@@ -1,0 +1,30 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string amountGold;
+        string bayCrystal;
+        int costCrystal = 4;
+
+        Console.WriteLine("Задайте золотой запас :");
+        amountGold = Console.ReadLine();
+        int goldValue = Convert.ToInt32(amountGold);
+        int solvency = goldValue / costCrystal;
+        Console.WriteLine("У Вас " + goldValue + " золота. Сколько кристаллов желаете приеобрести?\n Максимально предлагаю " + solvency + " кристаллов.");
+        bayCrystal = Console.ReadLine();
+        int crystalValue = Convert.ToInt32(bayCrystal);
+
+        if (crystalValue > solvency)
+        {
+            Console.WriteLine("Вам не хватит золота");
+        }
+        else
+        {
+            int goldBalance = goldValue % costCrystal;
+            int crystalBalans = goldValue / costCrystal;
+            Console.WriteLine("У Вас {0} золота и {1} кристаллов.", goldBalance, crystalBalans);
+        }
+    }
+}
