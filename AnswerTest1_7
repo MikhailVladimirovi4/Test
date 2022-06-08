@@ -22,9 +22,8 @@ internal class Program
         }
         else
         {
-            int goldBalance = goldValue % costCrystal;
-            int crystalBalans = goldValue / costCrystal;
-            Console.WriteLine("У Вас {0} золота и {1} кристаллов.", goldBalance, crystalBalans);
+            int goldBalance = goldValue - crystalValue * costCrystal;
+            Console.WriteLine("У Вас {0} золота и {1} кристаллов.", goldBalance, crystalValue);
         }
     }
 }
