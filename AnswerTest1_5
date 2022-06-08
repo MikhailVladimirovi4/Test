@@ -8,7 +8,7 @@ internal class Program
         string secondName = "Имя";
 
         Console.WriteLine(firstName + " " + secondName);
-        string timeStorage = firstName;
+        string temporaryStorage = firstName;
         firstName = secondName;
         secondName = timeStorage;
         Console.WriteLine(firstName + " " + secondName);
