@@ -1,1 +1,17 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string firstName = "Фамилия";
+        string secondName = "Имя";
+
+        Console.WriteLine(firstName + " " + secondName);
+        string timeStorage = firstName;
+        firstName = secondName;
+        secondName = timeStorage;
+        Console.WriteLine(firstName + " " + secondName);
+    }
+}
 
