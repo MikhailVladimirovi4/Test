@@ -5,12 +5,15 @@ internal class Program
     static void Main(string[] args)
     {
         string numberOldLadi;
+        int minutesPerHour = 60;
+        int timePerPerson = 10;
 
         Console.WriteLine("Задайте количество бабушек в очереди :");
         numberOldLadi = Console.ReadLine();
         int oldLadiValue = Convert.ToInt32(numberOldLadi);
-        int timeWaitHours = oldLadiValue * 10 / 60;
-        int timeWaitMinutes = oldLadiValue * 10 % 60;
+        int waitingtime = oldLadiValue * timePerPerson;
+        int timeWaitHours = waitingtime / minutesPerHour;
+        int timeWaitMinutes = waitingtime % minutesPerHour;
         Console.WriteLine("Время ожидания приема {0} часов {1} минут.", timeWaitHours, timeWaitMinutes);
     }
 }
