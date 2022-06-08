@@ -16,7 +16,7 @@ internal class Program
         work = Console.ReadLine();
         Console.Clear();
 
-        Console.WriteLine("Вас зовут {0}, вам {1} год(а), вы {2} и работаете {3}", name, age, zodiac, work);
+        Console.WriteLine("Вас зовут {0}, вам {1} год(а), вы {2} и работаете {3}.", name, age, zodiac, work);
 
 
 
