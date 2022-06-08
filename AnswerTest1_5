@@ -10,7 +10,7 @@ internal class Program
         Console.WriteLine(firstName + " " + secondName);
         string temporaryStorage = firstName;
         firstName = secondName;
-        secondName = timeStorage;
+        secondName = temporaryStorage;
         Console.WriteLine(firstName + " " + secondName);
     }
 }
