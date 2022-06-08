@@ -1,0 +1,13 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int sizeRow = 3;
+        int arrayPaints = 52;
+        int numberRows = arrayPaints / sizeRow;
+        int trowTrash = arrayPaints % sizeRow;
+        Console.WriteLine("Заполнено рядов: {0}, количество картин в неполном ряду: {1}.", numberRows, trowTrash);
+    }
+}
