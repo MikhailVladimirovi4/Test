@@ -4,29 +4,13 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        for (int number = 5; number < 100; number +=7)
+        int startNumber = 5;
+        int stepProgression = 7;
+        int maxCounterProgression = 100;
+
+        for (int i = startNumber; i < maxCounterProgression; i += stepProgression)
         {
-            Console.Write(" " + number);
-        }
-        Console.Write("\n");
-    }
-}
-
-
-
-V2
-using System;
-
-internal class Program
-{
-    static void Main(string[] args)
-    { 
-        int number = 5;
-    
-        while(100 > number)
-        {
-            Console.Write(" " + number);
-            number += 7;
+            Console.Write(" " + i);
         }
         Console.Write("\n");
     }
