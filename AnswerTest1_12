@@ -20,3 +20,30 @@ internal class Program
         Console.WriteLine($"Random число= {saveNumber}, сумма по условию задачи= {sum}.");
     }
 }
+
+
+V2
+
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int number = random.Next(0, 100);
+        int saveNumber = number;
+        int sum = 0;
+        byte firstKeyAddSum = 3;
+        byte secondKeyAddSum = 5;
+
+        for (int i = number; i >0; i-- )
+        {
+            if ((i % firstKeyAddSum == 0) || (i % secondKeyAddSum == 0))
+            {
+                sum += number;
+            }
+        }
+        Console.WriteLine($"Random число= {saveNumber}, сумма по условию задачи= {sum}.");
+    }
+}
