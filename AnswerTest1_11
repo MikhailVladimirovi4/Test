@@ -1,0 +1,16 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int number = 5;
+
+        for (int i = 14; i > 0; i--)
+        {
+            Console.Write(" " + number);
+            number += 7;
+        }
+        Console.ReadKey(true);
+    }
+}
