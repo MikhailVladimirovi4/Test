@@ -1,0 +1,18 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        byte bt;
+        sbyte sb;
+        short sh;
+        int i;
+        uint ui;
+        long l;
+        ulong ul;
+        float fl;
+        double db;
+        char ch;
+    }
+}
