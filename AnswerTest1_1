@@ -4,15 +4,15 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        byte bt;
-        sbyte sb;
-        short sh;
-        int i;
-        uint ui;
-        long l;
-        ulong ul;
-        float fl;
-        double db;
-        char ch;
+        byte deys;
+        sbyte weight;
+        short humidity;
+        int cunning;
+        uint wisdom;
+        long mana;
+        ulong strength;
+        float damage;
+        double spirit;
+        char sign;
     }
 }
