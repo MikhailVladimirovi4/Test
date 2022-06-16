@@ -4,13 +4,30 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        int number = 5;
+        for (int number = 5; number < 100; number +=7)
+        {
+            Console.Write(" " + number);
+        }
+        Console.Write("\n");
+    }
+}
 
-        for (int i = 14; i > 0; i--)
+
+
+V2
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    { 
+        int number = 5;
+    
+        while(100 > number)
         {
             Console.Write(" " + number);
             number += 7;
         }
-        Console.ReadKey(true);
+        Console.Write("\n");
     }
 }
