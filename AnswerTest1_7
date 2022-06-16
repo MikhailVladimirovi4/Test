@@ -8,7 +8,7 @@ internal class Program
         string bayCrystal;
         int costCrystal = 4;
 
-        Console.WriteLine("Задайте золотой запас :");
+        Console.Write("Задайте золотой запас :");
         amountGold = Console.ReadLine();
         int goldValue = Convert.ToInt32(amountGold);
         int solvency = goldValue / costCrystal;
@@ -22,8 +22,8 @@ internal class Program
         }
         else
         {
-            int goldBalance = goldValue - crystalValue * costCrystal;
-            Console.WriteLine("У Вас {0} золота и {1} кристаллов.", goldBalance, crystalValue);
+            goldValue -= crystalValue * costCrystal;
+            Console.WriteLine("У Вас {0} золота и {1} кристаллов.", goldValue, crystalValue);
         }
     }
 }
