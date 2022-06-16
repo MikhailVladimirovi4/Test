@@ -1,0 +1,22 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int spamCouner = 0;
+        string spamStop = "";
+
+        while(spamStop != "exit")
+        {
+            for (int i = spamCouner++; i > 0; i--)
+            {
+                Console.Write("этословоналатинскомвыход");
+            }
+            Console.WriteLine("\nПривет, спамоприемник.\nПопробуй угадать 'стоп слово спама', вводи смелее: ");
+            spamStop = Console.ReadLine();
+            Console.Clear();
+        }
+
+    }
+}
