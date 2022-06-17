@@ -32,7 +32,6 @@ internal class Program
     {
         Random random = new Random();
         int number = random.Next(0, 100);
-        int saveNumber = number;
         int sum = 0;
         byte firstKeyAddSum = 3;
         byte secondKeyAddSum = 5;
@@ -41,9 +40,9 @@ internal class Program
         {
             if ((i % firstKeyAddSum == 0) || (i % secondKeyAddSum == 0))
             {
-                sum += number;
+                sum += i;
             }
         }
-        Console.WriteLine($"Random число= {saveNumber}, сумма по условию задачи= {sum}.");
+        Console.WriteLine($"Random число= {number}, сумма по условию задачи= {sum}.");
     }
 }
