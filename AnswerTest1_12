@@ -6,32 +6,6 @@ internal class Program
     {
         Random random = new Random();
         int number = random.Next(0, 100);
-        int saveNumber = number;
-        int sum = 0;
-
-        while (0 < number)
-        {
-          if ((number % 3 == 0) || (number % 5 == 0))
-            {
-                sum += number;
-            }
-            number--;
-        }
-        Console.WriteLine($"Random число= {saveNumber}, сумма по условию задачи= {sum}.");
-    }
-}
-
-
-V2
-
-using System;
-
-internal class Program
-{
-    static void Main(string[] args)
-    {
-        Random random = new Random();
-        int number = random.Next(0, 100);
         int sum = 0;
         byte firstKeyAddSum = 3;
         byte secondKeyAddSum = 5;
