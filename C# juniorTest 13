@@ -4,17 +4,22 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        int rubToUsd = 60, usdToRub = 50;
-        int rubToEur = 65, eurToRub = 55;
-        int usdToEur = 2, eurToUsd = 1;
-        float usd = 0f, eur = 0f, rub = 300000f;
-        bool workCalculator = true;
+        int rubToUsd = 60;
+        int usdToRub = 50;
+        int rubToEur = 65;
+        int eurToRub = 55;
+        int usdToEur = 2;
+        int eurToUsd = 1;
+        float usd = 0f;
+        float eur = 0f;
+        float rub = 300000f;
+        bool keepCounting = true;
         float amountExchanche;
 
         Console.WriteLine($"\n        Приветствуем тебя, мр. Жук, ты получил ЗП: {rub} рублей, начнем просирать");
         Console.WriteLine("\n Жми кнопку и попрощайся с бабосиками");
 
-        while (workCalculator)
+        while (keepCounting)
         {
             Console.ReadKey();
             Console.Clear();
@@ -130,7 +135,7 @@ internal class Program
                 case "7":
                     Console.Clear();
                     Console.WriteLine(" Пока неудачник.");
-                    workCalculator = false;
+                    keepCounting = false;
                     Console.ReadKey();
                     break;
                 default:
