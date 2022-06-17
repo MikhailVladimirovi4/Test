@@ -1,0 +1,137 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int rubToUsd = 60, usdToRub = 50;
+        int rubToEur = 65, eurToRub = 55;
+        int usdToEur = 2, eurToUsd = 1;
+        float usd = 0f, eur = 0f, rub = 300000f;
+        bool workCalculator = true;
+        float amountExchanche;
+
+        Console.WriteLine($"\n        Приветствуем тебя, мр. Жук, ты получил ЗП: {rub} рублей, начнем просирать");
+        Console.WriteLine("\n Жми кнопку и попрощайся с бабосиками");
+
+        while (workCalculator)
+        {
+            Console.ReadKey();
+            Console.Clear();
+            Console.WriteLine($"\n     Баланс: {rub} рублей, {usd} долларов, {eur} вкусной капусты.\n\n\n");
+            Console.WriteLine("Выбирай как уменьшить счетчик уверенности:\n\n 1 - рубли в доллары.\n\n 2 - доллары в рубли\n\n 3 - рубли в капусту");
+            Console.WriteLine("\n 4 - капусту в рубли.\n\n 5 - доллары в капусту.\n\n 6 - капусту в доллары.\n\n 7 - Выход.");
+            Console.SetCursorPosition(0, 25);
+            Console.WriteLine($"Курс обмена:\n Рубли в доллары: 1 к {rubToUsd}. Доллары в рубли: {usdToRub} к 1.");
+            Console.WriteLine($" Рубли в капусту: 1 к {rubToEur}. Капусту в рубли: {eurToRub} к 1.");
+            Console.WriteLine($" Доллары в капусту: 1 к {usdToEur}. Капусту в доллары: {eurToUsd} к 1.");
+            Console.SetCursorPosition(0, 22);
+            Console.Write("Твой выбор:");
+            string action = Console.ReadLine();
+
+            switch (action)
+            {
+                case "1":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > rub || amountExchanche / rubToUsd <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        rub -= amountExchanche;
+                        usd += amountExchanche / rubToUsd;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                        break;
+                case "2":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > usd || amountExchanche / usdToRub <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        usd -= amountExchanche;
+                        rub += amountExchanche * usdToRub;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                    break;
+                case "3":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > rub || amountExchanche / rubToEur <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        rub -= amountExchanche;
+                        eur += amountExchanche / rubToEur;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                    break;
+                case "4":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > eur || amountExchanche / eurToRub <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        eur -= amountExchanche;
+                        rub += amountExchanche * eurToRub;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                    break;
+                case "5":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > usd || amountExchanche / usdToEur <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        usd -= amountExchanche;
+                        eur += amountExchanche / usdToEur;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                    break;
+                case "6":
+                    Console.SetCursorPosition(0, 23);
+                    Console.Write("Сколько просрем:");
+                    amountExchanche = Convert.ToSingle(Console.ReadLine());
+                    if (amountExchanche > eur || amountExchanche / eurToUsd <= 0)
+                    {
+                        Console.WriteLine("Поздравляю, Сударь. у Вас крыша едет.\n Жми кнопку, пробуй заново");
+                    }
+                    else
+                    {
+                        eur -= amountExchanche;
+                        usd += amountExchanche * eurToUsd;
+                        Console.WriteLine("Операция успешна. напечатать чек?.. о чем это я хех. Жми кнопку для продолжения!");
+                    }
+                    break;
+                case "7":
+                    Console.Clear();
+                    Console.WriteLine(" Пока неудачник.");
+                    workCalculator = false;
+                    Console.ReadKey();
+                    break;
+                default:
+                    Console.WriteLine(" За что тебе, Балбес, деньги платят. Как научишься читать жми кнопку и продолжим.");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
+}
