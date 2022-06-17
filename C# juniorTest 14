@@ -1,0 +1,81 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string yourNickName = "мр. ЧембыЗаняться";
+        string yourName = "ПустоеПоле";
+        string keyFromName = "f{htyNsEuflfk";
+        bool keepWorking = true;
+        int stopRainbow = 2;
+
+
+        while (keepWorking)
+        {
+            Console.Clear();
+            Console.WriteLine($"\n  Привет, {yourNickName}.    Займемся,.. чем нибудь да займемся хех :)");
+            Console.WriteLine("  Выбирай чем заняться");
+            Console.WriteLine("\n 1 - нарисуем червяка где-тотам ниже.\n\n 2 - Сменим имя.\n\n 3 - Узнаем имя.");
+            Console.WriteLine("\n 4 - Сменим пароль и узнать для чего он.\n\n 5 - узнать секрет.\n\n 6 - Выход.\n\n");
+            Console.Write("Твой выбор: ");
+            string action = Console.ReadLine();
+            Console.Clear();
+
+            switch (action)
+            {
+                case "1":
+                    Console.BackgroundColor = ConsoleColor.Blue;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.SetCursorPosition(30, 15);
+                    Console.WriteLine("                 Я червь,  че не похож?      Жми я убегу         ");
+                    Console.BackgroundColor = ConsoleColor.Black;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.ReadKey();
+                    break;
+                case "2":
+                    Console.Write("Введе желаемое имя: ");
+                    yourName = Console.ReadLine();
+                    break;
+                case "3":
+                    Console.Write("Чтоб узнать имя введи пароль. Если не знаеш пароль посмотри переменные или задай свой, п.4: ");
+
+                    if (keyFromName == Console.ReadLine())
+                    {
+                        Console.WriteLine($"Твое имя: {yourName}.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Потом повезет.");
+                    }
+                    Console.ReadKey();
+                    break;
+                case "4":
+                    Console.Write("Пароль от п.3 - узнать имя. Вводи, не томи: ");
+                    keyFromName = Console.ReadLine();
+                    break;
+                case "5":
+
+                    for (int i = 0; i < stopRainbow; i++)
+                    {
+                        Console.SetCursorPosition(30, 15);
+                        Console.WriteLine("\n А с калькулятором веслее");
+                        Console.BackgroundColor = ConsoleColor.Gray;
+                        Console.ReadKey();
+                        Console.BackgroundColor = ConsoleColor.Black;
+                    }
+                    break;
+                case "6":
+                    Console.Clear();
+                    Console.WriteLine(" Пока, было весело.");
+                    keepWorking = false;
+                    Console.ReadKey();
+                    break;
+                default:
+                    Console.WriteLine(" No bad, no bad, может и так. Жми погнали заново ;)");
+                    Console.ReadKey();
+                    break;
+            }
+        }
+    }
+}
