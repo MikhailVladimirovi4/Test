@@ -31,10 +31,10 @@ internal class Program
                     }
                     break;
             }
-            if (bracketBalance != 0)
-            {
-                correctString = "некорректно";
-            }
+        }
+        if (bracketBalance != 0)
+        {
+            correctString = "некорректно";
         }
         Console.WriteLine($" Анализ строки:\n\n Строка введена {correctString}, макс. глубина вложенности {depthСounter}.");
         Console.ReadKey();
