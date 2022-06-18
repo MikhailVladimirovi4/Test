@@ -1,0 +1,42 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string targetObject;
+        string correctString = "корректно";
+        int bracketBalance = 0;
+        int depthСounter = 0;
+
+        Console.Write(" Введите текст на проверку: ");
+        targetObject = Console.ReadLine();
+
+        foreach (char symbol in targetObject)
+        {
+            switch (symbol)
+            {
+                case '(':
+                    bracketBalance++;
+                    if (bracketBalance > depthСounter)
+                    {
+                        depthСounter = bracketBalance;
+                    }
+                    break;
+                case ')':
+                    bracketBalance--;
+                    if (bracketBalance < 0)
+                    {
+                        correctString = "некорректно";
+                    }
+                    break;
+            }
+            if (bracketBalance != 0)
+            {
+                correctString = "некорректно";
+            }
+        }
+        Console.WriteLine($" Анализ строки:\n\n Строка введена {correctString}, макс. глубина вложенности {depthСounter}.");
+        Console.ReadKey();
+    }
+}
