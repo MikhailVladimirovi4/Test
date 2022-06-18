@@ -1,0 +1,30 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string keyToSecret = "f[htyeuflftim";
+        string secretWord = "Бесполезная хрень";
+        int tryCount = 3;
+
+        Console.Write($" Грац! у тебя {tryCount} попытки!!!\n Будем взрывать мозг?\n\n Введи секретное слово - узнаешь СЕКРЕТ!");
+
+        for (int i = 0; i < tryCount; i++)
+        {
+            Console.Write($"\n {i + 1} попыка: ");
+            string inputUser = Console.ReadLine();
+            if (inputUser == keyToSecret)
+            {
+                Console.Clear();
+                Console.WriteLine($"\n\n Угадал с {++i} попытки. Секрет хранил: {secretWord}");
+                break;
+            }
+            else
+            {
+                Console.Write("  Не угадал! Продолжай взрывать себе мозг и познаешь ДЗЕН.");
+            }
+        }
+        Console.ReadLine();
+    }
+}
