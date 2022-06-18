@@ -1,0 +1,34 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string yourName;
+        string simbolFrame;
+        int startPositionFrameX = 30;
+        int startPositionFrameY = 15;
+        int heightFrame = 3;
+        int wigthFrame = 1;
+
+        Console.Write(" Введите имя: ");
+        yourName = Console.ReadLine();
+        Console.Write("\n Введите символ рамки: ");
+        simbolFrame = Console.ReadLine();
+        Console.SetCursorPosition(startPositionFrameX, startPositionFrameY);
+
+        for (int i = 0; i <= heightFrame; i++)
+        {
+            for (int j = 0; j <= (wigthFrame + yourName.Length); j++)
+            {
+                Console.Write(simbolFrame);
+            }
+            Console.SetCursorPosition(startPositionFrameX, startPositionFrameY + i);
+        }
+        Console.SetCursorPosition(startPositionFrameX + wigthFrame, startPositionFrameY + wigthFrame);
+        Console.ForegroundColor = ConsoleColor.Red;
+        Console.Write(yourName);
+        Console.SetCursorPosition(0, 28);
+        Console.ReadKey();
+    }
+}
