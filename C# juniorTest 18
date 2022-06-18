@@ -1,0 +1,21 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int number = 2;
+        int borderNumber = random.Next(0,100);
+        int resultProgression = 1;
+        int counter = 0;
+
+        while (borderNumber > resultProgression)
+        {
+            resultProgression *= number;
+            counter++;
+        }
+        Console.WriteLine($"Для числа {borderNumber} будет {number} в степени {counter}, т.е. {borderNumber} < {resultProgression}.");
+        Console.ReadKey();
+    }
+}
