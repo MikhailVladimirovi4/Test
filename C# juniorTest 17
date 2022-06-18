@@ -1,0 +1,28 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int number = random.Next(0, 28);
+        int digitCount = 0;
+        int resultProgression = 0;
+        int amountNumber = 0;
+        int limitSize = 4;
+        int targetSize = 3;
+
+        while (digitCount < limitSize)
+        {
+            resultProgression += number;
+            digitCount = (int)Math.Log10(resultProgression) + 1;
+
+            if (digitCount == targetSize)
+            {
+                amountNumber++;
+            }
+        }
+        Console.WriteLine($" У числа {number} {amountNumber} кратных трехзначных натуральных значений.");
+        Console.ReadKey();
+    }
+}
