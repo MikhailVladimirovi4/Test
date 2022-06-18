@@ -26,3 +26,27 @@ internal class Program
         Console.ReadKey();
     }
 }
+V2=======================================================
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int number = random.Next(0, 28);
+        int amountNumber = 0;
+        int limitSize = 1000;
+        int targetSize = 99;
+
+        for (int i = number; i < limitSize; i += number)
+        {
+            if (i > targetSize)
+            {
+                amountNumber++;
+            }
+        }
+        Console.WriteLine($" У числа {number} {amountNumber} кратных трехзначных натуральных значений.");
+        Console.ReadKey();
+    }
+}
