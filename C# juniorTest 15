@@ -4,30 +4,37 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        string yourName;
+        string userName;
         string simbolFrame;
         int startPositionFrameX = 30;
         int startPositionFrameY = 15;
-        int heightFrame = 3;
-        int wigthFrame = 1;
+        string characterString = "";
+        int widthFrame = 2;
 
         Console.Write(" Введите имя: ");
-        yourName = Console.ReadLine();
+        userName = Console.ReadLine();
         Console.Write("\n Введите символ рамки: ");
         simbolFrame = Console.ReadLine();
+
+        for (int i = 0; i < (widthFrame + userName.Length + widthFrame); i++)
+        {
+            characterString += simbolFrame;
+        }
         Console.SetCursorPosition(startPositionFrameX, startPositionFrameY);
 
-        for (int i = 0; i <= heightFrame; i++)
+        for (int i = 0; i < widthFrame * 2 + 1; i++)
         {
-            for (int j = 0; j <= (wigthFrame + yourName.Length); j++)
-            {
-                Console.Write(simbolFrame);
-            }
             Console.SetCursorPosition(startPositionFrameX, startPositionFrameY + i);
+            Console.Write(characterString);
+
+            if (i == widthFrame)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(startPositionFrameX + widthFrame, startPositionFrameY + widthFrame);
+                Console.WriteLine(userName);
+                Console.ForegroundColor = ConsoleColor.White;
+            }
         }
-        Console.SetCursorPosition(startPositionFrameX + wigthFrame, startPositionFrameY + wigthFrame);
-        Console.ForegroundColor = ConsoleColor.Red;
-        Console.Write(yourName);
         Console.SetCursorPosition(0, 28);
         Console.ReadKey();
     }
