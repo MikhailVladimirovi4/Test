@@ -74,6 +74,7 @@ internal class Program
                     break;
 
                 case "2":
+                
                     heroNotLoh = false;
                     break;
 
