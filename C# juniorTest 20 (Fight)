@@ -6,11 +6,17 @@ internal class Program
     {
         Random random = new Random();
         float healtHero = 100f;
-        int damageHero = random.Next(60, 110);
-        int armorHero = random.Next(10, 50);
-        float healtMadRabbit = random.Next(400, 500);
-        int damageMadRabbit = random.Next(10, 50);
-        int armorMadRabbit = random.Next(50, 100);
+        int maxDamageHero = 110;
+        int minDamageHero = 60;
+        int maxDamageMadRabbit = 50;
+        int minDamageMadRabbit = 10;
+        int maxArmorHero = 50;
+        int minArmorHero = 10;
+        int maxHealtRabbit = 500;
+        int minHealtRabbit = 400;
+        float healtMadRabbit = random.Next(minHealtRabbit, maxHealtRabbit);
+        int maxArmorRabbit = 100;
+        int minArmorRabbit = 50;
         int amountLuck = 100;
         bool heroNotLoh = true;
         bool isReadySuperKick = false;
@@ -21,13 +27,16 @@ internal class Program
         float minusLifeHero;
         float minusLifeMadRabbit;
 
-
         Console.WriteLine(" Поздравляю, Герой, ты в начале пути.\n\n  о_О это бешенный кролик 3го уровня, порвем блохастого. Жми кнопку - начнется мортал-комбат!\n");
 
         while (healtMadRabbit > 0 && healtHero > 0 && heroNotLoh)
         {
             int luckHero = random.Next(0, amountLuck);
             int luckMadRabbit = random.Next(0, amountLuck);
+            int damageHero = random.Next(minDamageHero, maxDamageHero);
+            int damageMadRabbit = random.Next(minDamageMadRabbit, maxDamageMadRabbit);
+            int armorHero = random.Next(minArmorHero, maxArmorHero);
+            int armorMadRabbit = random.Next(minArmorRabbit, maxArmorRabbit);
 
             Console.WriteLine($" Жизнь героя - {healtHero}\n Жизнь кролика - {healtMadRabbit}\n\n");
             Console.WriteLine("\n 1 - ногой в корпус.\n 2 - Валим подальше.");
@@ -63,9 +72,11 @@ internal class Program
                     }
                     isReadySuperKick = true;
                     break;
+
                 case "2":
                     heroNotLoh = false;
                     break;
+
                 case "3":
 
                     if (isReadySuperKick)
@@ -80,6 +91,7 @@ internal class Program
                         Console.WriteLine("\n\n\n.... хех Умник - пропуск хода");
                     }
                     break;
+
                 case "4":
 
                     if (isReadyFatality)
@@ -92,6 +104,7 @@ internal class Program
                         Console.WriteLine(" хех Умник - пропуск хода");
                     }
                     break;
+
                 default:
                     Console.WriteLine("\n\n\n\n .....Глуппый, глуппый герой - пропуск хода");
                     break;
