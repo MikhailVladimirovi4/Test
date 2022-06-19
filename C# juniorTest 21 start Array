@@ -28,6 +28,5 @@ internal class Program
         }
         Console.WriteLine("\n Сумма 2й строки = " + sumTwoString);
         Console.WriteLine(" Произведение 1го столбца = " + productFirstColumn + "\n");
-
     }
 }
