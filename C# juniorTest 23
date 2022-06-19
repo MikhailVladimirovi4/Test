@@ -1,0 +1,34 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int[] array = new int[30];
+        Random random = new Random();
+        int leftNeighbor;
+        int reightNeighbor;
+        bool extremeSymbolLeft;
+        bool extremeSymbolRight;
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = random.Next(0, 9);
+            Console.Write(array[i] + " ");
+        }
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (i > 0)
+            {
+                leftNeighbor = array[i - 1];
+                extremeSymbolLeft = true;
+            }
+            if (i < array.Length)
+            {
+                reightNeighbor = array[i + 1];
+                extremeSymbolRight = true;
+            }
+
+        }
+    }
+}
