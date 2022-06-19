@@ -11,34 +11,36 @@ internal class Program
         float healtMadRabbit = random.Next(400, 500);
         int damageMadRabbit = random.Next(10, 50);
         int armorMadRabbit = random.Next(50, 100);
+        int amountLuck = 100;
         bool heroNotLoh = true;
-        bool superKick = false;
+        bool isReadySuperKick = false;
+        bool isReadyFatality = false;
+        int indexLuckyMadRabbit = 3;
+        int indexLuckyHero = 5;
+        int fatalityTrigger = 50;
+        float minusLifeHero;
+        float minusLifeMadRabbit;
+
 
         Console.WriteLine(" Поздравляю, Герой, ты в начале пути.\n\n  о_О это бешенный кролик 3го уровня, порвем блохастого. Жми кнопку - начнется мортал-комбат!\n");
 
         while (healtMadRabbit > 0 && healtHero > 0 && heroNotLoh)
         {
-            int luckHero = random.Next(0, 100);
-            int luckMadRabbit = random.Next(0, 100);
-            int fatalityTrigger = 50;
-            float minusLifeHero;
-            float minusLifeMadRabbit;
-            bool makeFatality = false;
-            int indexLuckyMadRabbit = 3;
-            int indexLuckyHero = 5;
+            int luckHero = random.Next(0, amountLuck);
+            int luckMadRabbit = random.Next(0, amountLuck);
 
             Console.WriteLine($" Жизнь героя - {healtHero}\n Жизнь кролика - {healtMadRabbit}\n\n");
             Console.WriteLine("\n 1 - ногой в корпус.\n 2 - Валим подальше.");
 
             if (healtMadRabbit <= fatalityTrigger)
             {
-                makeFatality = true;
+                isReadyFatality = true;
             }
-            if (superKick)
+            if (isReadySuperKick)
             {
                 Console.WriteLine(" 3 - дернуть за хвост");
             }
-            if (makeFatality)
+            if (isReadyFatality)
             {
                 Console.WriteLine(" 4 - пальцем в глаз");
             }
@@ -48,6 +50,7 @@ internal class Program
             switch (selectKick)
             {
                 case "1":
+
                     if (luckMadRabbit % indexLuckyMadRabbit != 0)
                     {
                         healtMadRabbit -= damageHero / 100f * armorMadRabbit;
@@ -58,18 +61,19 @@ internal class Program
                     {
                         Console.WriteLine("\n\n\n..промах Героя..");
                     }
-                    superKick = true;
+                    isReadySuperKick = true;
                     break;
                 case "2":
                     heroNotLoh = false;
                     break;
                 case "3":
-                    if (superKick)
+
+                    if (isReadySuperKick)
                     {
                         healtMadRabbit -= damageHero * (luckHero % indexLuckyHero) / 100 * armorMadRabbit;
                         minusLifeMadRabbit = damageHero * (luckHero % indexLuckyHero) / 100 * armorMadRabbit;
                         Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
-                        superKick = false;
+                        isReadySuperKick = false;
                     }
                     else
                     {
@@ -77,7 +81,8 @@ internal class Program
                     }
                     break;
                 case "4":
-                    if (makeFatality)
+
+                    if (isReadyFatality)
                     {
                         healtMadRabbit = 0;
                         Console.WriteLine("\n\n\n..это неспортивно.. ");
