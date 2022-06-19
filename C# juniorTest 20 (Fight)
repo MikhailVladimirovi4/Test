@@ -22,6 +22,8 @@ internal class Program
             int luckHero = random.Next(0, 100);
             int luckMadRabbit = random.Next(0, 100);
             int fatalityTrigger = 50;
+            float minusLifeHero;
+            float minusLifeMadRabbit;
             bool fatality = false;
 
             Console.WriteLine($" Жизнь героя - {healtHero}\n Жизнь кролика - {healtMadRabbit}\n\n");
@@ -48,7 +50,8 @@ internal class Program
                     if (luckMadRabbit % 3 != 0)
                     {
                         healtMadRabbit -= damageHero / 100f * armorMadRabbit;
-                        Console.WriteLine("\n\n\n..урон по кролику.. " + (damageHero / 100f * armorMadRabbit));
+                        minusLifeMadRabbit = damageHero / 100f * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
                     }
                     else
                     {
@@ -90,7 +93,8 @@ internal class Program
             if (healtMadRabbit > 0)
             {
                 healtHero -= damageMadRabbit / 100f * armorHero;
-                Console.WriteLine("..урон по Герою.. " + (damageMadRabbit / 100f * armorHero));
+                minusLifeHero = damageMadRabbit / 100f * armorHero;
+                Console.WriteLine("..урон по Герою.. " + minusLifeHero);
             }
             if (healtHero <= 0)
             {
