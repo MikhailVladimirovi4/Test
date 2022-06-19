@@ -26,6 +26,7 @@ internal class Program
         int fatalityTrigger = 50;
         float minusLifeHero;
         float minusLifeMadRabbit;
+        float perCent = 100f;
 
         Console.WriteLine(" Поздравляю, Герой, ты в начале пути.\n\n  о_О это бешенный кролик 3го уровня, порвем блохастого. Жми кнопку - начнется мортал-комбат!\n");
 
@@ -62,8 +63,8 @@ internal class Program
 
                     if (luckMadRabbit % indexLuckyMadRabbit != 0)
                     {
-                        healtMadRabbit -= damageHero / 100f * armorMadRabbit;
-                        minusLifeMadRabbit = damageHero / 100f * armorMadRabbit;
+                        healtMadRabbit -= damageHero / perCent * armorMadRabbit;
+                        minusLifeMadRabbit = damageHero / perCent * armorMadRabbit;
                         Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
                     }
                     else
@@ -82,8 +83,8 @@ internal class Program
 
                     if (isReadySuperKick)
                     {
-                        healtMadRabbit -= damageHero * (luckHero % indexLuckyHero) / 100 * armorMadRabbit;
-                        minusLifeMadRabbit = damageHero * (luckHero % indexLuckyHero) / 100 * armorMadRabbit;
+                        healtMadRabbit -= damageHero * (luckHero % indexLuckyHero) / perCent * armorMadRabbit;
+                        minusLifeMadRabbit = damageHero * (luckHero % indexLuckyHero) / perCent * armorMadRabbit;
                         Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
                         isReadySuperKick = false;
                     }
@@ -112,8 +113,8 @@ internal class Program
             }
             if (healtMadRabbit > 0)
             {
-                healtHero -= damageMadRabbit / 100f * armorHero;
-                minusLifeHero = damageMadRabbit / 100f * armorHero;
+                healtHero -= damageMadRabbit / perCent * armorHero;
+                minusLifeHero = damageMadRabbit / perCent * armorHero;
                 Console.WriteLine("..урон по Герою.. " + minusLifeHero);
             }
             Console.WriteLine("Жми для продолжения битвы.");
