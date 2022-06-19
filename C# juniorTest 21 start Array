@@ -17,10 +17,12 @@ internal class Program
             {
                 array[i, j] = random.Next(minDataArray, maxDataArray);
                 Console.Write(array[i, j] + " ");
+                
                 if (i == 1)
                 {
                     sumTwoString += array[i, j];
                 }
+                
                 if (j == 0)
                 {
                     multiplicationFirstColumn *= array[i, j];
