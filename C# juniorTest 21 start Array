@@ -1,0 +1,33 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int[,] array = new int[3, 3];
+        Random random = new Random();
+        int sumTwoString = 0;
+        int productFirstColumn = 1;
+
+        for (int i = 0; i < array.GetLength(0); i++)
+        {
+            for (int j = 0; j < array.GetLength(1); j++)
+            {
+                array[i, j] = random.Next(0, 9);
+                Console.Write(array[i, j] + " ");
+                if (i == 1)
+                {
+                    sumTwoString += array[i, j];
+                }
+                if (j == 0)
+                {
+                    productFirstColumn *= array[i, j];
+                }
+            }
+            Console.WriteLine();
+        }
+        Console.WriteLine("\n Сумма 2й строки = " + sumTwoString);
+        Console.WriteLine(" Произведение 1го столбца = " + productFirstColumn + "\n");
+
+    }
+}
