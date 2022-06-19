@@ -1,0 +1,120 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        float healtHero = 100f;
+        int damageHero = random.Next(60, 110);
+        int armorHero = random.Next(10, 50);
+        float healtMadRabbit = random.Next(400, 500);
+        int damageMadRabbit = random.Next(10, 50);
+        int armorMadRabbit = random.Next(50, 100);
+        int resultBatle = 0;
+        bool heroNotLoh = true;
+        bool superKick = false;
+
+        Console.WriteLine(" Поздравляю, Герой, ты в начале пути.\n\n  о_О это бешенный кролик 3го уровня, порвем блохастого. Жми кнопку - начнется мортал-комбат!\n");
+
+        while (healtMadRabbit > 0 && healtHero > 0 && heroNotLoh)
+        {
+            int luckHero = random.Next(0, 100);
+            int luckMadRabbit = random.Next(0, 100);
+            int fatalityTrigger = 50;
+            bool fatality = false;
+
+            Console.WriteLine($" Жизнь героя - {healtHero}\n Жизнь кролика - {healtMadRabbit}\n\n");
+            Console.WriteLine("\n 1 - ногой в корпус.\n 2 - Валим подальше.");
+
+            if (healtMadRabbit <= fatalityTrigger)
+            {
+                fatality = true;
+            }
+            if (superKick)
+            {
+                Console.WriteLine(" 3 - дернуть за хвост");
+            }
+            if (fatality)
+            {
+                Console.WriteLine(" 4 - пальцем в глаз");
+            }
+            Console.Write(" Выбери действие героя: ");
+            string selectKick = Console.ReadLine();
+
+            switch (selectKick)
+            {
+                case "1":
+                    if (luckMadRabbit % 3 != 0)
+                    {
+                        healtMadRabbit -= damageHero / 100f * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + (damageHero / 100f * armorMadRabbit));
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\n\n..промах Героя..");
+                    }
+                    superKick = true;
+                    break;
+                case "2":
+                    resultBatle = 2;
+                    heroNotLoh = false;
+                    break;
+                case "3":
+                    if (superKick)
+                    {
+                        healtMadRabbit -= damageHero * (luckHero % 5) / 100 * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + (damageHero * (luckHero % 5) / 100 * armorMadRabbit));
+                        superKick = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\n\n.... хех Умник - пропуск хода");
+                    }
+                    break;
+                case "4":
+                    if (fatality)
+                    {
+                        healtMadRabbit = 0;
+                        Console.WriteLine("\n\n\n..это неспортивно.. ");
+                    }
+                    else
+                    {
+                        Console.WriteLine(" хех Умник - пропуск хода");
+                    }
+                    break;
+                default:
+                    Console.WriteLine("\n\n\n\n .....Глуппый, глуппый герой - пропуск хода");
+                    break;
+            }
+            if (healtMadRabbit > 0)
+            {
+                healtHero -= damageMadRabbit / 100f * armorHero;
+                Console.WriteLine("..урон по Герою.. " + (damageMadRabbit / 100f * armorHero));
+            }
+            if (healtHero <= 0)
+            {
+                resultBatle = 1;
+            }
+            Console.WriteLine("Жми для продолжения битвы.");
+            Console.ReadKey();
+            Console.Clear();
+        }
+        switch (resultBatle)
+        {
+            case 0:
+                Console.WriteLine(" Кролик сдох, первый шаг - самый трудный. ( пысы ГринПис выехал за тобой.)");
+                break;
+            case 1:
+                Console.WriteLine(" Кролик сыт, герой на респаун");
+                break;
+            case 2:
+                Console.WriteLine(" Умный в гору не пойдет, умный гору обойден... Начнем с тараканов");
+                break;
+            default:
+                Console.WriteLine(" А че так можно было???");
+                Console.ReadKey();
+                break;
+        }
+    }
+}
