@@ -109,6 +109,7 @@ internal class Program
                     Console.WriteLine("\n\n\n\n .....Глуппый, глуппый герой - пропуск хода");
                     break;
             }
+            
             if (healtMadRabbit > 0)
             {
                 healtHero -= damageMadRabbit / perCent * armorHero;
