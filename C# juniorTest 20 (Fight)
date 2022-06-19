@@ -67,7 +67,8 @@ internal class Program
                     if (superKick)
                     {
                         healtMadRabbit -= damageHero * (luckHero % 5) / 100 * armorMadRabbit;
-                        Console.WriteLine("\n\n\n..урон по кролику.. " + (damageHero * (luckHero % 5) / 100 * armorMadRabbit));
+                        minusLifeMadRabbit = damageHero * (luckHero % 5) / 100 * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
                         superKick = false;
                     }
                     else
