@@ -1,0 +1,51 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int[] junkStorage = new int[0];
+        bool isWorking = true;
+
+        while (isWorking)
+        {
+            int sum = 0;
+            string inputUser;
+
+            Console.Clear();
+            Console.WriteLine(" \n sum - просмотр накоплений\n\n exit - выход\n\n остальные фантазии ввода !ТОЛЬКО ЦИФРЫ падают в копилку хлама");
+            Console.Write("  Введи желаемое: ");
+            inputUser = Console.ReadLine();
+
+            switch (inputUser)
+            {
+                case "exit":
+                    isWorking = false;
+                    break;
+
+                case "sum":
+                    for (int i = 0; i < junkStorage.Length; i++)
+                    {
+                        sum += junkStorage[i];
+                    }
+
+                    Console.SetCursorPosition(0, 15);
+                    Console.WriteLine($" Накопление хлама составляет = {sum} хламоедениц.");
+                    Console.ReadKey();
+                    break;
+
+                default:
+                    int[] tempArray = new int[junkStorage.Length + 1];
+
+                    for (int i=0; i< junkStorage.Length; i++)
+                    {
+                        tempArray[i] = junkStorage[i];
+                    }
+
+                    tempArray[tempArray.Length - 1] = Convert.ToInt32(inputUser);
+                    junkStorage = tempArray;
+                    break;
+            }
+        }
+    }
+}
