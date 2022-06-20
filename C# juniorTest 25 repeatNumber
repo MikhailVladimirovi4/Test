@@ -17,24 +17,24 @@ internal class Program
         {
             array[i] = random.Next(minValueArray, maxValueArray);
             Console.Write(array[i] + " ");
+        }
 
-            if (i !=0 )
+        for (int i = 1; i < array.Length; i++)
+        {
+            if (array[i] == array[i - 1])
             {
-                if (array[i] == array[i-1])
-                {
-                    repeatCaunter++;
-                    isRepeat = true;
+                repeatCaunter++;
+                isRepeat = true;
 
-                    if (repeatCaunter > repeatAmount)
-                    {
-                        repeatAmount = repeatCaunter;
-                        repeatLeader = array[i];
-                    }
-                }
-                else
+                if (repeatCaunter > repeatAmount)
                 {
-                    repeatCaunter = 0;
+                    repeatAmount = repeatCaunter;
+                    repeatLeader = array[i];
                 }
+            }
+            else
+            {
+                repeatCaunter = 0;
             }
         }
         if (isRepeat)
