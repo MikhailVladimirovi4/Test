@@ -17,29 +17,22 @@ internal class Program
 
         Console.WriteLine();
 
-        for (int i = 0; i < array.Length; i++)
+        if (array[0] > array[1])
         {
-            bool isLocalMaximux = false;
+            Console.WriteLine($" Позиция 1, число {array[0]} - локальный максимум.");
+        }
 
-            if (i == 0 && array[i] > array[i + 1])
-            {
-                isLocalMaximux = true;
-            }
+        for (int i = 1; i < (array.Length - 1); i++)
+        {
 
-            else if (i == (array.Length - 1) && array[i] > array[i - 1])
-            {
-                isLocalMaximux = true;
-            }
-
-            else if (i != (array.Length - 1) && array[i] > array[i + 1] && array[i] > array[i - 1])
-            {
-                isLocalMaximux = true;
-            }
-
-            if (isLocalMaximux)
+            if (i != (array.Length - 1) && array[i] > array[i + 1] && array[i] > array[i - 1])
             {
                 Console.WriteLine($" Позиция {(i + 1)}, число {array[i]} - локальный максимум.");
             }
+        }
+        if (array[array.Length - 1] > array[array.Length - 1 - 1])
+        {
+            Console.WriteLine($" Позиция {array.Length}, число {array[29]} - локальный максимум.");
         }
     }
 }
