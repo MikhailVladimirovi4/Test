@@ -1,0 +1,15 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string exampleString = "You win some. You lose some.";
+        string[] subs = exampleString.Split(' ');
+
+        foreach (var sub in subs)
+        {
+            Console.WriteLine($"Substring: {sub}");
+        }
+    }
+}
