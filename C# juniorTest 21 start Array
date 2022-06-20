@@ -32,7 +32,7 @@ internal class Program
         {
             sumSecondString += array[(numberString - 1), i];
         }
-        Console.WriteLine("\n Сумма 2й строки = " + sumSecondString);
-        Console.WriteLine(" Произведение 1го столбца = " + multiplicationFirstColumn + "\n");
+        Console.WriteLine($"\n Сумма строки {numberString} = {numberString}.");
+        Console.WriteLine($" Произведение столбца {numberColumn} = {multiplicationFirstColumn}.\n");
     }
 }
