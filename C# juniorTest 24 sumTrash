@@ -9,7 +9,6 @@ internal class Program
 
         while (isWorking)
         {
-            int sum = 0;
             string inputUser;
 
             Console.Clear();
@@ -24,6 +23,8 @@ internal class Program
                     break;
 
                 case "sum":
+                    int sum = 0;
+                            
                     for (int i = 0; i < junkStorage.Length; i++)
                     {
                         sum += junkStorage[i];
