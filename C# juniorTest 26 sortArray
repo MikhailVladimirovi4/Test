@@ -1,0 +1,37 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int maxValueArray = 20;
+        int minValueArray = 0;
+        int[] array = new int[30];
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = random.Next(minValueArray, maxValueArray);
+            Console.Write(array[i] + " ");
+        }
+        for (int i = 0; i < array.Length; i++)
+        {
+            for (int j = 1; j < array.Length; j++)
+            {
+                if (array[j] < array[j - 1])
+                {
+                    int tempNumber = array[j - 1];
+                    array[j - 1] = array[j];
+                    array[j] = tempNumber;
+                }
+            }
+        }
+        Console.WriteLine("\n");
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            Console.Write(array[i] + " ");
+        }
+        Console.WriteLine("\n");
+    }
+}
