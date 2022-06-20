@@ -6,50 +6,12 @@ internal class Program
     {
         int[,] array = new int[3, 3];
         Random random = new Random();
-        int sumTwoString = 0;
-        int multiplicationFirstColumn = 1;
-        int maxDataArray = 9;
-        int minDataArray = 0;
-
-        for (int i = 0; i < array.GetLength(0); i++)
-        {
-            for (int j = 0; j < array.GetLength(1); j++)
-            {
-                array[i, j] = random.Next(minDataArray, maxDataArray);
-                Console.Write(array[i, j] + " ");
-                
-                if (i == 1)
-                {
-                    sumTwoString += array[i, j];
-                }
-                
-                if (j == 0)
-                {
-                    multiplicationFirstColumn *= array[i, j];
-                }
-            }
-            Console.WriteLine();
-        }
-        Console.WriteLine("\n Сумма 2й строки = " + sumTwoString);
-        Console.WriteLine(" Произведение 1го столбца = " + multiplicationFirstColumn + "\n");
-    }
-}
-
-
-V2========================================
-using System;
-
-internal class Program
-{
-    static void Main(string[] args)
-    {
-        int[,] array = new int[3, 3];
-        Random random = new Random();
-        int sumTwoString = 0;
+        int sumSecondString = 0;
         int multiplicationFirstColumn = 1;
         int maxDataArray = 9;
         int minDataArray = 0;
         int numberString = 2;
+        int numberColumn = 1;
 
         for (int i = 0; i < array.GetLength(0); i++)
         {
@@ -63,14 +25,14 @@ internal class Program
 
         for (int i = 0; i < array.GetLength(0); i++)
         {
-            multiplicationFirstColumn *= array[i, 0];
+            multiplicationFirstColumn *= array[i, (numberColumn - 1)];
         }
 
         for (int i = 0; i < array.GetLength(1); i++)
         {
-            sumTwoString += array[(numberString - 1), i];
+            sumSecondString += array[(numberString - 1), i];
         }
-        Console.WriteLine("\n Сумма 2й строки = " + sumTwoString);
+        Console.WriteLine("\n Сумма 2й строки = " + sumSecondString);
         Console.WriteLine(" Произведение 1го столбца = " + multiplicationFirstColumn + "\n");
     }
 }
