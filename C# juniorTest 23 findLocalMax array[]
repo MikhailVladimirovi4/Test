@@ -32,7 +32,7 @@ internal class Program
         }
         if (array[array.Length - 1] > array[array.Length - 1 - 1])
         {
-            Console.WriteLine($" Позиция {array.Length}, число {array[29]} - локальный максимум.");
+            Console.WriteLine($" Позиция {array.Length}, число {array[array.Length - 1]} - локальный максимум.");
         }
     }
 }
