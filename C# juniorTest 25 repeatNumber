@@ -1,0 +1,50 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int maxValueArray = 9;
+        int minValueArray = 0;
+        int[] array = new int[30];
+        int repeatAmount = 0;
+        int repeatLeader = 0;
+        int repeatCaunter = 0;
+        bool isRepeat = false;
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = random.Next(minValueArray, maxValueArray);
+            Console.Write(array[i] + " ");
+
+            if (i !=0 )
+            {
+                if (array[i] == array[i-1])
+                {
+                    repeatCaunter++;
+                    isRepeat = true;
+
+                    if (repeatCaunter > repeatAmount)
+                    {
+                        repeatAmount = repeatCaunter;
+                        repeatLeader = array[i];
+                    }
+                }
+                else
+                {
+                    repeatCaunter = 0;
+                }
+            }
+        }
+        if (isRepeat)
+        {
+            Console.WriteLine($"\n\n Число(одно из чисел) с максимальным повтором {repeatLeader}, {repeatAmount + 1} повторений.\n");
+        }
+
+        else
+        {
+            Console.WriteLine("\n\nПовторов не было.\n");
+        }
+    }
+}
