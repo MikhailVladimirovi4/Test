@@ -1,0 +1,49 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        int maxValueArray = 9;
+        int minValueArray = 0;
+        int outputPositionY = 5;
+        int outputPositionX = 0;
+        int[] array = new int[10];
+        int[] tempArray;
+        int tempNumber;
+
+        for (int i = 0; i < array.Length; i++)
+        {
+            array[i] = random.Next(minValueArray, maxValueArray);
+            Console.Write(array[i] + " ");
+        }
+
+        Console.Write("\n\n Введите значение сдвига: ");
+        int shiftValue = Convert.ToInt32(Console.ReadLine());
+
+        Console.SetCursorPosition(outputPositionX, outputPositionY);
+
+        while (shiftValue != 0)
+        {
+            tempNumber = array[0];
+            tempArray = array;
+
+            for (int i = 0; i < (array.Length - 1); i++)
+            {
+                array[i] = tempArray[i + 1];
+            }
+            array[array.Length - 1] = tempNumber;
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                Console.Write(array[i] + " ");
+            }
+
+            Console.WriteLine();
+            outputPositionY++;
+            shiftValue--;
+        }
+        Console.WriteLine();
+    }
+}
