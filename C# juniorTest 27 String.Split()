@@ -5,11 +5,11 @@ internal class Program
     static void Main(string[] args)
     {
         string exampleString = "You win some. You lose some.";
-        string[] subs = exampleString.Split(' ');
+        string[] arrayWords = exampleString.Split(' ');
 
-        foreach (var sub in subs)
+        foreach (var word in arrayWords)
         {
-            Console.WriteLine($"Substring: {sub}");
+            Console.WriteLine($"arrayWords: {word}");
         }
     }
 }
