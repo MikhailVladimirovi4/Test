@@ -23,7 +23,7 @@ internal class Program
 
         Console.SetCursorPosition(outputPositionX, outputPositionY);
 
-        while (shiftValue != 0)
+        while (shiftValue > 0)
         {
             tempNumber = array[0];
 
