@@ -4,13 +4,165 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        string[,] studyJunior;
-        string firstName;
-        string lastName;
-        string jobTitle;
-        string jobDescription;
-        string morality;
-        string status;
+        string[,] studyWorkers = { { "№", "Фамилия", "Имя", "Должность" } };
+        bool isWork = true;
+        string action;
+        int outDataPositionX = 10;
+        int outDataPositionY = 16;
 
+        while (isWork)
+        {
+            Console.SetCursorPosition(0, outDataPositionY - 1);
+            Console.WriteLine(" Список сотрудников: \n");
+
+            for (int i = 0; i < studyWorkers.GetLength(0); i++)
+            {
+                for (int j = 0; j < (studyWorkers.GetLength(1) - 2); j++)
+                {
+                    Console.SetCursorPosition(j * outDataPositionX, outDataPositionY + i);
+                    Console.Write(studyWorkers[i, j]);
+                }
+
+                Console.WriteLine();
+            }
+
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("\n\n 1 - Добавить досье сотрудника.\n\n 2 - Удалить досье сотрудника.\n\n 3 - Просмотр досье сотрудника.\n\n 4 - Закончить работу");
+            Console.Write("\n Выбор действия: ");
+            action = Console.ReadLine();
+
+            switch (action)
+            {
+                case "1":
+                    AddWorker(ref studyWorkers);
+                    break;
+
+                case "2":
+                    DeleteWorker(ref studyWorkers);
+                    break;
+
+                case "3":
+                    OutputDossier(ref studyWorkers);
+                    break;
+
+                case "4":
+                    isWork = false;
+                    break;
+
+                default:
+                    ConsoleColor color = Console.ForegroundColor;
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine(" Недопустимый выбор.");
+                    Console.ForegroundColor = color;
+                    break;
+            }
+
+            Console.Clear();
+        }
+    }
+    static void AddWorker(ref string[,] studyWorkers)
+    {
+        Console.Clear();
+        string[,] tempArray = new string[(studyWorkers.GetLength(0) + 1), studyWorkers.GetLength(1)];
+
+        for (int i = 0; i < studyWorkers.GetLength(0); i++)
+        {
+            for (int j = 0; j < studyWorkers.GetLength(1); j++)
+            {
+                tempArray[i, j] = studyWorkers[i, j];
+            }
+        }
+        Console.Write("\n Введите данные нового сотрудника.");
+
+        for (int i = 0; i < tempArray.GetLength(1); i++)
+        {
+
+            switch (i)
+            {
+                case 0:
+                    tempArray[(tempArray.GetLength(0) - 1), i] = Convert.ToString(tempArray.GetLength(0) - 1);
+                    break;
+
+                case 1:
+                    Console.Write("\n Фамилия: ");
+                    tempArray[(tempArray.GetLength(0) - 1), i] = Console.ReadLine();
+                    break;
+
+                case 2:
+                    Console.Write(" Имя: ");
+                    tempArray[(tempArray.GetLength(0) - 1), i] = Console.ReadLine();
+                    break;
+
+                case 3:
+                    Console.Write(" Должность: ");
+                    tempArray[(tempArray.GetLength(0) - 1), i] = Console.ReadLine();
+                    break;
+            }
+        }
+        studyWorkers = tempArray;
+    }
+    static void OutputDossier(ref string[,] studyWorkers, int outPositionX = 10, int outPositionY = 13)
+    {
+        Console.SetCursorPosition(0, 12);
+        Console.Write(" Введите фамилию сотрудника: ");
+        string lastNameWorker = Console.ReadLine();
+
+        for (int i = 1; i < studyWorkers.GetLength(0); i++)
+        {
+            if (studyWorkers[i, 1].ToLower() == lastNameWorker.ToLower())
+            {
+                for (int j = 1; j < studyWorkers.GetLength(1); j++)
+                {
+                    Console.SetCursorPosition(j * outPositionX, outPositionY);
+                    Console.Write(studyWorkers[i, j]);
+                }
+
+                Console.ReadKey();
+                break;
+            }
+        }
+    }
+    static void DeleteWorker(ref string[,] studyWorkers)
+    {
+        int offsetNymber;
+
+        Console.Clear();
+        Console.Write("\n Введите номер сотрудника: ");
+        string deleteNumberWorker = Console.ReadLine();
+
+        if (Convert.ToInt32(deleteNumberWorker) > 0 && Convert.ToInt32(deleteNumberWorker) <= studyWorkers.GetLength(0))
+        {
+            string[,] tempArray = new string[(studyWorkers.GetLength(0) - 1), studyWorkers.GetLength(1)];
+
+            for (int i = 0; i < tempArray.GetLength(0); i++)
+            {
+                if (i >= Convert.ToInt32(deleteNumberWorker))
+                {
+                    offsetNymber = i + 1;
+                    tempArray[i, 0] = Convert.ToString(Convert.ToInt32(studyWorkers[offsetNymber, 0]) - 1);
+                }
+
+                else
+                {
+                    offsetNymber = i;
+                    tempArray[offsetNymber, 0] = studyWorkers[offsetNymber, 0];
+                }
+
+                for (int j = 1; j < tempArray.GetLength(1); j++)
+                {
+                    tempArray[i, j] = studyWorkers[offsetNymber, j];
+                }
+            }
+            studyWorkers = tempArray;
+        }
+
+        else
+        {
+            ConsoleColor color = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine(" Номер сотрудника не найден или ввод некорректен.");
+            Console.ForegroundColor = color;
+            Console.ReadKey();
+        }
     }
 }
