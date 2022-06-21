@@ -1,0 +1,16 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string[,] studyJunior;
+        string firstName;
+        string lastName;
+        string jobTitle;
+        string jobDescription;
+        string morality;
+        string status;
+
+    }
+}
