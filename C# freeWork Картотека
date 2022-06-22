@@ -129,9 +129,9 @@ internal class Program
         Console.Clear();
         Console.Write("\n Введите номер сотрудника: ");
         string deleteNumberWorker = Console.ReadLine();
-        bool result = int.TryParse(deleteNumberWorker, out var styles);
+        bool isCorrectInput? = int.TryParse(deleteNumberWorker, out var trash);
 
-        if (result && Convert.ToInt32(deleteNumberWorker) > 0 && Convert.ToInt32(deleteNumberWorker) <= studyWorkers.GetLength(0))
+        if (isCorrectInput && Convert.ToInt32(deleteNumberWorker) > 0 && Convert.ToInt32(deleteNumberWorker) <= studyWorkers.GetLength(0))
         {
             string[,] tempArray = new string[(studyWorkers.GetLength(0) - 1), studyWorkers.GetLength(1)];
 
