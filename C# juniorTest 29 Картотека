@@ -1,0 +1,171 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        string[] familyWorker = {"Фамилия" };
+        string[] jobTitleWorker = { "Должность"};
+        bool isCorrectInput;
+        bool isWork = true;
+        int menuItems = 5;
+
+        while (isWork)
+        {
+            Console.WriteLine(" Работа с картотекой.\n\n 1 - Просмотр сотрудников.\n\n 2 - Добавить сотрудника.");
+            Console.WriteLine("\n 3 - Удалить досье.\n\n 4 - Просмотр досье.\n\n 5 - Закончить работу.\n");
+            Console.Write("Выбор действия: ");
+            isCorrectInput = int.TryParse(Console.ReadLine(), out int actionChoice);
+
+            if (isCorrectInput && actionChoice > 0 && actionChoice <= menuItems)
+            {
+                switch (actionChoice)
+                {
+                    case 1:
+                        OutputWorkerr(familyWorker, jobTitleWorker);
+                        break;
+
+                    case 2:
+                        AddWorker(ref familyWorker, ref jobTitleWorker);
+                        break;
+
+                    case 3:
+                        Console.Write("\n Введите номер сотрудника: ");
+                        string deleteNumberWorker = Console.ReadLine();
+                        isCorrectInput = int.TryParse(deleteNumberWorker, out int numberWorker);
+
+                        if (isCorrectInput && numberWorker > 0 && numberWorker <= familyWorker.Length - 1)
+                        {
+                            DeleteWorker(ref familyWorker, ref jobTitleWorker, numberWorker);
+                        }
+
+                        else
+                        {
+                            OutputError();
+                        }
+                        break;
+
+                    case 4:
+                        if (familyWorker.Length == 1)
+                        {
+                            OutputError("Картотека пуста", ConsoleColor.Yellow);
+                        }
+
+                        else
+                        {
+                            Console.Write("Введите фамилию: ");
+                            string lastNameWorker = Console.ReadLine();
+                            OutputWorkerr(familyWorker, jobTitleWorker, lastNameWorker);
+                        }
+                        break;
+
+                    case 5:
+                        isWork = false;
+                        break;
+                }
+            }
+
+            else
+            {
+                OutputError();
+            }
+
+            Console.Clear();
+        }
+    }
+
+    static void AddWorker(ref string[] array1, ref string[] array2)
+    {
+        string[] newArray1 = new string[array1.Length + 1];
+        string[] newArray2 = new string[array2.Length + 1];
+
+        for (int i = 0; i < newArray1.Length - 1; i++)
+        {
+            newArray1[i] = array1[i];
+            newArray2[i] = array2[i];
+        }
+
+        Console.WriteLine(" Введите Фамилию: ");
+        newArray1[newArray1.Length - 1] = Console.ReadLine();
+        Console.WriteLine(" Введите должность: ");
+        newArray2[newArray2.Length - 1] = Console.ReadLine();
+
+        array1 = newArray1;
+        array2 = newArray2;
+    }
+    static void DeleteWorker(ref string[] array1, ref string[] array2, int number)
+    {
+        string[] newArray1 = new string[array1.Length - 1];
+        string[] newArray2 = new string[array2.Length - 1];
+
+        for (int i = 0; i < newArray1.Length; i++)
+        {
+            if (i >= number)
+            {
+                newArray1[i] = array1[i + 1];
+                newArray2[i] = array2[i + 1];
+            }
+
+            else
+            {
+                newArray1[i] = array1[i];
+                newArray2[i] = array2[i];
+            }
+        }
+        array1 = newArray1;
+        array2 = newArray2;
+
+        Console.WriteLine("\n Операция закончена");
+        Console.ReadKey();
+    }
+    static void OutputWorkerr(string[] array1, string[] array2)
+    {
+        if (array1.Length > 1)
+        {
+            for (int i = 0; i < array1.Length; i++)
+            {
+                if (i == 0)
+                {
+                    Console.Write($" \n    {array1[i]} - {array2[i]}");
+                }
+
+                else
+                {
+                    Console.Write($" \n{i} - {array1[i]} - {array2[i]}");
+                }
+            }
+            Console.ReadKey();
+        }
+
+        else
+        {
+            OutputError("Картотека пуста", ConsoleColor.Yellow);
+        }
+    }
+    static void OutputWorkerr(string[] array1, string[] array2, string lastName)
+    {
+        bool isFound = false;
+
+        for (int i = 0; i < array1.Length; i++)
+        {
+            if (array1[i] == lastName)
+            {
+                Console.WriteLine($" {i} - {array1[i]} - {array2[i]}");
+                Console.ReadKey();
+                isFound = true;
+            }
+        }
+        if (!isFound)
+        {
+            OutputError();
+        }
+    }
+    static void OutputError(string message = "Не унывай, Бро, у всех дрожат пальцы!", ConsoleColor color = ConsoleColor.Red)
+    {
+        ConsoleColor defaultColor = Console.ForegroundColor;
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ForegroundColor = defaultColor;
+        Console.ReadKey();
+    }
+}
