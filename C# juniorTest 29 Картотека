@@ -6,7 +6,6 @@ internal class Program
     {
         string[] fullNames = { "ФИО" };
         string[] positions = { "Должность" };
-        int amountArray = 2;
         string actionChoice;
         bool isWork = true;
 
