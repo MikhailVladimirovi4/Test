@@ -149,14 +149,12 @@ internal class Program
         int positionX = 0;
         int heroPositionY = 17;
         int rabbitPositionY = 19;
- //       ConsoleColor colorHero = ConsoleColor.Red;
- //       ConsoleColor colorMadRabbit = ConsoleColor.Yellow;
 
-        DisplayData(healt1, maxHealt1, " Жизнь Героя:", positionX, heroPositionY);
-        DisplayData(healt2, maxHealt2, " Жизнь Пушистика:", positionX, rabbitPositionY);
+        DisplayData(healt1, maxHealt1, " Жизнь Героя:", positionX, heroPositionY, ConsoleColor.Red);
+        DisplayData(healt2, maxHealt2, " Жизнь Пушистика:", positionX, rabbitPositionY, ConsoleColor.DarkBlue);
     }
 
-    static void DisplayData(float data, float maxData, string text, int positionX, int positionY)
+    static void DisplayData(float data, float maxData, string text, int positionX, int positionY, ConsoleColor color)
     {
         int levelHealt = 30;
         float perCent = 100;
@@ -183,7 +181,7 @@ internal class Program
             else
             {
                 ConsoleColor defaultColor = Console.BackgroundColor;
-                Console.BackgroundColor = ConsoleColor.Red;
+                Console.BackgroundColor = color;
                 Console.Write(barSignHealt);
                 Console.BackgroundColor = defaultColor;
             }
