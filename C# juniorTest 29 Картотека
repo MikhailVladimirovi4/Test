@@ -4,7 +4,7 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        string[] names = { "ФИО" };
+        string[] fullNames = { "ФИО" };
         string[] positions = { "Должность" };
         string actionChoice;
         bool isWork = true;
@@ -19,19 +19,19 @@ internal class Program
             switch (actionChoice)
             {
                 case "1":
-                    OutputWorker(names, positions);
+                    OutputWorker(fullNames, positions);
                     break;
 
                 case "2":
-                    AddWorker(ref names, ref positions);
+                    AddWorker(ref fullNames, ref positions);
                     break;
 
                 case "3":
-                    DeleteWorker(ref names, ref positions);
+                    DeleteWorker(ref fullNames, ref positions);
                     break;
 
                 case "4":
-                    OutputDossier(names, positions);
+                    OutputDossier(fullNames, positions);
                     break;
 
                 case "5":
