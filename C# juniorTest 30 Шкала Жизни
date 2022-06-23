@@ -1,0 +1,194 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Random random = new Random();
+        float healtHero = 100f;
+        float maxHealtHero = healtHero;
+        int maxDamageHero = 110;
+        int minDamageHero = 60;
+        int maxDamageMadRabbit = 50;
+        int minDamageMadRabbit = 10;
+        int maxArmorHero = 50;
+        int minArmorHero = 10;
+        int maxHealtRabbit = 500;
+        int minHealtRabbit = 400;
+        float healtMadRabbit = random.Next(minHealtRabbit, maxHealtRabbit);
+        float maxHealtMadRabbit = healtMadRabbit;
+        int maxArmorRabbit = 100;
+        int minArmorRabbit = 50;
+        int amountLuck = 100;
+        bool heroNotLoh = true;
+        bool isReadySuperKick = false;
+        bool isReadyFatality = false;
+        int indexLuckyMadRabbit = 3;
+        int indexLuckyHero = 5;
+        int fatalityTrigger = 50;
+        float minusLifeHero;
+        float minusLifeMadRabbit;
+        float perCent = 100f;
+
+        Console.WriteLine(" Поздравляю, Герой, ты в начале пути.\n\n  о_О это бешенный кролик 3го уровня, порвем блохастого. Жми кнопку - начнется мортал-комбат!\n");
+
+        while (healtMadRabbit > 0 && healtHero > 0 && heroNotLoh)
+        {
+            int luckHero = random.Next(0, amountLuck);
+            int luckMadRabbit = random.Next(0, amountLuck);
+            int damageHero = random.Next(minDamageHero, maxDamageHero);
+            int damageMadRabbit = random.Next(minDamageMadRabbit, maxDamageMadRabbit);
+            int armorHero = random.Next(minArmorHero, maxArmorHero);
+            int armorMadRabbit = random.Next(minArmorRabbit, maxArmorRabbit);
+
+            DisplayLives(healtHero, maxHealtHero, healtMadRabbit, maxHealtMadRabbit);
+
+            Console.WriteLine($" Жизнь героя - {healtHero}\n Жизнь кролика - {healtMadRabbit}\n\n");
+            Console.WriteLine("\n 1 - ногой в корпус.\n 2 - Валим подальше.");
+
+            if (healtMadRabbit <= fatalityTrigger)
+            {
+                isReadyFatality = true;
+            }
+
+            if (isReadySuperKick)
+            {
+                Console.WriteLine(" 3 - дернуть за хвост");
+            }
+
+            if (isReadyFatality)
+            {
+                Console.WriteLine(" 4 - пальцем в глаз");
+            }
+            Console.Write(" Выбери действие героя: ");
+            string selectKick = Console.ReadLine();
+
+            switch (selectKick)
+            {
+                case "1":
+                    if (luckMadRabbit % indexLuckyMadRabbit != 0)
+                    {
+                        healtMadRabbit -= damageHero / perCent * armorMadRabbit;
+                        minusLifeMadRabbit = damageHero / perCent * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\n\n..промах Героя..");
+                    }
+                    isReadySuperKick = true;
+                    break;
+
+                case "2":
+                    heroNotLoh = false;
+                    break;
+
+                case "3":
+                    if (isReadySuperKick)
+                    {
+                        healtMadRabbit -= damageHero * (luckHero % indexLuckyHero) / perCent * armorMadRabbit;
+                        minusLifeMadRabbit = damageHero * (luckHero % indexLuckyHero) / perCent * armorMadRabbit;
+                        Console.WriteLine("\n\n\n..урон по кролику.. " + minusLifeMadRabbit);
+                        isReadySuperKick = false;
+                    }
+                    else
+                    {
+                        Console.WriteLine("\n\n\n.... хех Умник - пропуск хода");
+                    }
+                    break;
+
+                case "4":
+                    if (isReadyFatality)
+                    {
+                        healtMadRabbit = 0;
+                        Console.WriteLine("\n\n\n..это неспортивно.. ");
+                    }
+                    else
+                    {
+                        Console.WriteLine(" хех Умник - пропуск хода");
+                    }
+                    break;
+
+                default:
+                    Console.WriteLine("\n\n\n\n .....Глуппый, глуппый герой - пропуск хода");
+                    break;
+            }
+
+            if (healtMadRabbit > 0)
+            {
+                healtHero -= damageMadRabbit / perCent * armorHero;
+                minusLifeHero = damageMadRabbit / perCent * armorHero;
+                Console.WriteLine("..урон по Герою.. " + minusLifeHero);
+            }
+            Console.WriteLine("Жми для продолжения битвы.");
+            Console.ReadKey();
+            Console.Clear();
+        }
+
+        if (healtMadRabbit <= 0)
+        {
+            Console.WriteLine(" Кролик сдох, первый шаг - самый трудный. ( пысы ГринПис выехал за тобой.)");
+        }
+        else if (healtHero <= 0)
+        {
+            Console.WriteLine(" Кролик сыт, герой на респаун");
+        }
+        else if (healtHero > 0 && healtMadRabbit > 0)
+        {
+            Console.WriteLine(" Умный в гору не пойдет, умный гору обойден... Начнем с тараканов");
+        }
+        else
+        {
+            Console.WriteLine(" А че так можно было???");
+        }
+        Console.ReadKey();
+    }
+
+    static void DisplayLives(float healt1, float maxHealt1, float healt2, float maxHealt2)
+    {
+        int positionX = 0;
+        int heroPositionY = 17;
+        int rabbitPositionY = 19;
+ //       ConsoleColor colorHero = ConsoleColor.Red;
+ //       ConsoleColor colorMadRabbit = ConsoleColor.Yellow;
+
+        DisplayData(healt1, maxHealt1, " Жизнь Героя:", positionX, heroPositionY);
+        DisplayData(healt2, maxHealt2, " Жизнь Пушистика:", positionX, rabbitPositionY);
+    }
+
+    static void DisplayData(float data, float maxData, string text, int X, int Y)
+    {
+        int levelHealt = 30;
+        float perCent = 100;
+        float barValue = 70;
+        char barSignHealt = ' ';
+        char barSignEmpty = ' ';
+        int barHealt = Convert.ToInt32(data / (maxData / perCent) / (perCent / barValue));
+
+        if (levelHealt > data / (maxData / perCent))
+        {
+            barSignHealt = '#';
+        }
+
+        Console.SetCursorPosition(X, Y);
+        Console.WriteLine(text);
+        Console.Write('[');
+
+        for (int i = 0; i < barValue; i++)
+        {
+            if (i > barHealt)
+            {
+                Console.Write(barSignEmpty);
+            }
+            else
+            {
+                ConsoleColor defaultColor = Console.BackgroundColor;
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.Write(barSignHealt);
+                Console.BackgroundColor = defaultColor;
+            }
+        }
+        Console.Write(']');
+        Console.SetCursorPosition(0, 0);
+    }
+}
