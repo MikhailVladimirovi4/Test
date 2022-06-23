@@ -6,6 +6,7 @@ internal class Program
     {
         string[] fullNames = { "ФИО" };
         string[] positions = { "Должность" };
+        int amountArray = 2;
         string actionChoice;
         bool isWork = true;
 
@@ -47,59 +48,31 @@ internal class Program
         }
     }
 
-    static void AddWorker(ref string[] names, ref string[] positions)
+    static void AddWorker(ref string[] array1, ref string[] array2)
     {
-        string[] newArray1 = new string[names.Length + 1];
-        string[] newArray2 = new string[positions.Length + 1];
-
-        for (int i = 0; i < newArray1.Length - 1; i++)
-        {
-            newArray1[i] = names[i];
-            newArray2[i] = positions[i];
-        }
-
-        AddElement(ref newArray1, " Введите ФИО: ");
-        AddElement(ref newArray2, " Введите Должность: ");
-
-        names = newArray1;
-        positions = newArray2;
+        AddData(ref array1, " Введите ФИО: ");
+        AddData(ref array2, " Введите Должность: ");
     }
-    
+
     static void DeleteWorker(ref string[] array1, ref string[] array2)
     {
-        string[] newArray1 = new string[array1.Length - 1];
-        string[] newArray2 = new string[array2.Length - 1];
-
         Console.Write("\n Введите № п/п: ");
         string deleteNumber = Console.ReadLine();
         bool isCorrectInput = int.TryParse(deleteNumber, out int number);
 
         if (isCorrectInput && number > 0 && number < array1.Length)
         {
-
-            for (int i = 0; i < newArray1.Length; i++)
-            {
-                if (i >= number)
-                {
-                    TransferElement(ref newArray1, ref newArray2, ref array1, ref array2, i, (i+1));
-                }
-
-                else
-                {
-                    TransferElement(ref newArray1, ref newArray2, ref array1, ref array2, i, i);
-                }
-            }
-            array1 = newArray1;
-            array2 = newArray2;
-
-            Console.WriteLine("\n Операция закончена");
-            Console.ReadKey();
+            DeleteData(ref array1, number);
+            DeleteData(ref array2, number);
         }
 
         else
         {
             OutputError();
         }
+
+        Console.WriteLine("\n Операция закончена");
+        Console.ReadKey();
     }
 
     static void OutputWorker(string[] array1, string[] array2)
@@ -171,15 +144,37 @@ internal class Program
         Console.ReadKey();
     }
 
-    static void AddElement(ref string[] array, string word)
+    static void AddData(ref string[] array, string text)
     {
-        Console.WriteLine(word);
-        array[array.Length - 1] = Console.ReadLine();
+        string[] newArray = new string[array.Length + 1];
+
+        for (int i = 0; i < newArray.Length - 1; i++)
+        {
+            newArray[i] = array[i];
+        }
+
+        Console.WriteLine(text);
+        newArray[newArray.Length - 1] = Console.ReadLine();
+
+        array = newArray;
     }
 
-    static void TransferElement(ref string[] in1, ref string[] in2, ref string[] out1, ref string[] out2, int inNumber, int outNumber)
+    static void DeleteData(ref string[] array, int number)
     {
-        in1[inNumber] = out1[outNumber];
-        in2[inNumber] = out2[outNumber];
+        string[] newArray = new string[array.Length - 1];
+
+        for (int i = 0; i < newArray.Length; i++)
+        {
+            if (i >= number)
+            {
+                newArray[i] = array[i + 1];
+            }
+
+            else
+            {
+                newArray[i] = array[i];
+            }
+        }
+        array = newArray;
     }
 }
