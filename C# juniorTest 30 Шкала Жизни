@@ -156,7 +156,7 @@ internal class Program
         DisplayData(healt2, maxHealt2, " Жизнь Пушистика:", positionX, rabbitPositionY);
     }
 
-    static void DisplayData(float data, float maxData, string text, int X, int Y)
+    static void DisplayData(float data, float maxData, string text, int positionX, int positionY)
     {
         int levelHealt = 30;
         float perCent = 100;
@@ -170,7 +170,7 @@ internal class Program
             barSignHealt = '#';
         }
 
-        Console.SetCursorPosition(X, Y);
+        Console.SetCursorPosition(positionX, positionY);
         Console.WriteLine(text);
         Console.Write('[');
 
