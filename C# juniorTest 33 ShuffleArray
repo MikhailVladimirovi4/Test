@@ -7,18 +7,15 @@ internal class Program
     {
         int minValueArray = 0;
         int maxValueArray = 9;
-        int sizeArray = 5;
+        int sizeArray = 3;
         int[,] exampleArray = FillArray(minValueArray, maxValueArray, sizeArray);
 
         PrintArray(exampleArray);
 
         ShuffleArray(exampleArray);
 
-        Console.WriteLine();
-
         PrintArray(exampleArray);
 
-        Console.WriteLine();
     }
 
     static int[,] FillArray(int minValue, int maxValue, int size)
@@ -48,6 +45,8 @@ internal class Program
 
             Console.WriteLine();
         }
+
+        Console.WriteLine();
     }
 
     static void ShuffleArray(int[,] array)
@@ -70,7 +69,7 @@ internal class Program
             ExchangeData(array, firstChangePosition0, firstChangePosition1, secondChangePosition0, secondChangePosition1);
         }
     }
-    
+
     static void ExchangeData(int[,] array, int firstPosition0, int firstPosition1, int secondPosition0, int secondPosition1)
     {
         int tempBox;
