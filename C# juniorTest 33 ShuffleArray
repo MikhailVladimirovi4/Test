@@ -70,6 +70,7 @@ internal class Program
             ExchangeData(array, firstChangePosition0, firstChangePosition1, secondChangePosition0, secondChangePosition1);
         }
     }
+    
     static void ExchangeData(int[,] array, int firstPosition0, int firstPosition1, int secondPosition0, int secondPosition1)
     {
         int tempBox;
