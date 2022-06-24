@@ -7,12 +7,12 @@ internal class Program
     {
         bool isWork = true;
         int speedGame = 150;
-        int heroX;
-        int heroY;
+        int heroPositionX;
+        int heroPositionX;
         char symbolHero;
         int heroDirectionX = 0;
         int heroDirectionY = 1;
-        char[,] currentMap = ReadMap("map1", out symbolHero, out heroX, out heroY);
+        char[,] currentMap = ReadMap("map1", out symbolHero, out heroPositionX, out heroPositionY);
 
         Console.CursorVisible = false;
         Console.Clear();
@@ -27,9 +27,9 @@ internal class Program
                 ChangeDirection(actionDirection, ref heroDirectionX, ref heroDirectionY);
             }
 
-            if (currentMap[heroX + heroDirectionX, heroY + heroDirectionY] != '#')
+            if (currentMap[heroPositionX + heroDirectionX, heroPositionY + heroDirectionY] != '#')
             {
-                Move(ref heroX, ref heroY, heroDirectionX, heroDirectionY, ref symbolHero);
+                Move(ref heroPositionX, ref heroPositionY, heroDirectionX, heroDirectionY, ref symbolHero);
 
             }
 
