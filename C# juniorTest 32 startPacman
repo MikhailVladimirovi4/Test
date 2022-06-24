@@ -1,0 +1,121 @@
+using System;
+using System.IO;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        bool isWork = true;
+        int speedGame = 150;
+        int heroX;
+        int heroY;
+        char symbolHero;
+        int heroDirectionX = 0;
+        int heroDirectionY = 1;
+        char[,] currentMap = ReadMap("map1", out symbolHero, out heroX, out heroY);
+
+        Console.CursorVisible = false;
+        Console.Clear();
+
+        DrawMap(currentMap);
+
+        while (isWork)
+        {
+            if (Console.KeyAvailable)
+            {
+                ConsoleKeyInfo actionDirection = Console.ReadKey(true);
+                ChangeDirection(actionDirection, ref heroDirectionX, ref heroDirectionY);
+            }
+
+            if (currentMap[heroX + heroDirectionX, heroY + heroDirectionY] != '#')
+            {
+                Move(ref heroX, ref heroY, heroDirectionX, heroDirectionY, ref symbolHero);
+
+            }
+
+            System.Threading.Thread.Sleep(speedGame);
+        }
+    }
+
+    static void DrawMap(char[,] map)
+    {
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                Console.Write(map[i, j]);
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    static char[,] ReadMap(string mapName, out char symbol, out int positionX, out int positionY)
+
+    {
+        positionX = 0;
+        positionY = 0;
+        symbol = ' ';
+
+        string[] newFile = File.ReadAllLines($"map/{mapName}.txt");
+        char[,] map = new char[newFile.Length, newFile[0].Length];
+
+        for (int i = 0; i < map.GetLength(0); i++)
+        {
+            for (int j = 0; j < map.GetLength(1); j++)
+            {
+                map[i, j] = newFile[i][j];
+
+                if (map[i, j] == '@')
+                {
+                    positionX = i;
+                    positionY = j;
+                    symbol = map[i, j];
+                }
+            }
+        }
+        return map;
+    }
+
+    static void ChangeDirection(ConsoleKeyInfo key, ref int directionX, ref int directionY)
+    {
+        switch (key.Key)
+        {
+            case ConsoleKey.UpArrow:
+                directionX = -1;
+                directionY = 0;
+                break;
+
+            case ConsoleKey.DownArrow:
+                directionX = +1;
+                directionY = 0;
+                break;
+
+            case ConsoleKey.LeftArrow:
+                directionX = 0;
+                directionY = -1;
+                break;
+
+            case ConsoleKey.RightArrow:
+                directionX = 0;
+                directionY = +1;
+                break;
+        }
+    }
+
+    static void Move(ref int positionX, ref int positionY, int directionX, int directionY, ref char symbol)
+    {
+        DrawSymbol(positionY, positionX);
+
+        positionX += directionX;
+        positionY += directionY;
+
+        DrawSymbol(positionY, positionX, symbol);
+    }
+
+    static void DrawSymbol(int consolX, int consolY, char symbol = ' ')
+    {
+        Console.SetCursorPosition(consolX, consolY);
+        Console.Write(symbol);
+    }
+}
