@@ -1,0 +1,28 @@
+using System;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int number = 0;
+
+        CheckInput(ref number);
+        Console.WriteLine(" Число: " + number);
+    }
+
+    static int CheckInput(ref int number)
+    {
+        bool isNotWork = false;
+        string inputText;
+
+        while (!isNotWork)
+        {
+            Console.Clear();
+            Console.Write("\n Введите число: ");
+            inputText = Console.ReadLine();
+            isNotWork = int.TryParse(inputText, out number);
+        }
+
+        return number;
+    }
+}
