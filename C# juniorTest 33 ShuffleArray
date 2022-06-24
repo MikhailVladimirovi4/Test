@@ -8,7 +8,7 @@ internal class Program
         int minValueArray = 0;
         int maxValueArray = 9;
         int sizeArray = 3;
-        int[,] exampleArray = FillArray(minValueArray, maxValueArray, sizeArray);
+        int[,] exampleArray = CreateArray(minValueArray, maxValueArray, sizeArray);
 
         PrintArray(exampleArray);
 
@@ -18,7 +18,7 @@ internal class Program
 
     }
 
-    static int[,] FillArray(int minValue, int maxValue, int size)
+    static int[,] CreateArray(int minValue, int maxValue, int size)
     {
         Random random = new Random();
         int[,] array = new int[size, size];
