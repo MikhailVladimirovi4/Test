@@ -15,7 +15,6 @@ internal class Program
         string inputText;
         int data = 0;
 
-
         while (isNotWork == false)
         {
             Console.Clear();
