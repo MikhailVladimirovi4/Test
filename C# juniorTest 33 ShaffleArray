@@ -1,0 +1,81 @@
+using System;
+using System.IO;
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int minValueArray = 0;
+        int maxValueArray = 9;
+        int sizeArray = 5;
+        int[,] exampleArray = FillArray(minValueArray, maxValueArray, sizeArray);
+
+        PrintArray(exampleArray);
+
+        ShuffleArray(exampleArray);
+
+        Console.WriteLine();
+
+        PrintArray(exampleArray);
+
+        Console.WriteLine();
+    }
+
+    static int[,] FillArray(int minValue, int maxValue, int size)
+    {
+        Random random = new Random();
+        int[,] array = new int[size, size];
+
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                array[i, j] = random.Next(minValue, maxValue);
+            }
+        }
+
+        return array;
+    }
+
+    static void PrintArray(int[,] array)
+    {
+        for (int i = 0; i < array.GetLength(0); i++)
+        {
+            for (int j = 0; j < array.GetLength(1); j++)
+            {
+                Console.Write($"{array[i, j]} ");
+            }
+
+            Console.WriteLine();
+        }
+    }
+
+    static void ShuffleArray(int[,] array)
+    {
+        Random random = new Random();
+        int levelChange = 1;
+        int firstChangePosition0;
+        int firstChangePosition1;
+        int secondChangePosition0;
+        int secondChangePosition1;
+
+        for (int k = 0; k < levelChange; k++)
+        {
+            firstChangePosition0 = random.Next(array.GetLength(0));
+            firstChangePosition1 = random.Next(array.GetLength(1));
+
+            secondChangePosition0 = random.Next(array.GetLength(0));
+            secondChangePosition1 = random.Next(array.GetLength(1));
+
+            ExchangeData(array, firstChangePosition0, firstChangePosition1, secondChangePosition0, secondChangePosition1);
+        }
+    }
+    static void ExchangeData(int[,] array, int firstPosition0, int firstPosition1, int secondPosition0, int secondPosition1)
+    {
+        int tempBox;
+
+        tempBox = array[firstPosition0, firstPosition1];
+        array[firstPosition0, firstPosition1] = array[secondPosition0, secondPosition1];
+        array[secondPosition0, secondPosition1] = tempBox;
+    }
+}
