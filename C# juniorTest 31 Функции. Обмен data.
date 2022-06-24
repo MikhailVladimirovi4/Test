@@ -4,25 +4,26 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        int number = 0;
+        int number = GetNumber();
 
-        CheckInput(ref number);
         Console.WriteLine(" Число: " + number);
     }
 
-    static int CheckInput(ref int number)
+    static int GetNumber()
     {
         bool isNotWork = false;
         string inputText;
+        int data = 0;
 
-        while (!isNotWork)
+
+        while (isNotWork == false)
         {
             Console.Clear();
             Console.Write("\n Введите число: ");
             inputText = Console.ReadLine();
-            isNotWork = int.TryParse(inputText, out number);
+            isNotWork = int.TryParse(inputText, out data);
         }
 
-        return number;
+        return data;
     }
 }
