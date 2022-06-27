@@ -27,13 +27,11 @@ internal class Program
         populations.Add("Киров", amountSmall);
         populations.Add("Вологда", amountSmall);
 
-        foreach (var city in populations)
-        {
-            if (city.Key.ToLower() == cityName.ToLower())
+            if (populations.ContainsKey(cityName))
             {
-                dataMessage = "\n Город: " + city.Key + ", население: " + city.Value + ".\n";
+                dataMessage = "\n Город: " + cityName + ", население: " + populations[cityName] + ".\n";
             }
-        }
+            
         return dataMessage;
     }
 }
