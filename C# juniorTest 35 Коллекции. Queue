@@ -1,0 +1,35 @@
+using System;
+using System.Collections.Generic;
+
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        int sum = 0;
+
+        Queue<int> profits = GetQuele();
+
+        while (profits.Count > 0)
+        {
+            Console.WriteLine($" получаем гешефт: {profits.Peek()}");
+            sum += profits.Dequeue();
+            Console.WriteLine($" Накопили: {sum}.");
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+
+    static Queue<int> GetQuele()
+    {
+        Queue<int> queue = new Queue<int>();
+        queue.Enqueue(15);
+        queue.Enqueue(35);
+        queue.Enqueue(45);
+        queue.Enqueue(55);
+        queue.Enqueue(65);
+        queue.Enqueue(75);
+
+        return queue;
+    }
+}
