@@ -14,7 +14,7 @@ internal class Program
         {
             DrawMenu();
 
-            DoAction(ref isWork, ref wallet);
+            TakeAction(ref isWork, ref wallet);
 
             Console.ReadKey();
             Console.Clear();
@@ -54,7 +54,7 @@ internal class Program
         return sum;
     }
 
-    static void DoAction(ref bool isWork, ref List<int> wallet)
+    static void TakeAction(ref bool isWork, ref List<int> wallet)
     {
         string action;
         int sum;
