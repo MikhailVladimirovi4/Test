@@ -75,9 +75,9 @@ internal class Program
 
         Console.WriteLine($" № - ФИО - Должность");
 
-        foreach (var entry in lists)
+        foreach (var record in lists)
         {
-            Console.WriteLine($" {recordNumber} - {entry.Key} - {entry.Value}");
+            Console.WriteLine($" {recordNumber} - {record.Key} - {record.Value}");
             recordNumber++;
         }
     }
@@ -87,9 +87,9 @@ internal class Program
         Console.Write(" Введите ФИО: ");
         string deleteName = Console.ReadLine().ToLower();
 
-        foreach (var entry in lists)
+        foreach (var record in lists)
         {
-            if (entry.Key == deleteName)
+            if (record.Key == deleteName)
             {
                lists.Remove(deleteName);
                 break;
