@@ -7,8 +7,6 @@ internal class Program
     static void Main(string[] args)
     {
         bool isWork = true;
-        string action;
-        int sum;
 
         List<int> wallet = new List<int>();
 
@@ -16,23 +14,7 @@ internal class Program
         {
             DrawMenu();
 
-            action = Console.ReadLine();
-
-            switch (action)
-            {
-                case "sum":
-                    sum = GetMany(wallet);
-                    Console.WriteLine("Накоплено: " + sum);
-                    break;
-
-                case "exit":
-                    isWork = false;
-                    break;
-
-                default:
-                    wallet.Add(PutMany(action));
-                    break;
-            }
+            DoAction(ref isWork, ref wallet);
 
             Console.ReadKey();
             Console.Clear();
@@ -71,4 +53,28 @@ internal class Program
 
         return sum;
     }
+
+    static void DoAction(ref bool isWork, ref List<int> wallet)
+    {
+        string action;
+        int sum;
+
+        action = Console.ReadLine();
+
+        switch (action)
+        {
+            case "sum":
+                sum = GetMany(wallet);
+                Console.WriteLine("Накоплено: " + sum);
+                break;
+
+            case "exit":
+                isWork = false;
+                break;
+
+            default:
+                wallet.Add(PutMany(action));
+                break;
+        }
+    }    
 }
