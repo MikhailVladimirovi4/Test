@@ -1,0 +1,39 @@
+using System;
+using System.Collections.Generic;
+
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        Console.Write("Впиши город, узнаешь плотность населения: ");
+        string cityName = Console.ReadLine();
+
+        Console.WriteLine(GetPopulationCount(cityName));
+    }
+
+    static string GetPopulationCount(string cityName)
+    {
+        string amountBig = "очень много";
+        string amountMiddle = "много";
+        string amountSmall = "немного";
+        string dataMessage = "\n Пусто.\n";
+
+        Dictionary<string, string> populations = new Dictionary<string, string>();
+        populations.Add("Москва", amountBig);
+        populations.Add("СПб", amountBig);
+        populations.Add("Владивосток", amountMiddle);
+        populations.Add("Новосибирск", amountMiddle);
+        populations.Add("Киров", amountSmall);
+        populations.Add("Вологда", amountSmall);
+
+        foreach (var city in populations)
+        {
+            if (city.Key.ToLower() == cityName.ToLower())
+            {
+                dataMessage = "\n Город: " + city.Key + ", население: " + city.Value + ".\n";
+            }
+        }
+        return dataMessage;
+    }
+}
