@@ -41,7 +41,7 @@ internal class Program
                 break;
 
             case "3":
-                DellDossier(ref lists);
+                DeleteDossier(ref lists);
                 break;
 
             case "4":
@@ -82,7 +82,7 @@ internal class Program
         }
     }
 
-    static void DellDossier(ref Dictionary<string, string> lists)
+    static void DeleteDossier(ref Dictionary<string, string> lists)
     {
         Console.Write(" Введите ФИО: ");
         string deleteName = Console.ReadLine().ToLower();
