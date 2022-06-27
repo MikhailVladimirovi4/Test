@@ -14,7 +14,7 @@ internal class Program
 
         while (isWork)
         {
-            Menu();
+            DrawMenu();
 
             action = Console.ReadLine();
 
@@ -30,7 +30,7 @@ internal class Program
                     break;
 
                 default:
-                    wallet.Add(AddMany(action));
+                    wallet.Add(PutMany(action));
                     break;
             }
 
@@ -39,12 +39,12 @@ internal class Program
         }
     }
 
-    static void Menu()
+    static void DrawMenu()
     {
         Console.WriteLine(" Копим БаБосики.\n\n Введешь число - на счет падает.\n exit - выход.\n sum - покажет копилку.");
     }
 
-    static int AddMany(string text)
+    static int PutMany(string text)
     {
         int numberAdd;
 
