@@ -1,0 +1,74 @@
+using System;
+using System.Collections.Generic;
+
+
+internal class Program
+{
+    static void Main(string[] args)
+    {
+        bool isWork = true;
+        string action;
+        int sum;
+
+        List<int> wallet = new List<int>();
+
+        while (isWork)
+        {
+            Menu();
+
+            action = Console.ReadLine();
+
+            switch (action)
+            {
+                case "sum":
+                    sum = GetMany(wallet);
+                    Console.WriteLine("Накоплено: " + sum);
+                    break;
+
+                case "exit":
+                    isWork = false;
+                    break;
+
+                default:
+                    wallet.Add(AddMany(action));
+                    break;
+            }
+
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+
+    static void Menu()
+    {
+        Console.WriteLine(" Копим БаБосики.\n\n Введешь число - на счет падает.\n exit - выход.\n sum - покажет копилку.");
+    }
+
+    static int AddMany(string text)
+    {
+        int numberAdd;
+
+        if (int.TryParse(text, out int number))
+        {
+            numberAdd = number;
+        }
+        else
+        {
+            numberAdd = 0;
+        }
+
+        return numberAdd;
+    }
+
+    static int GetMany(List<int> arrayMany)
+    {
+        int sum = 0;
+
+        for (int i = 0; i < arrayMany.Count; i++)
+        {
+            sum += arrayMany[i];
+        }
+
+        return sum;
+    }
+}
