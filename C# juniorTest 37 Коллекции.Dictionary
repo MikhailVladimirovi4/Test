@@ -14,7 +14,30 @@ internal class Program
         {
             DrawMenu();
 
-            TakeAction(ref dossiers, ref isWork);
+            string action = Console.ReadLine();
+
+            switch (action)
+            {
+                case "1":
+                    AddEntry(dossiers);
+                    break;
+
+                case "2":
+                    DrawDossiers(dossiers);
+                    break;
+
+                case "3":
+                    DelleteDossier(dossiers);
+                    break;
+
+                case "4":
+                    isWork = false;
+                    break;
+
+                default:
+                    Console.WriteLine(" Хрень введена");
+                    break;
+            }
 
             Console.ReadKey();
         }
@@ -26,74 +49,43 @@ internal class Program
         Console.WriteLine(" 1 - добавить досье\n\n 2 - вывести досье\n\n 3 - удалить досье\n\n 4 - выход");
     }
 
-    static void TakeAction(ref Dictionary<string, string> lists, ref bool isWork)
-    {
-        string action = Console.ReadLine();
-
-        switch (action)
-        {
-            case "1":
-                AddEntry(ref lists);
-                break;
-
-            case "2":
-                DrawDossiers(ref lists);
-                break;
-
-            case "3":
-                DeleteDossier(ref lists);
-                break;
-
-            case "4":
-                isWork = false;
-                break;
-
-            default:
-                Console.WriteLine(" Хрень введена");
-                break;
-        }
-    }
-
-    static void AddEntry(ref Dictionary<string, string> lists)
+    static void AddEntry(Dictionary<string, string> lists)
     {
         string fullName = CreateData("\n Введите ФИО: ");
-        string jobtitle = CreateData("\n Введите должность: ");
 
-        lists.Add(fullName, jobtitle);
+        if (lists.ContainsKey(fullName))
+        {
+            Console.WriteLine(" Хрень введена");
+        }
+        else
+        {
+            string jobtitle = CreateData("\n Введите должность: ");
+            lists.Add(fullName, jobtitle);
+        }
     }
 
     static string CreateData(string text)
     {
         Console.Write(text);
-        string stringData = Console.ReadLine().ToLower();
-        return stringData;
+        return Console.ReadLine().ToLower();
     }
 
-    static void DrawDossiers(ref Dictionary<string, string> lists)
+    static void DrawDossiers(Dictionary<string, string> lists)
     {
-        int recordNumber = 1;
+        int count = 1;
 
         Console.WriteLine($" № - ФИО - Должность");
 
-        foreach (var record in lists)
+        foreach (var entry in lists)
         {
-            Console.WriteLine($" {recordNumber} - {record.Key} - {record.Value}");
-            recordNumber++;
+            Console.WriteLine($" {count} - {entry.Key} - {entry.Value}");
+            count++;
         }
     }
 
-    static void DeleteDossier(ref Dictionary<string, string> lists)
+    static void DelleteDossier(Dictionary<string, string> lists)
     {
         Console.Write(" Введите ФИО: ");
-        string deleteName = Console.ReadLine().ToLower();
-
-        foreach (var record in lists)
-        {
-            if (record.Key == deleteName)
-            {
-               lists.Remove(deleteName);
-                break;
-            }
-        }
+        lists.Remove(Console.ReadLine().ToLower());
     }
 }
