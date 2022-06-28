@@ -6,32 +6,35 @@ internal class Program
 {
     static void Main(string[] args)
     {
-        Console.Write("Впиши город, узнаешь плотность населения: ");
-        string cityName = Console.ReadLine();
-
-        Console.WriteLine(GetPopulationCount(cityName));
-    }
-
-    static string GetPopulationCount(string cityName)
-    {
         string amountBig = "очень много";
         string amountMiddle = "много";
         string amountSmall = "немного";
+
+        Dictionary<string, string> populations = new Dictionary<string, string>()
+        {
+            {"Москва", amountBig},
+            {"СПб", amountBig},
+            {"Владивосток", amountMiddle},
+            {"Новосибирск", amountMiddle},
+            {"Киров", amountSmall},
+            {"Вологда", amountSmall}
+        };
+
+        Console.Write("Впиши город, узнаешь плотность населения: ");
+        string cityName = Console.ReadLine();
+
+        Console.WriteLine(GetPopulationCount(cityName, populations));
+    }
+
+    static string GetPopulationCount(string cityName, Dictionary<string, string> lists)
+    {
         string dataMessage = "\n Пусто.\n";
 
-        Dictionary<string, string> populations = new Dictionary<string, string>();
-        populations.Add("Москва", amountBig);
-        populations.Add("СПб", amountBig);
-        populations.Add("Владивосток", amountMiddle);
-        populations.Add("Новосибирск", amountMiddle);
-        populations.Add("Киров", amountSmall);
-        populations.Add("Вологда", amountSmall);
+        if (lists.ContainsKey(cityName))
+        {
+            dataMessage = "\n Город: " + cityName + ", население: " + lists[cityName] + ".\n";
+        }
 
-            if (populations.ContainsKey(cityName))
-            {
-                dataMessage = "\n Город: " + cityName + ", население: " + populations[cityName] + ".\n";
-            }
-            
         return dataMessage;
     }
 }
