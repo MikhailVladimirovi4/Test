@@ -1,0 +1,36 @@
+using System;
+
+namespace testOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Plauer student = new Plauer(2, 1, 1000, 400);
+
+            Console.WriteLine(" Ты в начале пути ООП, неюный падаван, твои статы:");
+            student.ShowStats();
+        }
+    }
+
+    class Plauer
+    {
+        public int Health;
+        public int Speed;
+        public int Mana;
+        public int Spirit;
+
+        public Plauer(int health, int speed, int mana, int spirit)
+        {
+            Health = health;
+            Speed = speed;
+            Mana = mana;
+            Spirit = spirit;
+        }
+
+        public void ShowStats()
+        {
+            Console.WriteLine($" Жизни - {Health}\n Скорость - {Speed}\n Мана - {Mana}\n Дух - {Spirit}");
+        }
+    }
+}
