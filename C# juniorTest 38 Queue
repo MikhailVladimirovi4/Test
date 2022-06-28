@@ -9,25 +9,24 @@ internal class Program
         Queue<string> lists = new Queue<string>();
         string[] arrayNumbers1 = { "1", "2", "3", "4" };
         string[] arrayNumbers2 = { "1", "4", "5", "6" };
-        int count = 0;
+        string[] arrayNumbers3;
 
-        AddNumber(lists, arrayNumbers1, ref count);
-        AddNumber(lists, arrayNumbers2, ref count);
+        AddNumber(lists, arrayNumbers1);
+        AddNumber(lists, arrayNumbers2);
 
-        for (int i = 0; i < count; i++)
+        for (int i = lists.Count; i > 0; i--)
         {
-            Console.WriteLine(lists.Dequeue());
+            Console.Write(lists.Dequeue() + " ");
         }
     }
 
-    static void AddNumber(Queue<string> lists, string[] array, ref int count)
+    static void AddNumber(Queue<string> lists, string[] array)
     {
         for (int i = 0; i < array.Length; i++)
         {
             if (lists.Contains(array[i]) == false)
             {
                 lists.Enqueue(array[i]);
-                count++;
             }
         }
     }
