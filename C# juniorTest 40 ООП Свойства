@@ -26,6 +26,9 @@ namespace TestOOP
     class Plauer
     {
         private char _icon;
+        private int _positionX;
+        private int _positionY;
+        
         public int PositionX { get; private set; }
         public int PositionY { get; private set; }
 
@@ -42,3 +45,4 @@ namespace TestOOP
         }
     }
 }
+
