@@ -25,9 +25,9 @@ namespace TestOOP
 
     class Plauer
     {
+        private char _icon;
         public int PositionX { get; private set; }
         public int PositionY { get; private set; }
-        private char _icon;
 
         public Plauer(int dataX, int dataY, char icon)
         {
