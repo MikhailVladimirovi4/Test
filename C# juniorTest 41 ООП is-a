@@ -1,0 +1,98 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool isPlay = true;
+
+            while (isPlay)
+            {
+                Console.WriteLine(" Вы типо судья и еще кто-то. Ваши возможные действия: \n");
+                Console.WriteLine(" 1 - добавить игрока\n\n 2 - забанить\n\n 3 - вытащить из бана\n\n 4 - удалить игрока\n\n 5 - закончить\n\n");
+                Console.Write(" Выбор действия: ");
+                string action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        Plauer.
+                        break;
+
+                    case "2":
+                        break;
+
+                    case "3":
+                        break;
+
+                    case "4":
+                        break;
+
+                    case "5":
+                        isPlay = false;
+                        break;
+                    default:
+                        Console.WriteLine(" Введена хрень");
+                        Console.ReadKey();
+                        break;
+                }
+
+                Console.Clear();
+            }
+        }
+    }
+
+    class MembersGame
+    {
+        protected List<Plauer> plauers = new List<Plauer>();
+
+        protected string Number { get; private set; }
+        protected string Name { get; private set; }
+        protected int Level { get; private set; }
+        protected bool IsBanned { get; private set; }
+
+        public MembersGame(string number, string name, int level, bool isBanned)
+        {
+            Number = number;
+            Name = name;
+            Level = level;
+            IsBanned = isBanned;
+        }
+
+        public void AddPlauer()
+        {
+            string newNamber = AddData("Введите номер игрока: ");
+
+            if (plauers.Equals(newNamber) == false)
+            {
+                string newName = AddData("Введите ник игрока: ");
+                plauers.Add(new Plauer(newNamber, newName));
+            }
+        }
+
+        public void ShowInfo()
+        {
+
+        }
+
+        public bool ChangeBanStatus(int number, bool isBanned)
+        {
+            return isBanned = !isBanned;
+        }
+
+        private string AddData(string text)
+        {
+            Console.Write(text);
+            return Console.ReadLine();
+        }
+    }
+
+    class Plauer : MembersGame
+    {
+        public Plauer(string number, string name, int level = 1, bool isBanned = false) : base(number, name, level, isBanned) { }
+    }
+}
+
