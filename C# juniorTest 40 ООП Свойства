@@ -1,0 +1,45 @@
+using System;
+// using System.Collections.Generic;
+
+
+namespace TestOOP
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Renderer renderer = new Renderer();
+            Plauer buks = new Plauer(3, 3, '$');
+
+            renderer.DrawPlauer(buks.PositionX, buks.PositionY, buks.GetIcon());
+        }
+    }
+
+    class Renderer
+    {
+        public void DrawPlauer(int posirionX, int positionY, char icon)
+        {
+            Console.SetCursorPosition(posirionX, positionY);
+            Console.WriteLine(icon + "\n");
+        }
+    }
+
+    class Plauer
+    {
+        public int PositionX { get; private set; }
+        public int PositionY { get; private set; }
+        private char _icon;
+
+        public Plauer(int posirionX, int positionY, char icon)
+        {
+            PositionX = posirionX;
+            PositionY = positionY;
+            _icon = icon;
+        }
+
+        public char GetIcon()
+        {
+            return _icon;
+        }
+    }
+}
