@@ -1,5 +1,4 @@
 using System;
-// using System.Collections.Generic;
 
 
 namespace TestOOP
@@ -17,9 +16,9 @@ namespace TestOOP
 
     class Renderer
     {
-        public void DrawPlauer(int posirionX, int positionY, char icon)
+        public void DrawPlauer(int positionX, int positionY, char icon)
         {
-            Console.SetCursorPosition(posirionX, positionY);
+            Console.SetCursorPosition(positionX, positionY);
             Console.WriteLine(icon + "\n");
         }
     }
@@ -30,10 +29,10 @@ namespace TestOOP
         public int PositionY { get; private set; }
         private char _icon;
 
-        public Plauer(int posirionX, int positionY, char icon)
+        public Plauer(int dataX, int dataY, char icon)
         {
-            PositionX = posirionX;
-            PositionY = positionY;
+            PositionX = dataX;
+            PositionY = dataY;
             _icon = icon;
         }
 
