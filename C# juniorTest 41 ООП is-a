@@ -65,29 +65,29 @@ namespace TestOOP
     class DataBase
     {
 
-        public List<Plauer> plauers = new List<Plauer>();
+        private List<Plauer> plauers = new List<Plauer>();
 
         public void CreatePlauer()
         {
             Console.Write(" Введите прозвище: ");
-            string _name = Console.ReadLine();
-            plauers.Add(new Plauer(_name));
+            string name = Console.ReadLine();
+            plauers.Add(new Plauer(name));
         }
 
-        public void DeletePlauer(int _number)
+        public void DeletePlauer(int number)
         {
             for (int i = 0; i < plauers.Count; i++)
             {
-                if (plauers[i].Index == _number)
+                if (plauers[i].Index == number)
                     plauers.Remove(plauers[i]);
             }
         }
 
-        public void ChangeBan(int _number)
+        public void ChangeBan(int number)
         {
             for (int i = 0; i < plauers.Count; i++)
             {
-                if (plauers[i].Index == _number)
+                if (plauers[i].Index == number)
                     plauers[i].ChangeStatusBan(plauers[i]);
             }
         }
@@ -102,7 +102,7 @@ namespace TestOOP
     }
     class Plauer : DataBase
     {
-        public static int Ids;
+        private static int ids;
 
         public int Index { get; private set; }
         public string Nick { get; private set; }
@@ -112,7 +112,7 @@ namespace TestOOP
 
         public Plauer(string name, int level = 1, bool isBan = false)
         {
-            Index = ++Ids;
+            Index = ++ids;
             Nick = name;
             Level = level;
             StatusBan = isBan;
