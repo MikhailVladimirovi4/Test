@@ -65,7 +65,7 @@ namespace TestOOP
     class DataBase
     {
 
-        private List<Plauer> plauers = new List<Plauer>();
+        private readonly List<Plauer> plauers = new List<Plauer>();
 
         public void CreatePlauer()
         {
@@ -102,7 +102,7 @@ namespace TestOOP
     }
     class Plauer : DataBase
     {
-        private static int ids;
+        private static int _ids;
 
         public int Index { get; private set; }
         public string Nick { get; private set; }
@@ -112,7 +112,7 @@ namespace TestOOP
 
         public Plauer(string name, int level = 1, bool isBan = false)
         {
-            Index = ++ids;
+            Index = ++_ids;
             Nick = name;
             Level = level;
             StatusBan = isBan;
