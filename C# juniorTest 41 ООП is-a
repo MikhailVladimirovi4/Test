@@ -5,94 +5,122 @@ namespace TestOOP
 {
     class Program
     {
+        private static int number;
+
         static void Main(string[] args)
         {
+            int listsPlauersPositionX = 0;
+            int listsPlauersPositionY = 16;
             bool isPlay = true;
+
+            DataBase dataBase = new DataBase();
 
             while (isPlay)
             {
+                Console.Clear();
+                Console.SetCursorPosition(listsPlauersPositionX, listsPlauersPositionY);
+
+                dataBase.ShowPlauers();
+
+                Console.SetCursorPosition(0, 0);
                 Console.WriteLine(" Вы типо судья и еще кто-то. Ваши возможные действия: \n");
-                Console.WriteLine(" 1 - добавить игрока\n\n 2 - забанить\n\n 3 - вытащить из бана\n\n 4 - удалить игрока\n\n 5 - закончить\n\n");
+                Console.WriteLine(" 1 - добавить игрока\n\n 2 - Изменить статус бана\n\n 3 - удалить игрока\n\n 4 - закончить\n\n");
                 Console.Write(" Выбор действия: ");
                 string action = Console.ReadLine();
 
                 switch (action)
                 {
                     case "1":
-                        Plauer.
+                        dataBase.CreatePlauer();
                         break;
 
                     case "2":
+                        dataBase.ChangeBan(GetNumber());
                         break;
 
                     case "3":
+
+                        dataBase.DeletePlauer(GetNumber());
                         break;
 
                     case "4":
-                        break;
-
-                    case "5":
                         isPlay = false;
+
                         break;
                     default:
                         Console.WriteLine(" Введена хрень");
-                        Console.ReadKey();
                         break;
                 }
-
-                Console.Clear();
             }
+        }
+
+        static int GetNumber()
+        {
+            Console.Write(" Введите номер жертвы: ");
+            int.TryParse(Console.ReadLine(), out number);
+            return number;
         }
     }
 
-    class MembersGame
+    class DataBase
     {
-        protected List<Plauer> plauers = new List<Plauer>();
 
-        protected string Number { get; private set; }
-        protected string Name { get; private set; }
-        protected int Level { get; private set; }
-        protected bool IsBanned { get; private set; }
+        public List<Plauer> plauers = new List<Plauer>();
 
-        public MembersGame(string number, string name, int level, bool isBanned)
+        public void CreatePlauer()
         {
-            Number = number;
-            Name = name;
-            Level = level;
-            IsBanned = isBanned;
+            Console.Write(" Введите прозвище: ");
+            string name = Console.ReadLine();
+            plauers.Add(new Plauer(name));
         }
 
-        public void AddPlauer()
+        public void DeletePlauer(int number)
         {
-            string newNamber = AddData("Введите номер игрока: ");
-
-            if (plauers.Equals(newNamber) == false)
+            for (int i = 0; i < plauers.Count; i++)
             {
-                string newName = AddData("Введите ник игрока: ");
-                plauers.Add(new Plauer(newNamber, newName));
+                if (plauers[i].Index == number)
+                    plauers.Remove(plauers[i]);
             }
         }
 
-        public void ShowInfo()
+        public void ChangeBan(int number)
         {
-
+            for (int i = 0; i < plauers.Count; i++)
+            {
+                if (plauers[i].Index == number)
+                    plauers[i].ChangeStatusBan(plauers[i]);
+            }
         }
 
-        public bool ChangeBanStatus(int number, bool isBanned)
+        public void ShowPlauers()
         {
-            return isBanned = !isBanned;
-        }
-
-        private string AddData(string text)
-        {
-            Console.Write(text);
-            return Console.ReadLine();
+            for (int i = 0; i < plauers.Count; i++)
+            {
+                Console.WriteLine(plauers[i].Index + "  " + plauers[i].Nick + " L" + plauers[i].Level + " бан = " + plauers[i].StatusBan);
+            }
         }
     }
-
-    class Plauer : MembersGame
+    class Plauer : DataBase
     {
-        public Plauer(string number, string name, int level = 1, bool isBanned = false) : base(number, name, level, isBanned) { }
+        public static int Ids;
+
+        public int Index { get; private set; }
+        public string Nick { get; private set; }
+        public int Level { get; private set; }
+        public bool StatusBan { get; private set; }
+
+
+        public Plauer(string name, int level = 1, bool isBan = false)
+        {
+            Index = ++Ids;
+            Nick = name;
+            Level = level;
+            StatusBan = isBan;
+        }
+
+        public void ChangeStatusBan(Plauer plauer)
+        {
+            plauer.StatusBan = !StatusBan;
+        }
     }
 }
-
