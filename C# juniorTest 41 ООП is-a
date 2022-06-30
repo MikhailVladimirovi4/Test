@@ -70,24 +70,24 @@ namespace TestOOP
         public void CreatePlauer()
         {
             Console.Write(" Введите прозвище: ");
-            string name = Console.ReadLine();
-            plauers.Add(new Plauer(name));
+            string _name = Console.ReadLine();
+            plauers.Add(new Plauer(_name));
         }
 
-        public void DeletePlauer(int number)
+        public void DeletePlauer(int _number)
         {
             for (int i = 0; i < plauers.Count; i++)
             {
-                if (plauers[i].Index == number)
+                if (plauers[i].Index == _number)
                     plauers.Remove(plauers[i]);
             }
         }
 
-        public void ChangeBan(int number)
+        public void ChangeBan(int _number)
         {
             for (int i = 0; i < plauers.Count; i++)
             {
-                if (plauers[i].Index == number)
+                if (plauers[i].Index == _number)
                     plauers[i].ChangeStatusBan(plauers[i]);
             }
         }
