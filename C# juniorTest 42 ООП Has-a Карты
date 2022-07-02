@@ -15,16 +15,16 @@ namespace TestOOP
             int selectCard;
 
             Console.CursorVisible = false;
-            Player player = new Player("Игрок");
-            CardDeck cardDeck = new CardDeck();
+            Player player = new Player(null);
+            Carddeck cardDeck = new Carddeck();
 
-            cardDeck.CreateDeck();
+            cardDeck.CreateCards();
 
             while (isPlay)
             {
                 Console.Clear();
 
-                cardDeck.ShowDeck(positionListsCardDeckX, positionListsCardDeckY);
+                cardDeck.ShowCards(positionListsCardDeckX, positionListsCardDeckY);
                 player.ShowCardPlayer(positionListsCardPlayerX, positionListsCardPlayerY);
 
                 Console.SetCursorPosition(0, 0);
@@ -40,13 +40,13 @@ namespace TestOOP
                     default:
                         int.TryParse(selectPlayer, out selectCard);
 
-                        if (selectCard > 0 && selectCard <= cardDeck.GetSizeDeck())
+                        if (selectCard > 0 && selectCard <= cardDeck.GetNumberCards())
                         {
-                            player.AddCardPlauer(cardDeck.GetDeckCard(selectCard));
-                            cardDeck.RemoveDeckCard(selectCard);
+                            player.AddCardPlauer(cardDeck.GetCard(selectCard));
+                            cardDeck.RemoveCard(selectCard);
                         }
 
-                        if (cardDeck.IsEmptyDeck())
+                        if (cardDeck.IsEmpty())
                             isPlay = false;
 
                         break;
@@ -81,14 +81,14 @@ namespace TestOOP
         }
     }
 
-    class CardDeck
+    class Carddeck
     {
         private static readonly string[] _namesCard = { "туз", "король", "дама", "валет", "10", "9", "8", "7", "6" };
         private static readonly string[] _suitCard = { "черв", "буб", "крест", "пик" };
 
         private readonly List<Card> _cards = new List<Card>();
 
-        public void CreateDeck()
+        public void CreateCards()
         {
             for (int i = 0; i < _namesCard.Length; i++)
             {
@@ -99,7 +99,7 @@ namespace TestOOP
             }
         }
 
-        public void ShowDeck(int positionX, int positionY)
+        public void ShowCards(int positionX, int positionY)
         {
 
             for (int i = 0; i < _cards.Count; i++)
@@ -109,22 +109,22 @@ namespace TestOOP
             }
         }
 
-        public Card GetDeckCard(int number)
+        public Card GetCard(int number)
         {
             return _cards[number - 1];
         }
 
-        public void RemoveDeckCard(int number)
+        public void RemoveCard(int number)
         {
             _cards.RemoveAt(number - 1);
         }
 
-        public bool IsEmptyDeck()
+        public bool IsEmpty()
         {
             return _cards.Count == 0;
         }
 
-        public int GetSizeDeck()
+        public int GetNumberCards()
         {
             return _cards.Count;
         }
