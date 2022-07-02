@@ -1,0 +1,126 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool isPlay = true;
+            int positionListsBookX = 40;
+            int positionListsBookY = 2;
+
+            Library books = new Library();
+            Console.CursorVisible = false;
+
+            while (isPlay)
+            {
+                Console.Clear();
+                books.ShowBooks(positionListsBookX, positionListsBookY);
+                Console.SetCursorPosition(0, 0);
+                Console.WriteLine(" Варианты действий:\n\n 1 - добывить книгу\n\n 2 - удалить книгу\n\n 3 - найти книгу\n\n 4 - закончить");
+                Console.Write("\nВыбор действия: ");
+                string select = Console.ReadLine();
+
+                switch (select)
+                {
+                    case "1":
+                        books.CreateBook();
+                        break;
+
+                    case "2":
+                        books.DeleteBook();
+                        break;
+
+                    case "3":
+                        books.ShowBook();
+                        break;
+
+                    case "4":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Введена хрень");
+                        break;
+                }
+            }
+        }
+    }
+
+    class Library
+    {
+        private readonly List<Book> _books = new List<Book>();
+
+        public void ShowBooks(int positionX, int positionY)
+        {
+            for (int i = 0; i < _books.Count; i++)
+            {
+                Console.SetCursorPosition(positionX, positionY + i);
+                _books[i].DrawData();
+            }
+        }
+
+        public void CreateBook()
+        {
+            Console.WriteLine("\nВведите данные книги:");
+            _books.Add(new Book(GetData("название"), GetData("автора"), GetData("год печати")));
+        }
+
+        public void DeleteBook()
+        {
+            _books.Remove(GetBook(_books));
+        }
+
+        public void ShowBook()
+        {
+            GetBook(_books).DrawData();
+            Console.ReadKey();
+        }
+
+        private static string GetData(string text)
+        {
+            Console.Write(text + ": ");
+            return Console.ReadLine();
+        }
+
+        private static Book GetBook(List<Book> lists)
+        {
+            Book book = null;
+
+            Console.Write("Введите любой идентификатор книги: ");
+            string data = Console.ReadLine();
+
+            for (int i = 0; i < lists.Count; i++)
+            {
+                if (lists[i].Name == data || lists[i].Author == data || lists[i].YearPrinting == data)
+                {
+                    book = lists[i];
+                }
+            }
+            return book;
+        }
+    }
+
+    class Book
+    {
+        public string Name { get; private set; }
+        public string Author { get; private set; }
+        public string YearPrinting { get; private set; }
+        public bool IsRecommended { get; private set; }
+
+        public Book(string name = "", string author = "", string year = "", bool isRecommended = false)
+        {
+            Name = name;
+            Author = author;
+            YearPrinting = year;
+            IsRecommended = isRecommended;
+        }
+
+        public void DrawData()
+        {
+            Console.WriteLine($"Название: {Name}, автор: {Author}, год печати {YearPrinting}, рекомендация к чтению: {IsRecommended}");
+        }
+    }
+}
