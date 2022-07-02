@@ -7,19 +7,16 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
-            int listsPlauersPositionX = 0;
-            int listsPlauersPositionY = 16;
+            int listsPlayersPositionX = 0;
+            int listsPlayersPositionY = 16;
             bool isPlay = true;
-
-            DataBase dataBase = new DataBase();
+            Database database = new Database();
 
             while (isPlay)
             {
                 Console.Clear();
-                Console.SetCursorPosition(listsPlauersPositionX, listsPlauersPositionY);
-
-                dataBase.ShowPlauers();
-
+                Console.SetCursorPosition(listsPlayersPositionX, listsPlayersPositionY);
+                database.ShowPlayers();
                 Console.SetCursorPosition(0, 0);
                 Console.WriteLine(" Вы типо судья и еще кто-то. Ваши возможные действия: \n");
                 Console.WriteLine(" 1 - добавить игрока\n\n 2 - удалить игрока\n\n 3 - забанить\n\n 4 - разбанить\n\n 5 - закончить\n");
@@ -29,19 +26,19 @@ namespace TestOOP
                 switch (action)
                 {
                     case "1":
-                        dataBase.CreatePlauer();
+                        database.CreatePlauer();
                         break;
 
                     case "2":
-                        dataBase.DeletePlauer(GetNumber());
+                        database.DeletePlayer(GetNumber());
                         break;
 
                     case "3":
-                        dataBase.PlauerBan(GetNumber());
+                        database.BanPlayer(GetNumber());
                         break;
 
                     case "4":
-                        dataBase.PlauerUnBan(GetNumber());
+                        database.UnBanPlayer(GetNumber());
                         break;
 
                     case "5":
@@ -54,7 +51,6 @@ namespace TestOOP
                 }
             }
         }
-
         static int GetNumber()
         {
             int number;
@@ -63,89 +59,88 @@ namespace TestOOP
             return number;
         }
     }
-
-    class DataBase
+    class Database
     {
-        private int _index;
-
-        private readonly List<Plauer> _plauers = new List<Plauer>();
+        private readonly List<Player> _players = new List<Player>();
+        private Player player;
 
         public void CreatePlauer()
         {
             Console.Write(" Введите прозвище: ");
             string name = Console.ReadLine();
-            _plauers.Add(new Plauer(name));
+            _players.Add(new Player(name));
         }
 
-        public void DeletePlauer(int number)
+        public void DeletePlayer(int number)
         {
-            if(TryGetPlayer(number, out _index))
-                    _plauers.Remove(_plauers[_index]);
+            if (TryGetPlayer(number, out player))
+                _players.Remove(player);
         }
 
-        public void PlauerBan(int number)
+        public void BanPlayer(int number)
         {
-            if (TryGetPlayer(number, out _index))
-                _plauers[_index].Ban();
+            if (TryGetPlayer(number, out player))
+                player.Ban();
         }
-        public void PlauerUnBan(int number)
+        public void UnBanPlayer(int number)
         {
-            if (TryGetPlayer(number, out _index))
-                _plauers[_index].UnBan();
+            if (TryGetPlayer(number, out player))
+                player.UnBan();
         }
 
-        public void ShowPlauers()
+        public void ShowPlayers()
         {
-            for (int i = 0; i < _plauers.Count; i++)
+            for (int i = 0; i < _players.Count; i++)
             {
-                Console.WriteLine(_plauers[i].Index + "  " + _plauers[i].Nick + " L" + _plauers[i].Level + " бан = " + _plauers[i].StatusBan);
+                Console.WriteLine(_players[i].Id + "  " + _players[i].Nick + " L" + _players[i].Level + " бан = " + _players[i].IsBanned);
             }
         }
 
-        private bool TryGetPlayer(int number, out int index)
+        private bool TryGetPlayer(int number, out Player player)
         {
             bool isResult = false;
-            index = 0;
+            player = new Player("игрок");
 
-            for (int i = 0; i < _plauers.Count; i++)
+            for (int i = 0; i < _players.Count; i++)
             {
-                if (_plauers[i].Index == number)
+                if (_players[i].Id == number)
                 {
-                    index = i;
+                    player = _players[i];
                     isResult = true;
                     break;
                 }
                 else
+                {
                     isResult = false;
+                }
             }
             return isResult;
         }
     }
-    class Plauer
+    class Player
     {
         private static int _ids;
-
-        public int Index { get; private set; }
+        public int Id { get; private set; }
         public string Nick { get; private set; }
         public int Level { get; private set; }
-        public bool StatusBan { get; private set; }
+        public bool IsBanned { get; private set; }
 
-
-        public Plauer(string name, int level = 1, bool isBan = false)
+        public Player(string name, int level = 1, bool isBan = false)
         {
-            Index = ++_ids;
+            Id = ++_ids;
             Nick = name;
             Level = level;
-            StatusBan = isBan;
+            IsBanned = isBan;
         }
 
         public void Ban()
         {
-            StatusBan = true;
+            IsBanned = true;
         }
+
         public void UnBan()
         {
-            StatusBan = false;
+            IsBanned = false;
         }
     }
 }
