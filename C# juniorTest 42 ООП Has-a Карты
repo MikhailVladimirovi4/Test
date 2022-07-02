@@ -12,12 +12,10 @@ namespace TestOOP
             int positionListsCardPlayerX = 80;
             int positionListsCardPlayerY = 2;
             bool isPlay = true;
-            int selectCard;
+            CardDeck cardDeck = new CardDeck();
+            Player player = new Player(null);
 
             Console.CursorVisible = false;
-            Player player = new Player(null);
-            Carddeck cardDeck = new Carddeck();
-
             cardDeck.CreateCards();
 
             while (isPlay)
@@ -25,7 +23,7 @@ namespace TestOOP
                 Console.Clear();
 
                 cardDeck.ShowCards(positionListsCardDeckX, positionListsCardDeckY);
-                player.ShowCardPlayer(positionListsCardPlayerX, positionListsCardPlayerY);
+                player.ShowCard(positionListsCardPlayerX, positionListsCardPlayerY);
 
                 Console.SetCursorPosition(0, 0);
                 Console.Write("  Набираем карты на обои.\n\n Надоест набери exit, выбери карту: ");
@@ -38,50 +36,55 @@ namespace TestOOP
                         break;
 
                     default:
-                        int.TryParse(selectPlayer, out selectCard);
-
-                        if (selectCard > 0 && selectCard <= cardDeck.GetNumberCards())
-                        {
-                            player.AddCardPlauer(cardDeck.GetCard(selectCard));
-                            cardDeck.RemoveCard(selectCard);
-                        }
-
-                        if (cardDeck.IsEmpty())
-                            isPlay = false;
-
+                        TakeCard(selectPlayer, ref isPlay,cardDeck, player);
                         break;
                 }
+
+                if (cardDeck.IsEmpty())
+                    isPlay = false;
+            }
+        }
+
+        static void TakeCard(string text, ref bool isPlay, CardDeck cardDeck, Player player)
+        {
+            int selectCard;
+            int.TryParse(text, out selectCard);
+
+            if (selectCard > 0 && selectCard <= cardDeck.GetNumberCards())
+            {
+                player.AddCard(cardDeck.GetCard(selectCard));
+                cardDeck.RemoveCard(selectCard);
             }
         }
     }
 
     class Player
     {
-        private readonly List<Card> _cardsPlayer = new List<Card>();
+        private readonly List<Card> _cards = new List<Card>();
 
-        public string NamePlauer { get; private set; }
+        public string Name { get; private set; }
 
         public Player(string name)
         {
-            NamePlauer = name;
+            Name = name;
         }
 
-        public void AddCardPlauer(Card card)
+        public void AddCard(Card card)
         {
-            _cardsPlayer.Add(card);
+            _cards.Add(card);
         }
 
-        public void ShowCardPlayer(int positionX, int positionY)
+        public void ShowCard(int positionX, int positionY)
         {
-            for (int i = 0; i < _cardsPlayer.Count; i++)
+            for (int i = 0; i < _cards.Count; i++)
             {
                 Console.SetCursorPosition(positionX, positionY + i);
-                Console.WriteLine(_cardsPlayer[i].Name + " " + _cardsPlayer[i].Suit);
+                Console.WriteLine(_cards[i].Name + " " + _cards[i].Suit);
             }
         }
     }
 
-    class Carddeck
+    class CardDeck
     {
         private static readonly string[] _namesCard = { "туз", "король", "дама", "валет", "10", "9", "8", "7", "6" };
         private static readonly string[] _suitCard = { "черв", "буб", "крест", "пик" };
