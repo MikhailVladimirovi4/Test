@@ -26,7 +26,7 @@ namespace TestOOP
                 switch (action)
                 {
                     case "1":
-                        database.CreatePlauer();
+                        database.CreatePlayer();
                         break;
 
                     case "2":
@@ -59,12 +59,12 @@ namespace TestOOP
             return number;
         }
     }
+
     class Database
     {
         private readonly List<Player> _players = new List<Player>();
-        private Player player;
 
-        public void CreatePlauer()
+        public void CreatePlayer()
         {
             Console.Write(" Введите прозвище: ");
             string name = Console.ReadLine();
@@ -73,17 +73,23 @@ namespace TestOOP
 
         public void DeletePlayer(int number)
         {
+            Player player;
+
             if (TryGetPlayer(number, out player))
                 _players.Remove(player);
         }
 
         public void BanPlayer(int number)
         {
+            Player player;
+
             if (TryGetPlayer(number, out player))
                 player.Ban();
         }
         public void UnBanPlayer(int number)
         {
+            Player player;
+
             if (TryGetPlayer(number, out player))
                 player.UnBan();
         }
@@ -99,7 +105,7 @@ namespace TestOOP
         private bool TryGetPlayer(int number, out Player player)
         {
             bool isResult = false;
-            player = new Player("игрок");
+            player = new Player(null);
 
             for (int i = 0; i < _players.Count; i++)
             {
@@ -109,14 +115,11 @@ namespace TestOOP
                     isResult = true;
                     break;
                 }
-                else
-                {
-                    isResult = false;
-                }
             }
             return isResult;
         }
     }
+
     class Player
     {
         private static int _ids;
