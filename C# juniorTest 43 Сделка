@@ -1,0 +1,179 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool isPlay = true;
+            int listsItemSalesmanPositionX = 40;
+            int listsItemSalesmanPositionY = 2;
+            int listsItemPlaeyrPositionX = 80;
+            int listsItemPlaeyrPositionY = 2;
+            int manySalesman = 500;
+            int manyPlayer = 1000;
+
+            Salesman goga = new Salesman(manySalesman, new List<Item>());
+            Player roga = new Player(manyPlayer, new List<Item>());
+
+            goga.CreateItemsSalesman();
+
+            while (isPlay)
+            {
+                Console.Clear();
+                goga.DrawItems(listsItemSalesmanPositionX, listsItemSalesmanPositionY, "Предметы продавца");
+                roga.DrawItems(listsItemPlaeyrPositionX, listsItemPlaeyrPositionY, "Предметы игрока");
+                DrawInterface();
+                Console.Write("Ваши действия: ");
+                string select = Console.ReadLine();
+
+                switch (select)
+                {
+                    case "1":
+                        MakeDial(goga, roga);
+                        break;
+
+                    case "2":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("хрень");
+                        break;
+                }
+            }
+        }
+
+        static void DrawInterface()
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
+        }
+
+        static void MakeDial(Salesman salesman, Player buyer)
+        {
+            Item item;
+
+            Console.Write("Введите название предмета: ");
+            string nameItem = Console.ReadLine();
+
+            if (salesman.TryGetItem(nameItem, out item))
+            {
+                if (item.Price <= buyer.Many)
+                {
+                    buyer.AddItem(item);
+                    buyer.SetMany(item.Price);
+                    salesman.DeleteItem(item);
+                }
+                else
+                {
+                    Console.WriteLine("Ха, полковник Кудасов - НИЩИЙ :)");
+                    Console.ReadKey();
+                }
+            }
+        }
+    }
+
+    class GameMembers
+    {
+        protected readonly List<Item> Inventory;
+        public int Many { get; private set; }
+
+        protected GameMembers(int many, List<Item> lists)
+        {
+            Many = many;
+            Inventory = lists;
+        }
+
+        public void DrawItems(int positionX, int positionY, string text)
+        {
+            Console.SetCursorPosition(positionX, positionY - 1);
+            Console.Write(text + ". " + Many + " монет.");
+
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                Console.SetCursorPosition(positionX, positionY++);
+                Inventory[i].Draw();
+            }
+        }
+
+        public void AddItem(Item item)
+        {
+            Inventory.Add(item);
+        }
+
+        public void DeleteItem(Item item)
+        {
+            Inventory.Remove(item);
+        }
+
+        public bool TryGetItem(string name, out Item item)
+        {
+            bool isFound = false;
+            item = null;
+
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                if (Inventory[i].Name == name)
+                {
+                    isFound = true;
+                    item = Inventory[i];
+                }
+            }
+            return isFound;
+        }
+
+        public void SetMany(int namber)
+        {
+            Many -= namber;
+        }
+    }
+
+    class Salesman : GameMembers
+    {
+        private static readonly int _amountItems = 5;
+        public Salesman(int many, List<Item> inventory) : base(many, inventory) { }
+
+        public void CreateItemsSalesman()
+        {
+            for (int i = 0; i < _amountItems; i++)
+            {
+                CreateItem(Inventory);
+            }
+        }
+
+        private static void CreateItem(List<Item> lists)
+        {
+            int price;
+
+            Console.WriteLine("Введите название, затем стоимость предмета");
+            string name = Console.ReadLine();
+            int.TryParse(Console.ReadLine(), out price);
+            lists.Add(new Item(name, price));
+        }
+    }
+
+    class Player : GameMembers
+    {
+        public Player(int many, List<Item> inventory) : base(many, inventory) { }
+    }
+
+    class Item
+    {
+        public string Name { get; private set; }
+        public int Price { get; private set; }
+
+        public Item(string name, int price)
+        {
+            Name = name;
+            Price = price;
+        }
+
+        public void Draw()
+        {
+            Console.Write(Name + " " + Price + "монет");
+        }
+    }
+}
