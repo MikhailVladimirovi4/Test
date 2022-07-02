@@ -7,7 +7,6 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
-            int sizeDeck = 20;
             int positionListsCardDeckX = 60;
             int positionListsCardDeckY = 2;
             int positionListsCardPlayerX = 80;
@@ -16,16 +15,16 @@ namespace TestOOP
             int selectCard;
 
             Console.CursorVisible = false;
-            CardPlayer player = new CardPlayer("Игрок");
+            Player player = new Player("Игрок");
             CardDeck cardDeck = new CardDeck();
 
-            cardDeck.CreateCardDeck(sizeDeck);
+            cardDeck.CreateDeck();
 
             while (isPlay)
             {
                 Console.Clear();
 
-                cardDeck.ShowCardDeck(positionListsCardDeckX, positionListsCardDeckY);
+                cardDeck.ShowDeck(positionListsCardDeckX, positionListsCardDeckY);
                 player.ShowCardPlayer(positionListsCardPlayerX, positionListsCardPlayerY);
 
                 Console.SetCursorPosition(0, 0);
@@ -47,20 +46,22 @@ namespace TestOOP
                             cardDeck.RemoveDeckCard(selectCard);
                         }
 
-                        isPlay = cardDeck.IsNotEmptyDeck();
+                        if (cardDeck.IsEmptyDeck())
+                            isPlay = false;
+
                         break;
                 }
             }
         }
     }
 
-    class CardPlayer
+    class Player
     {
         private readonly List<Card> _cardsPlayer = new List<Card>();
 
         public string NamePlauer { get; private set; }
 
-        public CardPlayer(string name)
+        public Player(string name)
         {
             NamePlauer = name;
         }
@@ -75,30 +76,36 @@ namespace TestOOP
             for (int i = 0; i < _cardsPlayer.Count; i++)
             {
                 Console.SetCursorPosition(positionX, positionY + i);
-                Console.WriteLine(_cardsPlayer[i].NameCard);
+                Console.WriteLine(_cardsPlayer[i].Name + " " + _cardsPlayer[i].Suit);
             }
         }
     }
 
     class CardDeck
     {
+        private static readonly string[] _namesCard = { "туз", "король", "дама", "валет", "10", "9", "8", "7", "6" };
+        private static readonly string[] _suitCard = { "черв", "буб", "крест", "пик" };
+
         private readonly List<Card> _cards = new List<Card>();
 
-        public void CreateCardDeck(int count)
+        public void CreateDeck()
         {
-            for (int i = 0; i < count; i++)
+            for (int i = 0; i < _namesCard.Length; i++)
             {
-                _cards.Add(new Card());
+                for (int j = 0; j < _suitCard.Length; j++)
+                {
+                    _cards.Add(new Card(_namesCard[i], _suitCard[j]));
+                }
             }
         }
 
-        public void ShowCardDeck(int positionX, int positionY)
+        public void ShowDeck(int positionX, int positionY)
         {
 
             for (int i = 0; i < _cards.Count; i++)
             {
                 Console.SetCursorPosition(positionX, positionY + i);
-                Console.WriteLine((i + 1) + " - " + _cards[i].NameCard);
+                Console.WriteLine((i + 1) + " - " + _cards[i].Name + " " + _cards[i].Suit);
             }
         }
 
@@ -112,14 +119,9 @@ namespace TestOOP
             _cards.RemoveAt(number - 1);
         }
 
-        public bool IsNotEmptyDeck()
+        public bool IsEmptyDeck()
         {
-            bool isNotEmpty = true;
-
-            if (_cards.Count == 0)
-                isNotEmpty = false;
-
-            return isNotEmpty;
+            return _cards.Count == 0;
         }
 
         public int GetSizeDeck()
@@ -130,19 +132,13 @@ namespace TestOOP
 
     class Card
     {
-        private static readonly string[] _namesCard = { "туз", "король", "дама", "валет", "10", "9", "8", "7", "6", "5", "4", };
+        public string Name { get; private set; }
+        public string Suit { get; private set; }
 
-        static readonly Random random = new Random();
-        public string NameCard { get; private set; }
-
-        public Card(bool isInDeck = true)
+        public Card(string name, string suit)
         {
-            NameCard = GetNameCard();
-        }
-
-        public string GetNameCard()
-        {
-            return _namesCard[random.Next(0, _namesCard.Length)];
+            Name = name;
+            Suit = suit;
         }
     }
 }
