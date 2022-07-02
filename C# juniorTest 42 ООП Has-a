@@ -1,0 +1,148 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int sizeDeck = 20;
+            int positionListsCardDeckX = 60;
+            int positionListsCardDeckY = 2;
+            int positionListsCardPlayerX = 80;
+            int positionListsCardPlayerY = 2;
+            bool isPlay = true;
+            int selectCard;
+
+            Console.CursorVisible = false;
+            CardPlayer player = new CardPlayer("Игрок");
+            CardDeck cardDeck = new CardDeck();
+
+            cardDeck.CreateCardDeck(sizeDeck);
+
+            while (isPlay)
+            {
+                Console.Clear();
+
+                cardDeck.ShowCardDeck(positionListsCardDeckX, positionListsCardDeckY);
+                player.ShowCardPlayer(positionListsCardPlayerX, positionListsCardPlayerY);
+
+                Console.SetCursorPosition(0, 0);
+                Console.Write("  Набираем карты на обои.\n\n Надоест набери exit, выбери карту: ");
+                string selectPlayer = Console.ReadLine();
+
+                switch (selectPlayer)
+                {
+                    case "exit":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        int.TryParse(selectPlayer, out selectCard);
+
+                        if (selectCard > 0 && selectCard <= cardDeck.GetSizeDeck())
+                        {
+                            player.AddCardPlauer(cardDeck.GetDeckCard(selectCard));
+                            cardDeck.RemoveDeckCard(selectCard);
+                        }
+
+                        isPlay = cardDeck.IsNotEmptyDeck();
+                        break;
+                }
+            }
+        }
+    }
+
+    class CardPlayer
+    {
+        private readonly List<Card> _cardsPlayer = new List<Card>();
+
+        public string NamePlauer { get; private set; }
+
+        public CardPlayer(string name)
+        {
+            NamePlauer = name;
+        }
+
+        public void AddCardPlauer(Card card)
+        {
+            _cardsPlayer.Add(card);
+        }
+
+        public void ShowCardPlayer(int positionX, int positionY)
+        {
+            for (int i = 0; i < _cardsPlayer.Count; i++)
+            {
+                Console.SetCursorPosition(positionX, positionY + i);
+                Console.WriteLine(_cardsPlayer[i].NameCard);
+            }
+        }
+    }
+
+    class CardDeck
+    {
+        private readonly List<Card> _cards = new List<Card>();
+
+        public void CreateCardDeck(int count)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                _cards.Add(new Card());
+            }
+        }
+
+        public void ShowCardDeck(int positionX, int positionY)
+        {
+
+            for (int i = 0; i < _cards.Count; i++)
+            {
+                Console.SetCursorPosition(positionX, positionY + i);
+                Console.WriteLine((i + 1) + " - " + _cards[i].NameCard);
+            }
+        }
+
+        public Card GetDeckCard(int number)
+        {
+            return _cards[number - 1];
+        }
+
+        public void RemoveDeckCard(int number)
+        {
+            _cards.RemoveAt(number - 1);
+        }
+
+        public bool IsNotEmptyDeck()
+        {
+            bool isNotEmpty = true;
+
+            if (_cards.Count == 0)
+                isNotEmpty = false;
+
+            return isNotEmpty;
+        }
+
+        public int GetSizeDeck()
+        {
+            return _cards.Count;
+        }
+    }
+
+    class Card
+    {
+        private static readonly string[] _namesCard = { "туз", "король", "дама", "валет", "10", "9", "8", "7", "6", "5", "4", };
+
+        static readonly Random random = new Random();
+        public string NameCard { get; private set; }
+
+        public Card(bool isInDeck = true)
+        {
+            NameCard = GetNameCard();
+        }
+
+        public string GetNameCard()
+        {
+            return _namesCard[random.Next(0, _namesCard.Length)];
+        }
+    }
+}
