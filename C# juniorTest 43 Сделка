@@ -52,7 +52,7 @@ namespace TestOOP
             Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
         }
 
-        static void MakeDial(Salesman salesman, Player buyer)
+        static void MakeDial(GameMembers salesman, GameMembers buyer)
         {
             Item item;
 
