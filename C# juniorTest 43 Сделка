@@ -61,9 +61,10 @@ namespace TestOOP
 
             if (salesman.TryGetItem(nameItem, out item))
             {
-                if (item.Price <= buyer.Coins)
+                if (item.Price <= buyer.GetNumberCoins())
                 {
-                    Dial(salesman, buyer, ref item);
+                    buyer.BayItems(item);
+                    salesman.SellItems(item);
                 }
                 else
                 {
@@ -72,20 +73,12 @@ namespace TestOOP
                 }
             }
         }
-
-        private static void Dial(Salesman salesman, Player buyer, ref Item item)
-        {
-            buyer.AddItems(item);
-            buyer.SetCoins(item.Price);
-            salesman.DeleteItems(item);
-            salesman.SetCoins(-item.Price);
-        }
     }
 
     class GameMembers
     {
+        private int Coins;
         private readonly List<Item> Inventory;
-        public int Coins { get; private set; }
 
         protected GameMembers(int coins, List<Item> lists)
         {
@@ -110,7 +103,7 @@ namespace TestOOP
             Inventory.Add(item);
         }
 
-        protected void DeleteItem(Item item)
+        protected void RemoveItem(Item item)
         {
             Inventory.Remove(item);
         }
@@ -131,10 +124,16 @@ namespace TestOOP
             return isFound;
         }
 
-        public void SetCoins(int namber)
+        protected void AddCoins(int number)
         {
-            Coins -= namber;
+            Coins += number;
         }
+
+        protected void RemoveCoins(int number)
+        {
+            Coins -= number;
+        }
+
         protected void CreateItem()
         {
             int price;
@@ -143,6 +142,11 @@ namespace TestOOP
             string name = Console.ReadLine();
             int.TryParse(Console.ReadLine(), out price);
             Inventory.Add(new Item(name, price));
+        }
+
+        protected int GetCoins()
+        {
+            return Coins;
         }
     }
 
@@ -162,9 +166,10 @@ namespace TestOOP
             }
         }
 
-        public void DeleteItems(Item item)
+        public void SellItems(Item item)
         {
-            DeleteItem(item);
+            RemoveItem(item);
+            AddCoins(item.Price);
         }
     }
 
@@ -174,9 +179,14 @@ namespace TestOOP
         public int listsItemPositionY { get; private set; } = 2;
         public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
 
-        public void AddItems(Item item)
+        public void BayItems(Item item)
         {
             AddItem(item);
+            RemoveCoins(item.Price);
+        }
+        public int GetNumberCoins()
+        {
+            return GetCoins();
         }
     }
 
