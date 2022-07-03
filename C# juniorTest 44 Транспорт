@@ -8,44 +8,183 @@ namespace TestOOP
         static void Main(string[] args)
         {
             bool isPlay = true;
-            int listsItemSalesmanPositionX = 40;
-            int listsItemSalesmanPositionY = 2;
-            int listsItemPlaeyrPositionX = 80;
-            int listsItemPlaeyrPositionY = 2;
-            int manySalesman = 500;
-            int manyPlayer = 1000;
+            int coinsSalesman = 500;
+            int coinsPlayer = 1000;
 
+            Salesman salesman = new Salesman(coinsSalesman, new List<Item>());
+            Player player = new Player(coinsPlayer, new List<Item>());
+            Score score = new Score();
+
+            salesman.CreateItemsSalesman();
+
+            while (isPlay)
+            {
+                Console.Clear();
+                salesman.DrawItems(salesman.listsItemPositionX, salesman.listsItemPositionY, "Предметы продавца");
+                player.DrawItems(player.listsItemPositionX, player.listsItemPositionY, "Предметы игрока");
+                score.DrawInterface();
+                Console.Write("Ваши действия: ");
+                string select = Console.ReadLine();
+
+                switch (select)
+                {
+                    case "1":
+                        score.MakeDial(salesman, player);
+                        break;
+
+                    case "2":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("хрень");
+                        break;
+                }
+            }
         }
     }
 
-    class Route
+    class Score
     {
-        private static int _ids;
-        protected int Id { get; private set; }
-        protected string Title { get; private set; }
-
-        public Route(string title = null)
+        public void DrawInterface()
         {
-            Id = ++_ids;
-            Title = title;
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
+        }
+
+        public void MakeDial(GameMembers salesman, GameMembers buyer)
+        {
+            Item item;
+
+            Console.Write("Введите название предмета: ");
+            string nameItem = Console.ReadLine();
+
+            if (salesman.TryGetItem(nameItem, out item))
+            {
+                if (item.Price <= buyer.Coins)
+                {
+                    Dial(salesman, buyer, ref item);
+                }
+                else
+                {
+                    Console.WriteLine("Ха, полковник Кудасов - НИЩИЙ :)");
+                    Console.ReadKey();
+                }
+            }
+        }
+
+        private static void Dial(GameMembers salesman, GameMembers buyer, ref Item item)
+        {
+            buyer.AddItem(item);
+            buyer.SetCoins(item.Price);
+            salesman.DeleteItem(item);
+            salesman.SetCoins(-item.Price);
         }
     }
 
-    class Train : Route
+    class GameMembers
     {
-        public int Place { get; private set; }
-        public int FreePlace { get; private set; }
+        protected readonly List<Item> Inventory;
+        public int Coins { get; private set; }
 
-        public Train
+        protected GameMembers(int coins, List<Item> lists)
+        {
+            Coins = coins;
+            Inventory = lists;
+        }
+
+        public void DrawItems(int positionX, int positionY, string text)
+        {
+            Console.SetCursorPosition(positionX, positionY - 1);
+            Console.Write(text + ". " + Coins + " монет.");
+
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                Console.SetCursorPosition(positionX, positionY++);
+                Inventory[i].Draw();
+            }
+        }
+
+        public void AddItem(Item item)
+        {
+            Inventory.Add(item);
+        }
+
+        public void DeleteItem(Item item)
+        {
+            Inventory.Remove(item);
+        }
+
+        public bool TryGetItem(string name, out Item item)
+        {
+            bool isFound = false;
+            item = null;
+
+            for (int i = 0; i < Inventory.Count; i++)
+            {
+                if (Inventory[i].Name == name)
+                {
+                    isFound = true;
+                    item = Inventory[i];
+                }
+            }
+            return isFound;
+        }
+
+        public void SetCoins(int namber)
+        {
+            Coins -= namber;
+        }
     }
 
-    class WagonTrain : Train
+    class Salesman : GameMembers
     {
+        public int listsItemPositionX { get; private set; } = 40;
+        public int listsItemPositionY { get; private set; } = 2;
 
+        private static readonly int _amountItems = 5;
+        public Salesman(int coins, List<Item> inventory) : base(coins, inventory) { }
+
+        public void CreateItemsSalesman()
+        {
+            for (int i = 0; i < _amountItems; i++)
+            {
+                CreateItem(Inventory);
+            }
+        }
+
+        private static void CreateItem(List<Item> lists)
+        {
+            int price;
+
+            Console.WriteLine("Введите название, затем стоимость предмета");
+            string name = Console.ReadLine();
+            int.TryParse(Console.ReadLine(), out price);
+            lists.Add(new Item(name, price));
+        }
     }
 
-    class Ticket
+    class Player : GameMembers
     {
+        public int listsItemPositionX { get; private set; } = 80;
+        public int listsItemPositionY { get; private set; } = 2;
+        public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
+    }
 
+    class Item
+    {
+        public string Name { get; private set; }
+        public int Price { get; private set; }
+
+        public Item(string name, int price)
+        {
+            Name = name;
+            Price = price;
+        }
+
+        public void Draw()
+        {
+            Console.Write(Name + " " + Price + "монет");
+        }
     }
 }
