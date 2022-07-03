@@ -1,0 +1,51 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool isPlay = true;
+            int listsItemSalesmanPositionX = 40;
+            int listsItemSalesmanPositionY = 2;
+            int listsItemPlaeyrPositionX = 80;
+            int listsItemPlaeyrPositionY = 2;
+            int manySalesman = 500;
+            int manyPlayer = 1000;
+
+        }
+    }
+
+    class Route
+    {
+        private static int _ids;
+        protected int Id { get; private set; }
+        protected string Title { get; private set; }
+
+        public Route(string title = null)
+        {
+            Id = ++_ids;
+            Title = title;
+        }
+    }
+
+    class Train : Route
+    {
+        public int Place { get; private set; }
+        public int FreePlace { get; private set; }
+
+        public Train
+    }
+
+    class WagonTrain : Train
+    {
+
+    }
+
+    class Ticket
+    {
+
+    }
+}
