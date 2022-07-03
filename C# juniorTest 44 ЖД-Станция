@@ -147,15 +147,15 @@ namespace TestOOP
 
     class Wagon
     {
-        private readonly static int _seatType1 = 15;
-        private readonly static int _seatType2 = 25;
-        private readonly static int _seatType3 = 35;
         private readonly static Random _random = new Random();
-        private readonly static int[] _placeWagon = { _seatType1, _seatType2, _seatType3 };
+        private readonly  int _seatType1 = 15;
+        private readonly  int _seatType2 = 25;
+        private readonly  int _seatType3 = 35;
         public int Seats { get; private set; }
 
         public Wagon()
         {
+            int[] _placeWagon = { _seatType1, _seatType2, _seatType3 };
             Seats = _placeWagon[_random.Next(0, _placeWagon.Length)];
         }
     }
