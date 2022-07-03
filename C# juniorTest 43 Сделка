@@ -7,29 +7,36 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
+            Shop shop = new Shop();
+
+            shop.Work();
+        }
+    }
+
+    class Shop
+    {
+        public void Work()
+        {
             bool isPlay = true;
             int coinsSalesman = 500;
             int coinsPlayer = 1000;
-
             Salesman salesman = new Salesman(coinsSalesman, new List<Item>());
             Player player = new Player(coinsPlayer, new List<Item>());
-            Score score = new Score();
 
             salesman.CreateItems();
 
             while (isPlay)
             {
                 Console.Clear();
-                salesman.DrawItems(salesman.listsItemPositionX, salesman.listsItemPositionY, "Предметы продавца");
-                player.DrawItems(player.listsItemPositionX, player.listsItemPositionY, "Предметы игрока");
-                score.DrawInterface();
+                DrawItems(salesman, player);
+                DrawInterface();
                 Console.Write("Ваши действия: ");
                 string select = Console.ReadLine();
 
                 switch (select)
                 {
                     case "1":
-                        score.MakeDial(salesman, player);
+                        MakeDial(salesman, player);
                         break;
 
                     case "2":
@@ -42,17 +49,14 @@ namespace TestOOP
                 }
             }
         }
-    }
 
-    class Score
-    {
-        public void DrawInterface()
+        private void DrawInterface()
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
         }
 
-        public void MakeDial(Salesman salesman, Player buyer)
+        private void MakeDial(Salesman salesman, Player buyer)
         {
             Item item;
 
@@ -73,39 +77,39 @@ namespace TestOOP
                 }
             }
         }
+
+        private void DrawItems(Salesman salesman, Player player)
+        {
+            int positionSellerItemListX = 40;
+            int positionBuyerItemListX = 80;
+            int positionItemListY = 2;
+
+            salesman.DrawItems(positionSellerItemListX, positionItemListY, "Предметы продавца");
+            player.DrawItems(positionBuyerItemListX, positionItemListY, "Предметы игрока");
+        }
     }
 
     class GameMembers
     {
-        private int Coins;
-        private readonly List<Item> Inventory;
+        private int _coins;
+        private readonly List<Item> _inventory;
 
         protected GameMembers(int coins, List<Item> lists)
         {
-            Coins = coins;
-            Inventory = lists;
+            _coins = coins;
+            _inventory = lists;
         }
 
         public void DrawItems(int positionX, int positionY, string text)
         {
             Console.SetCursorPosition(positionX, positionY - 1);
-            Console.Write(text + ". " + Coins + " монет.");
+            Console.Write(text + ". " + _coins + " монет.");
 
-            for (int i = 0; i < Inventory.Count; i++)
+            for (int i = 0; i < _inventory.Count; i++)
             {
                 Console.SetCursorPosition(positionX, positionY++);
-                Inventory[i].Draw();
+                _inventory[i].Draw();
             }
-        }
-
-        protected void AddItem(Item item)
-        {
-            Inventory.Add(item);
-        }
-
-        protected void RemoveItem(Item item)
-        {
-            Inventory.Remove(item);
         }
 
         public bool TryGetItem(string name, out Item item)
@@ -113,25 +117,35 @@ namespace TestOOP
             bool isFound = false;
             item = null;
 
-            for (int i = 0; i < Inventory.Count; i++)
+            for (int i = 0; i < _inventory.Count; i++)
             {
-                if (Inventory[i].Name == name)
+                if (_inventory[i].Name == name)
                 {
                     isFound = true;
-                    item = Inventory[i];
+                    item = _inventory[i];
                 }
             }
             return isFound;
         }
 
+        protected void AddItem(Item item)
+        {
+            _inventory.Add(item);
+        }
+
+        protected void RemoveItem(Item item)
+        {
+            _inventory.Remove(item);
+        }
+
         protected void AddCoins(int number)
         {
-            Coins += number;
+            _coins += number;
         }
 
         protected void RemoveCoins(int number)
         {
-            Coins -= number;
+            _coins -= number;
         }
 
         protected void CreateItem()
@@ -141,20 +155,17 @@ namespace TestOOP
             Console.WriteLine("Введите название, затем стоимость предмета");
             string name = Console.ReadLine();
             int.TryParse(Console.ReadLine(), out price);
-            Inventory.Add(new Item(name, price));
+            _inventory.Add(new Item(name, price));
         }
 
         protected int GetCoins()
         {
-            return Coins;
+            return _coins;
         }
     }
 
     class Salesman : GameMembers
     {
-        public int listsItemPositionX { get; private set; } = 40;
-        public int listsItemPositionY { get; private set; } = 2;
-
         private readonly int _amountItems = 5;
         public Salesman(int coins, List<Item> inventory) : base(coins, inventory) { }
 
@@ -175,8 +186,6 @@ namespace TestOOP
 
     class Player : GameMembers
     {
-        public int listsItemPositionX { get; private set; } = 80;
-        public int listsItemPositionY { get; private set; } = 2;
         public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
 
         public void BayItems(Item item)
