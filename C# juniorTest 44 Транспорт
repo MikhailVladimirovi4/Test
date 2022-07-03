@@ -7,26 +7,82 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
+            Console.WriteLine(
         }
+    }
+    class Station
+    {
+        public void Work()
+        {
+            bool isWork = true;
+
+            while (isWork)
+            {
+                DrawRoute();
+            }
+        }
+
+        private void CreateRoute()
+        {
+            routes.Add(new Route);
+        }
+
+        private void DrawRoute()
+        {
+
+        }
+
     }
 
     class Route
     {
+        private readonly int _minimumNumberSeats = 50;
+        private readonly int _maximumNumberSeats = 100;
+        private readonly int _ids;
+        private readonly static Random random = new Random();
+        public int Id { get; private set; }
+        public string Description { get; private set; }
+        public int Passengers { get; private set; }
 
+        public Route(string description)
+        {
+            Id = ++_ids;
+            Description = description;
+            Passengers = random.Next(_minimumNumberSeats, _maximumNumberSeats);
+        }
     }
 
-    class Ticket
+    class Train : Route
     {
+        private readonly List<Wagon> _wagons;
 
-    }
-
-    class Train
-    {
-
+        public Train(int number, Wagon wagon) : base(description)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                _wagons.Add(wagon);
+            }
+        }
     }
 
     class Wagon
     {
-public int[] PlaceWagon = new int[15,25,35];
+        private readonly int _seatType;
+        private readonly static int _seatType1 = 15;
+        private readonly static int _seatType2 = 25;
+        private readonly static int _seatType3 = 35;
+        private readonly  Random random = new Random();
+
+        private readonly static int[] _placeWagon = { _seatType1, _seatType2, _seatType3 };
+
+        public Wagon()
+        {
+            _seatType = random.Next(0, _placeWagon.Length);
+        }
+
+        public int Get()
+        {
+            return _seatType;
+        }
     }
 }
