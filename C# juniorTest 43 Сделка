@@ -15,7 +15,7 @@ namespace TestOOP
             Player player = new Player(coinsPlayer, new List<Item>());
             Score score = new Score();
 
-            salesman.CreateItemsSalesman();
+            salesman.CreateItems();
 
             while (isPlay)
             {
@@ -52,7 +52,7 @@ namespace TestOOP
             Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
         }
 
-        public void MakeDial(GameMembers salesman, GameMembers buyer)
+        public void MakeDial(Salesman salesman, Player buyer)
         {
             Item item;
 
@@ -73,18 +73,18 @@ namespace TestOOP
             }
         }
 
-        private static void Dial(GameMembers salesman, GameMembers buyer, ref Item item)
+        private static void Dial(Salesman salesman, Player buyer, ref Item item)
         {
-            buyer.AddItem(item);
+            buyer.AddItems(item);
             buyer.SetCoins(item.Price);
-            salesman.DeleteItem(item);
+            salesman.DeleteItems(item);
             salesman.SetCoins(-item.Price);
         }
     }
 
     class GameMembers
     {
-        protected readonly List<Item> Inventory;
+        private readonly List<Item> Inventory;
         public int Coins { get; private set; }
 
         protected GameMembers(int coins, List<Item> lists)
@@ -105,12 +105,12 @@ namespace TestOOP
             }
         }
 
-        public void AddItem(Item item)
+        protected void AddItem(Item item)
         {
             Inventory.Add(item);
         }
 
-        public void DeleteItem(Item item)
+        protected void DeleteItem(Item item)
         {
             Inventory.Remove(item);
         }
@@ -135,6 +135,15 @@ namespace TestOOP
         {
             Coins -= namber;
         }
+        protected void CreateItem()
+        {
+            int price;
+
+            Console.WriteLine("Введите название, затем стоимость предмета");
+            string name = Console.ReadLine();
+            int.TryParse(Console.ReadLine(), out price);
+            Inventory.Add(new Item(name, price));
+        }
     }
 
     class Salesman : GameMembers
@@ -142,25 +151,20 @@ namespace TestOOP
         public int listsItemPositionX { get; private set; } = 40;
         public int listsItemPositionY { get; private set; } = 2;
 
-        private static readonly int _amountItems = 5;
+        private readonly int _amountItems = 5;
         public Salesman(int coins, List<Item> inventory) : base(coins, inventory) { }
 
-        public void CreateItemsSalesman()
+        public void CreateItems()
         {
             for (int i = 0; i < _amountItems; i++)
             {
-                CreateItem(Inventory);
+                CreateItem();
             }
         }
 
-        private static void CreateItem(List<Item> lists)
+        public void DeleteItems(Item item)
         {
-            int price;
-
-            Console.WriteLine("Введите название, затем стоимость предмета");
-            string name = Console.ReadLine();
-            int.TryParse(Console.ReadLine(), out price);
-            lists.Add(new Item(name, price));
+            DeleteItem(item);
         }
     }
 
@@ -169,6 +173,11 @@ namespace TestOOP
         public int listsItemPositionX { get; private set; } = 80;
         public int listsItemPositionY { get; private set; } = 2;
         public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
+
+        public void AddItems(Item item)
+        {
+            AddItem(item);
+        }
     }
 
     class Item
