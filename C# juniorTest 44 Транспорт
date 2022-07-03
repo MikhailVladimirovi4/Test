@@ -7,82 +7,157 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
-            Console.WriteLine(
+            Station station = new Station();
+
+            station.Work();
         }
     }
     class Station
     {
+        private readonly Dictionary<Ticket, Train> _routes = new Dictionary<Ticket, Train>();
+
         public void Work()
         {
             bool isWork = true;
 
             while (isWork)
             {
-                DrawRoute();
+                Console.Clear();
+                DrawFormations();
+                DrawInterface();
+                Console.Write(" Введите действие: ");
+                string action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        CreateRoute();
+                        break;
+
+                    case "2":
+                        SendFormations();
+                        break;
+
+                    case "3":
+                        isWork = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Хрень");
+                        break;
+                }
             }
+        }
+
+        private void DrawInterface()
+        {
+            int interfacePositionX = 0;
+            int interfacePositionY = 10;
+
+            Console.SetCursorPosition(interfacePositionX, interfacePositionY);
+            Console.WriteLine(" Формирование, отправление поездов:\n\n 1 - Сформировать направление.\n");
+
+            if (_routes.Count > 0)
+                Console.WriteLine(" 2 - Отправить состав(ы).\n");
+
+            Console.WriteLine(" 3 - Закончить работу станции.\n");
         }
 
         private void CreateRoute()
         {
-            routes.Add(new Route);
+            Console.Write("\n Пример описания направления: Мухостранск - Ракова Горка.\n Введите описание: ");
+            string directionDescription = Console.ReadLine();
+            Ticket destinationPassengers = new Ticket(directionDescription);
+            Train train = new Train(destinationPassengers.NumberPassengers);
+            _routes.Add(destinationPassengers, train);
         }
 
-        private void DrawRoute()
+        private void SendFormations()
         {
-
+            _routes.Clear();
         }
 
+        private void DrawFormations()
+        {
+            int formationPositionX = 2;
+            int formationPositionY = 1;
+
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Green;
+
+            foreach (var meaning in _routes)
+            {
+                Console.SetCursorPosition(formationPositionX, ++formationPositionY);
+                Console.Write($"Направление: {meaning.Key.Description} - пассажиров: {meaning.Key.NumberPassengers}. ");
+                Console.Write($" В составе вагоны рассчитаны на: ");
+                meaning.Value.DrawWagons();
+                Console.Write(" мест.");
+            }
+
+            Console.ForegroundColor = defaultColor;
+        }
     }
 
     class Route
     {
-        private readonly int _minimumNumberSeats = 50;
-        private readonly int _maximumNumberSeats = 100;
-        private readonly int _ids;
-        private readonly static Random random = new Random();
-        public int Id { get; private set; }
         public string Description { get; private set; }
-        public int Passengers { get; private set; }
 
         public Route(string description)
         {
-            Id = ++_ids;
             Description = description;
-            Passengers = random.Next(_minimumNumberSeats, _maximumNumberSeats);
         }
     }
 
-    class Train : Route
+    class Ticket : Route
     {
-        private readonly List<Wagon> _wagons;
+        private readonly Random _random = new Random();
+        private readonly int _minimumNumberSeats = 50;
+        private readonly int _maximumNumberSeats = 100;
+        public int NumberPassengers { get; private set; }
 
-        public Train(int number, Wagon wagon) : base(description)
+        public Ticket(string description) : base(description)
         {
-            for (int i = 0; i < number; i++)
+            NumberPassengers = _random.Next(_minimumNumberSeats, _maximumNumberSeats);
+        }
+    }
+
+    class Train
+    {
+        private readonly int _numberSeats = 0;
+        private readonly List<Wagon> _wagons = new List<Wagon>();
+
+        public Train(int numberPassengers)
+        {
+            while (numberPassengers > _numberSeats)
             {
+                Wagon wagon = new Wagon();
                 _wagons.Add(wagon);
+                _numberSeats += wagon.Seats;
+            }
+        }
+
+        public void DrawWagons()
+        {
+            foreach (Wagon wagon in _wagons)
+            {
+                Console.Write(" " + wagon.Seats);
             }
         }
     }
 
     class Wagon
     {
-        private readonly int _seatType;
         private readonly static int _seatType1 = 15;
         private readonly static int _seatType2 = 25;
         private readonly static int _seatType3 = 35;
-        private readonly  Random random = new Random();
+        private readonly static Random random = new Random();
+        public int Seats { get; private set; }
 
         private readonly static int[] _placeWagon = { _seatType1, _seatType2, _seatType3 };
 
         public Wagon()
         {
-            _seatType = random.Next(0, _placeWagon.Length);
-        }
-
-        public int Get()
-        {
-            return _seatType;
+            Seats = _placeWagon[random.Next(0, _placeWagon.Length)];
         }
     }
 }
