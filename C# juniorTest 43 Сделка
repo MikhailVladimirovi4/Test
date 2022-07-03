@@ -65,9 +65,9 @@ namespace TestOOP
 
             if (salesman.TryGetItem(nameItem, out item))
             {
-                if (item.Price <= buyer.GetNumberCoins())
+                if (item.Price <= buyer.GetCoins())
                 {
-                    buyer.BayItems(item);
+                    buyer.BuyingItem(item);
                     salesman.SellItems(item);
                 }
                 else
@@ -91,19 +91,24 @@ namespace TestOOP
 
     class GameMembers
     {
-        private int _coins;
         private readonly List<Item> _inventory;
+        protected int Coins { get; private set; }
 
         protected GameMembers(int coins, List<Item> lists)
         {
-            _coins = coins;
+            Coins = coins;
             _inventory = lists;
+        }
+
+        public int GetCoins()
+        {
+            return Coins;
         }
 
         public void DrawItems(int positionX, int positionY, string text)
         {
             Console.SetCursorPosition(positionX, positionY - 1);
-            Console.Write(text + ". " + _coins + " монет.");
+            Console.Write(text + ". " + Coins + " монет.");
 
             for (int i = 0; i < _inventory.Count; i++)
             {
@@ -140,12 +145,12 @@ namespace TestOOP
 
         protected void AddCoins(int number)
         {
-            _coins += number;
+            Coins += number;
         }
 
         protected void RemoveCoins(int number)
         {
-            _coins -= number;
+            Coins -= number;
         }
 
         protected void CreateItem()
@@ -156,11 +161,6 @@ namespace TestOOP
             string name = Console.ReadLine();
             int.TryParse(Console.ReadLine(), out price);
             _inventory.Add(new Item(name, price));
-        }
-
-        protected int GetCoins()
-        {
-            return _coins;
         }
     }
 
@@ -188,14 +188,10 @@ namespace TestOOP
     {
         public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
 
-        public void BayItems(Item item)
+        public void BuyingItem(Item item)
         {
             AddItem(item);
             RemoveCoins(item.Price);
-        }
-        public int GetNumberCoins()
-        {
-            return GetCoins();
         }
     }
 
