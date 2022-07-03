@@ -8,31 +8,28 @@ namespace TestOOP
         static void Main(string[] args)
         {
             bool isPlay = true;
-            int listsItemSalesmanPositionX = 40;
-            int listsItemSalesmanPositionY = 2;
-            int listsItemPlaeyrPositionX = 80;
-            int listsItemPlaeyrPositionY = 2;
-            int manySalesman = 500;
-            int manyPlayer = 1000;
+            int coinsSalesman = 500;
+            int coinsPlayer = 1000;
 
-            Salesman goga = new Salesman(manySalesman, new List<Item>());
-            Player roga = new Player(manyPlayer, new List<Item>());
+            Salesman salesman = new Salesman(coinsSalesman, new List<Item>());
+            Player player = new Player(coinsPlayer, new List<Item>());
+            Score score = new Score();
 
-            goga.CreateItemsSalesman();
+            salesman.CreateItemsSalesman();
 
             while (isPlay)
             {
                 Console.Clear();
-                goga.DrawItems(listsItemSalesmanPositionX, listsItemSalesmanPositionY, "Предметы продавца");
-                roga.DrawItems(listsItemPlaeyrPositionX, listsItemPlaeyrPositionY, "Предметы игрока");
-                DrawInterface();
+                salesman.DrawItems(salesman.listsItemPositionX, salesman.listsItemPositionY, "Предметы продавца");
+                player.DrawItems(player.listsItemPositionX, player.listsItemPositionY, "Предметы игрока");
+                score.DrawInterface();
                 Console.Write("Ваши действия: ");
                 string select = Console.ReadLine();
 
                 switch (select)
                 {
                     case "1":
-                        MakeDial(goga, roga);
+                        score.MakeDial(salesman, player);
                         break;
 
                     case "2":
@@ -45,14 +42,17 @@ namespace TestOOP
                 }
             }
         }
+    }
 
-        static void DrawInterface()
+    class Score
+    {
+        public void DrawInterface()
         {
             Console.SetCursorPosition(0, 0);
             Console.WriteLine("Варианты: \n\n 1 - Купить вещь.\n\n 2 - Уйти.\n");
         }
 
-        static void MakeDial(GameMembers salesman, GameMembers buyer)
+        public void MakeDial(GameMembers salesman, GameMembers buyer)
         {
             Item item;
 
@@ -61,11 +61,9 @@ namespace TestOOP
 
             if (salesman.TryGetItem(nameItem, out item))
             {
-                if (item.Price <= buyer.Many)
+                if (item.Price <= buyer.Coins)
                 {
-                    buyer.AddItem(item);
-                    buyer.SetMany(item.Price);
-                    salesman.DeleteItem(item);
+                    Dial(salesman, buyer, ref item);
                 }
                 else
                 {
@@ -74,23 +72,31 @@ namespace TestOOP
                 }
             }
         }
+
+        private static void Dial(GameMembers salesman, GameMembers buyer, ref Item item)
+        {
+            buyer.AddItem(item);
+            buyer.SetCoins(item.Price);
+            salesman.DeleteItem(item);
+            salesman.SetCoins(-item.Price);
+        }
     }
 
     class GameMembers
     {
         protected readonly List<Item> Inventory;
-        public int Many { get; private set; }
+        public int Coins { get; private set; }
 
-        protected GameMembers(int many, List<Item> lists)
+        protected GameMembers(int coins, List<Item> lists)
         {
-            Many = many;
+            Coins = coins;
             Inventory = lists;
         }
 
         public void DrawItems(int positionX, int positionY, string text)
         {
             Console.SetCursorPosition(positionX, positionY - 1);
-            Console.Write(text + ". " + Many + " монет.");
+            Console.Write(text + ". " + Coins + " монет.");
 
             for (int i = 0; i < Inventory.Count; i++)
             {
@@ -125,16 +131,19 @@ namespace TestOOP
             return isFound;
         }
 
-        public void SetMany(int namber)
+        public void SetCoins(int namber)
         {
-            Many -= namber;
+            Coins -= namber;
         }
     }
 
     class Salesman : GameMembers
     {
+        public int listsItemPositionX { get; private set; } = 40;
+        public int listsItemPositionY { get; private set; } = 2;
+
         private static readonly int _amountItems = 5;
-        public Salesman(int many, List<Item> inventory) : base(many, inventory) { }
+        public Salesman(int coins, List<Item> inventory) : base(coins, inventory) { }
 
         public void CreateItemsSalesman()
         {
@@ -157,7 +166,9 @@ namespace TestOOP
 
     class Player : GameMembers
     {
-        public Player(int many, List<Item> inventory) : base(many, inventory) { }
+        public int listsItemPositionX { get; private set; } = 80;
+        public int listsItemPositionY { get; private set; } = 2;
+        public Player(int coins, List<Item> inventory) : base(coins, inventory) { }
     }
 
     class Item
