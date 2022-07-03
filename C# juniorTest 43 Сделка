@@ -65,7 +65,7 @@ namespace TestOOP
 
             if (salesman.TryGetItem(nameItem, out item))
             {
-                if (item.Price <= buyer.GetCoins())
+                if (item.Price <= buyer.Coins)
                 {
                     buyer.BuyingItem(item);
                     salesman.SellItems(item);
@@ -92,17 +92,12 @@ namespace TestOOP
     class GameMembers
     {
         private readonly List<Item> _inventory;
-        protected int Coins { get; private set; }
+        public int Coins { get; private set; }
 
         protected GameMembers(int coins, List<Item> lists)
         {
             Coins = coins;
             _inventory = lists;
-        }
-
-        public int GetCoins()
-        {
-            return Coins;
         }
 
         public void DrawItems(int positionX, int positionY, string text)
