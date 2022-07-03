@@ -1,1 +1,32 @@
+using System;
+using System.Collections.Generic;
 
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+        }
+    }
+
+    class Route
+    {
+
+    }
+
+    class Ticket
+    {
+
+    }
+
+    class Train
+    {
+
+    }
+
+    class Wagon
+    {
+public int[] PlaceWagon = new int[15,25,35];
+    }
+}
