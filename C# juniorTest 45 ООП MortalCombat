@@ -104,7 +104,8 @@ namespace TestOOP
         private static readonly Random _random = new Random();
         public void StartFight(Fighter leftFighter, Fighter rightFighter)
         {
-            while (leftFighter.GetHealth() > 0 && rightFighter.GetHealth() > 0)
+
+            while (leftFighter.Health > 0 && rightFighter.Health > 0)
             {
                 Console.Clear();
                 DrawFighters(leftFighter, rightFighter);
@@ -113,7 +114,7 @@ namespace TestOOP
                 Console.ReadKey();
             }
 
-            BattleResult(leftFighter.GetHealth(), rightFighter.GetHealth());
+            BattleResult(leftFighter.Health, rightFighter.Health);
         }
 
         private void DrawFighters(Fighter leftFighter, Fighter rightFighter)
@@ -173,14 +174,14 @@ namespace TestOOP
 
         private void MakeAttack(Fighter attacking, Fighter attacked)
         {
-            attacked.TakeDamage(attacking.GetAttack());
+            attacked.TakeDamage(attacking.Attack);
         }
 
         private void DrawFighter(Fighter fighter, string text)
         {
             Console.Write(text);
             fighter.ShowInfo();
-            DrawLive(fighter.GetHealth());
+            DrawLive(fighter.Health);
         }
 
         private void DrawLive(int health, ConsoleColor color = ConsoleColor.Red)
@@ -220,33 +221,13 @@ namespace TestOOP
 
     class Fighter
     {
-        protected int Health;
-        protected int Attack;
-        protected int Armor;
-        protected int Dexterity;
         private static readonly Random _random = new Random();
+        public int Health { get; protected set; }
+        public int Attack { get; protected set; }
+        public int Armor { get; protected set; }
+        public int Dexterity { get; protected set; }
 
         public virtual void UseAbility() { }
-
-        public int GetHealth()
-        {
-            return Health;
-        }
-
-        public int GetAttack()
-        {
-            return Attack;
-        }
-
-        public int GetArmor()
-        {
-            return Armor;
-        }
-
-        public int GetDexterity()
-        {
-            return Dexterity;
-        }
 
         public void TakeDamage(int damage)
         {
