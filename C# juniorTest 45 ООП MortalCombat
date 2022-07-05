@@ -1,0 +1,440 @@
+using System;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            bool isPlay = true;
+            Arena arena = new Arena();
+
+            Console.CursorVisible = false;
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+
+            while (isPlay)
+            {
+                Console.Clear();
+                Console.WriteLine(" 1 - Старт боя.\n\n 2 - Закончить.");
+                string select = Console.ReadLine();
+
+                switch (select)
+                {
+                    case "1":
+                        arena.WorkArena();
+                        break;
+
+                    case "2":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("no comment");
+                        break;
+                }
+            }
+        }
+    }
+
+    class Arena
+    {
+        private readonly Ninja _ninja = new Ninja();
+        private readonly Barbarian _barbarian = new Barbarian();
+        private readonly Spirit _spirit = new Spirit();
+        private readonly Boxer _boxer = new Boxer();
+        private readonly Witch _witch = new Witch();
+        private readonly MortalCombat _fight = new MortalCombat();
+
+        public void WorkArena()
+        {
+            Console.Clear();
+            ShowFighters();
+            Fighter leftFighter = TakeFighter("\n Введите номер бойца в ЛЕВОМ углу: ");
+            Fighter rightFighter = TakeFighter("\n Введите номер бойца в ПРАВОМ углу: ");
+            _fight.StartFight(leftFighter, rightFighter);
+
+        }
+
+        private void ShowFighters()
+        {
+            Console.WriteLine("Список бойцов: ");
+            _ninja.ShowInfo();
+            _barbarian.ShowInfo();
+            _spirit.ShowInfo();
+            _boxer.ShowInfo();
+            _witch.ShowInfo();
+        }
+
+        private Fighter TakeFighter(string text)
+        {
+            string select = null;
+
+            while (select != "1" && select != "2" && select != "3" && select != "4" && select != "5")
+            {
+                CustomPrint.ApplyColor(text, ConsoleColor.DarkGreen);
+                select = Console.ReadLine();
+
+                switch (select)
+                {
+                    case "1":
+                        return new Ninja();
+
+                    case "2":
+                        return new Barbarian();
+
+                    case "3":
+                        return new Spirit();
+
+                    case "4":
+                        return new Boxer();
+
+                    case "5":
+                        return new Witch();
+
+                    default:
+                        Console.Write("Хрень введена, введи ЦИФРУ! от 1 до 5!");
+                        Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 2);
+                        break;
+                }
+            }
+            return null;
+        }
+    }
+
+    class MortalCombat
+    {
+        private static readonly Random _random = new Random();
+        public void StartFight(Fighter leftFighter, Fighter rightFighter)
+        {
+            while (leftFighter.GetHealth() > 0 && rightFighter.GetHealth() > 0)
+            {
+                Console.Clear();
+                DrawFighters(leftFighter, rightFighter);
+                MakeMove(leftFighter, rightFighter);
+                CustomPrint.ApplyColor("\n Жми кнопку для продолжения.", ConsoleColor.DarkYellow);
+                Console.ReadKey();
+            }
+
+            BattleResult(leftFighter.GetHealth(), rightFighter.GetHealth());
+        }
+
+        private void DrawFighters(Fighter leftFighter, Fighter rightFighter)
+        {
+            DrawFighter(leftFighter, "\n Смертник в ЛЕВОМ углу:");
+            DrawFighter(rightFighter, "\n Смертник в ПРАВОМ углу:");
+        }
+
+        private void MakeMove(Fighter leftFighter, Fighter rightFighter)
+        {
+            MakeFighterMove(leftFighter, rightFighter, "ЛЕВОГО");
+            MakeFighterMove(rightFighter, leftFighter, "ПРАВОГО");
+        }
+
+        private void BattleResult(int healthLeftFighter, int healthRightFighter)
+        {
+            Console.Clear();
+
+            if (healthLeftFighter > 0)
+                CustomPrint.ApplyColor("Победа ЛЕВОГО бойца", ConsoleColor.Yellow);
+
+            else if (healthRightFighter > 0)
+                CustomPrint.ApplyColor("Победа ПРАВОГО бойца", ConsoleColor.Yellow);
+
+            else
+                CustomPrint.ApplyColor("Два дибила это сила.", ConsoleColor.Yellow);
+
+            Console.WriteLine("\n Для продолжения нажмите кнопку.");
+            Console.ReadKey();
+        }
+
+        private string SelectAction(string text)
+        {
+            Console.WriteLine($"\n\nВыберите действие {text} бойца: \n 1 - атака \n 2 - применить способность(шанс 50/50 \n Ввод хрени - пропуск хода)");
+            return Console.ReadLine();
+        }
+
+        private void MakeFighterMove(Fighter attacking, Fighter attacked, string text)
+        {
+            string selectFighter = SelectAction(text);
+
+            switch (selectFighter)
+            {
+                case "1":
+                    MakeAttack(attacking, attacked);
+                    break;
+
+                case "2":
+                    MakeAbility(attacking);
+                    break;
+
+                default:
+                    Console.WriteLine($"Боец ковыряется в носу.");
+                    break;
+            }
+        }
+
+        private void MakeAttack(Fighter attacking, Fighter attacked)
+        {
+            attacked.TakeDamage(attacking.GetAttack());
+        }
+
+        private void DrawFighter(Fighter fighter, string text)
+        {
+            Console.Write(text);
+            fighter.ShowInfo();
+            DrawLive(fighter.GetHealth());
+        }
+
+        private void DrawLive(int health, ConsoleColor color = ConsoleColor.Red)
+        {
+            char sign = ' ';
+            int lifeInSign = 20;
+            int numberSignsLife = health / lifeInSign;
+
+            Console.Write(" Уровень жизни:[ ");
+            ConsoleColor defaultColor = Console.BackgroundColor;
+            Console.BackgroundColor = color;
+
+            for (int i = 0; i < numberSignsLife; i++)
+                Console.Write(sign);
+
+            Console.WriteLine();
+            Console.BackgroundColor = defaultColor;
+        }
+
+        private void MakeAbility(Fighter fighter)
+        {
+            int jobChance = 50;
+            int maxPerCent = 100;
+            bool isWorkedAbiliry = jobChance >= _random.Next(0, maxPerCent);
+
+            if (isWorkedAbiliry)
+            {
+                fighter.UseAbility();
+                CustomPrint.ApplyColor("\n Способность применена.\n", ConsoleColor.DarkGreen);
+            }
+            else
+            {
+                CustomPrint.ApplyColor("\n Способность не удалось применить.\n", ConsoleColor.DarkRed);
+            }
+        }
+    }
+
+    abstract class Fighter
+    {
+        private static readonly Random _random = new Random();
+        protected int Health { get; set; }
+        protected int Attack { get; set; }
+        protected int Armor { get; set; }
+        protected int Dexterity { get; set; }
+
+        public abstract void UseAbility();
+
+        public int GetHealth()
+        {
+            return Health;
+        }
+
+        public int GetAttack()
+        {
+            return Attack;
+        }
+
+        public int GetArmor()
+        {
+            return Armor;
+        }
+
+        public int GetDexterity()
+        {
+            return Dexterity;
+        }
+
+        public void TakeDamage(int damage)
+        {
+            int perCent = 100;
+
+            if (Dexterity < _random.Next(0, perCent))
+            {
+                Health -= damage - Armor;
+                CustomPrint.ApplyColor("\n Атака успешна\n", ConsoleColor.Green);
+            }
+            else
+            {
+                CustomPrint.ApplyColor("\n Противник увернулся\n", ConsoleColor.Red);
+            }
+        }
+
+        public virtual void ShowInfo()
+        {
+            Console.Write($"\n Жизни - {Health}\n Атака - {Attack}\n Броня - {Armor}\n Ловкость - {Dexterity}\n");
+        }
+    }
+
+    class Ninja : Fighter
+    {
+        private readonly int _health = 1000;
+        private readonly int _attack = 130;
+        private readonly int _armor = 10;
+        private readonly int _dexterity = 80;
+
+        public Ninja()
+        {
+            Health = _health;
+            Attack = _attack;
+            Armor = _armor;
+            Dexterity = _dexterity;
+        }
+
+        public override void UseAbility()
+        {
+            int factorAbility = 4;
+
+            Attack *= factorAbility;
+            Health -= _health / factorAbility;
+        }
+
+        public override void ShowInfo()
+        {
+            CustomPrint.ApplyColor("\n 1: Великий воин востока, способность: ПСИХ - несмотря на раны летит на противника и ПАЛЬЦЕМ в ГЛАЗ!");
+            base.ShowInfo();
+        }
+    }
+
+    class Barbarian : Fighter
+    {
+        private readonly int _health = 1500;
+        private readonly int _attack = 150;
+        private readonly int _armor = 50;
+        private readonly int _dexterity = 5;
+
+        public Barbarian()
+        {
+            Health = _health;
+            Attack = _attack;
+            Armor = _armor;
+            Dexterity = _dexterity;
+        }
+
+        public override void UseAbility()
+        {
+            int factorAbility = 2;
+
+            Dexterity *= factorAbility;
+
+            if (Health < _health / factorAbility)
+                Health += Health / Dexterity;
+        }
+
+        public override void ShowInfo()
+        {
+            CustomPrint.ApplyColor("\n 2: Могучий воин севера, способность: БЕШЕНСТВО - ускоряется, крайняя стадия жрет комаров на лету, повышая здоровье.");
+            base.ShowInfo();
+        }
+    }
+
+    class Spirit : Fighter
+    {
+        private readonly int _health = 20;
+        private readonly int _attack = 60;
+        private readonly int _armor = 0;
+        private readonly int _dexterity = 95;
+
+        public Spirit()
+        {
+            Health = _health;
+            Attack = _attack;
+            Armor = _armor;
+            Dexterity = _dexterity;
+        }
+
+        public override void UseAbility()
+        {
+            Health = _health;
+        }
+
+        public override void ShowInfo()
+        {
+            CustomPrint.ApplyColor("\n 3: Дух(ждет дембеля), способность: ХитроЖопость - непонятно как восстанавливает жизнь.");
+            base.ShowInfo();
+        }
+    }
+
+    class Boxer : Fighter
+    {
+        private readonly int _health = 1000;
+        private readonly int _attack = 100;
+        private readonly int _armor = 50;
+        private readonly int _dexterity = 50;
+
+        public Boxer()
+        {
+            Health = _health;
+            Attack = _attack;
+            Armor = _armor;
+            Dexterity = _dexterity;
+        }
+
+        public override void UseAbility()
+        {
+            int factorAbility = 2;
+
+            Attack *= factorAbility;
+        }
+
+        public override void ShowInfo()
+        {
+            CustomPrint.ApplyColor("\n 4: Боксер, способность: КОНЦЕНТРАЦИЯ - повышает атаку.");
+            base.ShowInfo();
+        }
+    }
+
+    class Witch : Fighter
+    {
+        private readonly int _health = 100;
+        private readonly int _attack = 250;
+        private readonly int _armor = 20;
+        private readonly int _dexterity = 30;
+        public int Mana { get; private set; } = 300;
+        public int MagicPower { get; private set; } = 2;
+
+        public Witch()
+        {
+            Health = _health;
+            Attack = _attack;
+            Armor = _armor;
+            Dexterity = _dexterity;
+            Mana = Mana;
+            MagicPower = MagicPower;
+        }
+
+        public override void UseAbility()
+        {
+            int priceAbility = 150;
+
+            Health *= MagicPower;
+            Attack *= MagicPower;
+            Armor *= MagicPower;
+            Dexterity *= MagicPower;
+            Mana -= priceAbility;
+        }
+
+        public override void ShowInfo()
+        {
+            CustomPrint.ApplyColor("\n 5: Колдун, способность: ПЕРДИМАНОКЛЬ - повышает характеристики.");
+            base.ShowInfo();
+            Console.Write($" Мана - {Mana}\n Сила Магии - {MagicPower}\n");
+        }
+    }
+
+    class CustomPrint
+    {
+        public static void ApplyColor(string text, ConsoleColor color = ConsoleColor.DarkMagenta)
+        {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = Console.ForegroundColor = color;
+            Console.Write(text);
+            Console.ForegroundColor = defaultColor;
+        }
+    }
+}
