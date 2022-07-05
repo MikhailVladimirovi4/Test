@@ -1,0 +1,32 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+        }
+    }
+
+    class Shop
+    {
+
+    }
+
+    class Product
+    {
+
+    }
+
+    class Client
+    {
+
+    }
+
+    class Inventory
+    {
+
+    }
+}
