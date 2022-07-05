@@ -85,7 +85,7 @@ namespace TestOOP
 
                 if (isFighterSelected)
                 {
-                    return fighters[number - 1 + selectionModifier];
+                    return fighters[--number + selectionModifier];
                 }
                 else
                 {
