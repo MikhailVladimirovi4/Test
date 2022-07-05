@@ -296,7 +296,7 @@ namespace TestOOP
 
         public override void ShowInfo()
         {
-            CustomPrint.ApplyColor("\n 1: Великий воин востока, способность: ПСИХ - несмотря на раны летит на противника и ПАЛЬЦЕМ в ГЛАЗ!");
+            CustomPrint.ApplyColor("\n 1: Великий воин востока, способность: ПСИХ - теряя здоровье грызет себя, затачивая ногу, и в ГЛАЗ!");
             base.ShowInfo();
         }
     }
