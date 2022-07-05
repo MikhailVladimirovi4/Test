@@ -77,13 +77,11 @@ namespace TestOOP
 
         private Fighter TakeFighter(List<Fighter> fighters, string text, int duplicationRateFightersCollection, int selectionModifier = 0)
         {
-            string select = null;
-
-            while (select != "1" && select != "2" && select != "3" && select != "4" && select != "5")
+            while (true)
             {
                 CustomPrint.ApplyColor(text, ConsoleColor.DarkGreen);
-                select = Console.ReadLine();
-                bool isFighterSelected = (int.TryParse(select, out int number) && number > 0 && number <= fighters.Count / duplicationRateFightersCollection);
+                int.TryParse(Console.ReadLine(), out int number);
+                bool isFighterSelected = ( number > 0 && number <= fighters.Count / duplicationRateFightersCollection);
 
                 if (isFighterSelected)
                 {
@@ -95,7 +93,6 @@ namespace TestOOP
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 2);
                 }
             }
-            return null;
         }
     }
 
@@ -114,7 +111,7 @@ namespace TestOOP
                 Console.ReadKey();
             }
 
-            BattleResult(leftFighter.Health, rightFighter.Health);
+            ShowBattleResult(leftFighter.Health, rightFighter.Health);
         }
 
         private void DrawFighters(Fighter leftFighter, Fighter rightFighter)
@@ -129,7 +126,7 @@ namespace TestOOP
             MakeFighterMove(rightFighter, leftFighter, "ПРАВОГО");
         }
 
-        private void BattleResult(int healthLeftFighter, int healthRightFighter)
+        private void ShowBattleResult(int healthLeftFighter, int healthRightFighter)
         {
             Console.Clear();
 
