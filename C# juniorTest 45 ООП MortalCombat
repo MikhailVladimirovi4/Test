@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 
 namespace TestOOP
 {
@@ -38,34 +39,43 @@ namespace TestOOP
 
     class Arena
     {
-        private readonly Ninja _ninja = new Ninja();
-        private readonly Barbarian _barbarian = new Barbarian();
-        private readonly Spirit _spirit = new Spirit();
-        private readonly Boxer _boxer = new Boxer();
-        private readonly Witch _witch = new Witch();
         private readonly MortalCombat _fight = new MortalCombat();
+        private readonly List<Fighter> _fighters = new List<Fighter>();
+
 
         public void WorkArena()
         {
+            int uniqueFighterModifier = 5;
+            int duplicationRateFightersCollection = 2;
+
+            _fighters.Clear();
+
+            for (int i = 0; i < duplicationRateFightersCollection; i++)
+            {
+                _fighters.Add(new Ninja());
+                _fighters.Add(new Barbarian());
+                _fighters.Add(new Spirit());
+                _fighters.Add(new Boxer());
+                _fighters.Add(new Witch());
+            }
+
             Console.Clear();
-            ShowFighters();
-            Fighter leftFighter = TakeFighter("\n Введите номер бойца в ЛЕВОМ углу: ");
-            Fighter rightFighter = TakeFighter("\n Введите номер бойца в ПРАВОМ углу: ");
+            ShowFighters(_fighters, duplicationRateFightersCollection);
+            Fighter leftFighter = TakeFighter(_fighters, "\n Введите номер бойца в ЛЕВОМ углу: ", duplicationRateFightersCollection);
+            Fighter rightFighter = TakeFighter(_fighters, "\n Введите номер бойца в ПРАВОМ углу: ", duplicationRateFightersCollection, uniqueFighterModifier);
             _fight.StartFight(leftFighter, rightFighter);
 
         }
 
-        private void ShowFighters()
+        private void ShowFighters(List<Fighter> fighters, int duplicationRateFightersCollection)
         {
             Console.WriteLine("Список бойцов: ");
-            _ninja.ShowInfo();
-            _barbarian.ShowInfo();
-            _spirit.ShowInfo();
-            _boxer.ShowInfo();
-            _witch.ShowInfo();
+
+            for (int i = 0; i < fighters.Count / duplicationRateFightersCollection; i++)
+                fighters[i].ShowInfo();
         }
 
-        private Fighter TakeFighter(string text)
+        private Fighter TakeFighter(List<Fighter> fighters, string text, int duplicationRateFightersCollection, int selectionModifier = 0)
         {
             string select = null;
 
@@ -73,28 +83,16 @@ namespace TestOOP
             {
                 CustomPrint.ApplyColor(text, ConsoleColor.DarkGreen);
                 select = Console.ReadLine();
+                bool isFighterSelected = (int.TryParse(select, out int number) && number > 0 && number <= fighters.Count / duplicationRateFightersCollection);
 
-                switch (select)
+                if (isFighterSelected)
                 {
-                    case "1":
-                        return new Ninja();
-
-                    case "2":
-                        return new Barbarian();
-
-                    case "3":
-                        return new Spirit();
-
-                    case "4":
-                        return new Boxer();
-
-                    case "5":
-                        return new Witch();
-
-                    default:
-                        Console.Write("Хрень введена, введи ЦИФРУ! от 1 до 5!");
-                        Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 2);
-                        break;
+                    return fighters[number - 1 + selectionModifier];
+                }
+                else
+                {
+                    Console.Write("Хрень введена, введи ЦИФРУ! от 1 до 5!");
+                    Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 2);
                 }
             }
             return null;
@@ -220,15 +218,15 @@ namespace TestOOP
         }
     }
 
-    abstract class Fighter
+    class Fighter
     {
+        protected int Health;
+        protected int Attack;
+        protected int Armor;
+        protected int Dexterity;
         private static readonly Random _random = new Random();
-        protected int Health { get; set; }
-        protected int Attack { get; set; }
-        protected int Armor { get; set; }
-        protected int Dexterity { get; set; }
 
-        public abstract void UseAbility();
+        public virtual void UseAbility() { }
 
         public int GetHealth()
         {
