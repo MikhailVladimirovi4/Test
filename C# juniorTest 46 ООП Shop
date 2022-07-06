@@ -7,26 +7,148 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
+            Shop shop = new Shop();
+            string[] clientNames = { "Паша", "Гоша", "Степа", "Саша" };
+            int[] walletVolumes = { 200, 300, 400, 500 };
+
+            shop.CreateTrade(clientNames, walletVolumes);
         }
     }
 
     class Shop
     {
+        private readonly static Random _random = new Random();
+        private readonly Queue<Client> _clients = new Queue<Client>();
+        protected string[] Showcase { get; private set; } = { "Лопата", "Самокат", "Жвачка", "Колесо", "Ручка", "Катер", "Ракета", };
 
+        public void CreateTrade(string[] clientNames, int[] walletVolumes)
+        {
+            int storeBalance = 0;
+
+            CreareQueue(clientNames, walletVolumes);
+
+            while (_clients.Count > 0)
+            {
+                Console.Clear();
+                Client client = _clients.Dequeue();
+                ShowInfo(client, storeBalance);
+                OptimizeItemCosts(client);
+                storeBalance += GetCostItem(client);
+                client.SetCoins(GetCostItem(client));
+                ShowInfo(client, storeBalance, "После обслуживания ");
+                Console.ReadKey();
+            }
+
+            Console.Clear();
+            Console.WriteLine("\n\n  Всех обслужили, монет в кассе: " + storeBalance);
+            Console.ReadKey();
+        }
+
+        private void ShowInfo(Client client, int number, string text  = "Когда пришел на кассу")
+        {
+            Console.Write(text + " ");
+            client.ShowInfo();
+            Console.WriteLine("\n Монет в кассе: " + number + "\n");
+        }
+
+        private void OptimizeItemCosts(Client client)
+        {
+            bool isNotOptimized = client.Coins < GetCostItem(client);
+
+            while (isNotOptimized)
+            {
+                RemoveItem(client);
+                isNotOptimized = client.Coins < GetCostItem(client);
+            }
+        }
+
+        private void RemoveItem(Client client)
+        {
+            client.ListsItem.Inventory.RemoveAt(_random.Next(0, client.ListsItem.Inventory.Count));
+        }
+
+        private int GetCostItem(Client client)
+        {
+            int sum = 0;
+
+            for (int i = 0; i < client.ListsItem.Inventory.Count; i++)
+            {
+                sum += client.ListsItem.Inventory[i].Price;
+            }
+
+            return sum;
+        }
+
+        private void CreareQueue(string[] clientNames, int[] walletVolumes)
+        {
+            for (int i = 0; i < clientNames.Length; i++)
+            {
+                _clients.Enqueue(new Client(clientNames[i], walletVolumes[_random.Next(0, walletVolumes.Length)]));
+            }
+        }
     }
 
-    class Product
+    class Product : Shop
     {
+        private readonly static Random _random = new Random();
+        private readonly int _minimumCostProduct = 50;
+        private readonly int _maximumCostProduct = 100;
+        public string Name { get; private set; }
+        public int Price { get; private set; }
 
+        public Product(string name)
+        {
+            Name = name;
+            Price = _random.Next(_minimumCostProduct, _maximumCostProduct);
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{Name} - {Price} монет");
+        }
     }
 
-    class Client
+    class FoodBascket : Shop
     {
+        public List<Product> Inventory { get; private set; } = new List<Product>();
 
+        public FoodBascket()
+        {
+            for (int i = 0; i < Showcase.Length; i++)
+            {
+                Inventory.Add(new Product(Showcase[i]));
+            }
+        }
+
+        public void ShowInfo()
+        {
+            foreach (Product product in Inventory)
+                product.ShowInfo();
+        }
     }
 
-    class Inventory
+    class Client : Shop
     {
+        public string Name { get; private set; }
+        public int Coins { get; private set; }
+        public FoodBascket ListsItem { get; private set; }
 
+        public Client(string name, int coins)
+        {
+            Name = name;
+            Coins = coins;
+            ListsItem = new FoodBascket();
+        }
+
+        public void ShowInfo()
+        {
+            Console.WriteLine($"{Name} c монетами = {Coins}");
+            ListsItem.ShowInfo();
+        }
+
+        public void SetCoins(int number)
+        {
+            Coins -= number;
+        }
     }
 }
