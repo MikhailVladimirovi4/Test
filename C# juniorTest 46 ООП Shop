@@ -19,7 +19,9 @@ namespace TestOOP
     {
         private readonly static Random _random = new Random();
         private readonly Queue<Client> _clients = new Queue<Client>();
-        protected string[] Showcase { get; private set; } = { "Лопата", "Самокат", "Жвачка", "Колесо", "Ручка", "Катер", "Ракета", };
+        private readonly string[] _showcase  = { "Лопата", "Самокат", "Жвачка", "Колесо", "Ручка", "Катер", "Ракета", };
+
+        public string[] GetShowcase() { return _showcase; }
 
         public void CreateTrade(string[] clientNames, int[] walletVolumes)
         {
@@ -34,7 +36,7 @@ namespace TestOOP
                 ShowInfo(client, storeBalance);
                 OptimizeItemCosts(client);
                 storeBalance += GetCostItem(client);
-                client.SetCoins(GetCostItem(client));
+                client.TakeCoins(GetCostItem(client));
                 ShowInfo(client, storeBalance, "После обслуживания ");
                 Console.ReadKey();
             }
@@ -64,16 +66,16 @@ namespace TestOOP
 
         private void RemoveItem(Client client)
         {
-            client.ListsItem.Inventory.RemoveAt(_random.Next(0, client.ListsItem.Inventory.Count));
+            client.GetListsItem().RemoveItemFromBascket(_random.Next(0, client.GetListsItem().GetBascketSize()));
         }
 
         private int GetCostItem(Client client)
         {
             int sum = 0;
 
-            for (int i = 0; i < client.ListsItem.Inventory.Count; i++)
+            for (int i = 0; i < client.GetListsItem().GetBascketSize(); i++)
             {
-                sum += client.ListsItem.Inventory[i].Price;
+                sum += client.GetListsItem().GetItemFromCart(i).Price;
             }
 
             return sum;
@@ -108,45 +110,54 @@ namespace TestOOP
         }
     }
 
-    class FoodBascket : Shop
+    class FoodBascket 
     {
-        public List<Product> Inventory { get; private set; } = new List<Product>();
+        private readonly Shop _shop = new Shop();
+        private readonly List<Product> _inventory = new List<Product>();
 
         public FoodBascket()
         {
-            for (int i = 0; i < Showcase.Length; i++)
+            for (int i = 0; i < _shop.GetShowcase().Length; i++)
             {
-                Inventory.Add(new Product(Showcase[i]));
+                _inventory.Add(new Product(_shop.GetShowcase()[i]));
             }
         }
 
+        public Product GetItemFromCart(int number) { return _inventory[number]; }
+
+        public int GetBascketSize() { return _inventory.Count; }
+
+        public void RemoveItemFromBascket(int number) { _inventory.RemoveAt(number); }
+
         public void ShowInfo()
         {
-            foreach (Product product in Inventory)
+            foreach (Product product in _inventory)
                 product.ShowInfo();
         }
     }
 
     class Client : Shop
     {
+        private FoodBascket _listsItem;
         public string Name { get; private set; }
         public int Coins { get; private set; }
-        public FoodBascket ListsItem { get; private set; }
 
         public Client(string name, int coins)
         {
             Name = name;
             Coins = coins;
-            ListsItem = new FoodBascket();
+            _listsItem = new FoodBascket();
         }
+
+        public FoodBascket GetListsItem() { return _listsItem; }
 
         public void ShowInfo()
         {
             Console.WriteLine($"{Name} c монетами = {Coins}");
-            ListsItem.ShowInfo();
+            _listsItem.ShowInfo();
         }
 
-        public void SetCoins(int number)
+        public void TakeCoins(int number)
         {
             Coins -= number;
         }
