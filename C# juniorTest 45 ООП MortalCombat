@@ -77,11 +77,13 @@ namespace TestOOP
 
         private Fighter TakeFighter(List<Fighter> fighters, string text, int duplicationRateFightersCollection, int selectionModifier = 0)
         {
-            while (true)
+            bool isNotSelected = true;
+
+            while (isNotSelected)
             {
                 CustomPrint.ApplyColor(text, ConsoleColor.DarkGreen);
                 int.TryParse(Console.ReadLine(), out int number);
-                bool isFighterSelected = ( number > 0 && number <= fighters.Count / duplicationRateFightersCollection);
+                bool isFighterSelected = (number > 0 && number <= fighters.Count / duplicationRateFightersCollection);
 
                 if (isFighterSelected)
                 {
@@ -89,10 +91,11 @@ namespace TestOOP
                 }
                 else
                 {
-                    Console.Write("Хрень введена, введи ЦИФРУ! от 1 до 5!");
+                    Console.Write("Хрень введена, введи ЦИФРУ! - в соответствии с принадлежности к бойцу.");
                     Console.SetCursorPosition(Console.CursorLeft, Console.CursorTop - 2);
                 }
             }
+            return null;
         }
     }
 
