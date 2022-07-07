@@ -1,0 +1,186 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            int unitSize = 9;
+            List<Fighter> countryFighters1 = new List<Fighter>();
+            List<Fighter> countryFighters2 = new List<Fighter>();
+            Battle battle = new Battle();
+
+            Console.CursorVisible = false;
+            CreateCountryFighters(countryFighters1, countryFighters2, unitSize);
+            battle.СreateFight(countryFighters1, countryFighters2);
+
+            if (countryFighters1.Count > 0)
+                Console.Write(" Победил Север.\n\n");
+            else
+                Console.Write(" Победил Юг.\n\n");
+
+            Console.ReadKey();
+        }
+
+        static void CreateCountryFighters(List<Fighter> lists1, List<Fighter> lists2, int number)
+        {
+            for (int i = 0; i < number; i++)
+            {
+                lists1.Add(new Fighter());
+                lists2.Add(new Fighter());
+            }
+        }
+    }
+    class Battle
+    {
+        private readonly static Random _random = new Random();
+
+        public void СreateFight(List<Fighter> team1, List<Fighter> team2)
+        {
+            DrawFighters(team1, team2);
+
+            while (team1.Count > 0 && team2.Count > 0)
+            {
+                Console.ReadKey();
+                Console.Clear();
+                MakeMoveTeams(team1, team2);
+                DrawFighters(team1, team2);
+            }
+        }
+
+        private void MakeMoveTeams(List<Fighter> team1, List<Fighter> team2)
+        {
+            MakeMoveTeam(team1, team2);
+            TestLifeBestFighters(team1, team2);
+        }
+
+        private void MakeMoveTeam(List<Fighter> team1, List<Fighter> team2)
+        {
+            MakeMoveFighters(team1, team2[GetIndexBestFighter(team2)]);
+            MakeMoveFighters(team2, team1[GetIndexBestFighter(team1)]);
+        }
+
+        private void TestLifeBestFighters(List<Fighter> team1, List<Fighter> team2)
+        {
+            TestLifeBestFighter(team1);
+            TestLifeBestFighter(team2);
+        }
+
+        private void TestLifeBestFighter(List<Fighter> team)
+        {
+            if (team[GetIndexBestFighter(team)].Health < 1)
+                team.RemoveAt(GetIndexBestFighter(team));
+        }
+
+        private void MakeMoveFighters(List<Fighter> attackingFighters, Fighter attackedFighter)
+        {
+            int perCent = 100;
+
+            int damage = GetDamage(attackingFighters);
+
+            if (_random.Next(0, perCent) > attackedFighter.Dexterity)
+                attackedFighter.RemoveHealth(damage);
+        }
+
+        private int GetDamage(List<Fighter> attackingFighters)
+        {
+            int damage = 0;
+
+            for (int i = 0; i < attackingFighters.Count; i++)
+            {
+                damage += attackingFighters[i].Attack;
+            }
+
+            return damage;
+        }
+
+        private void DrawFighters(List<Fighter> team1, List<Fighter> team2)
+        {
+            DrawFighter(team1, "Команда Севера");
+            DrawFighter(team2, "Команда Юга");
+        }
+
+        private void DrawFighter(List<Fighter> team, string text)
+        {
+            Console.WriteLine(text + "\n\n");
+
+            for (var i = 0; i < team.Count; i++)
+                Console.WriteLine($"Боец({i + 1}) HP({team[i].Health}): в руках: {team[i].Weapon} - урон: {team[i].Attack}. Одет в {team[i].Armor} - защита: {team[i].Protection}. Ловкость: {team[i].Dexterity}\n");
+
+            Console.WriteLine("########################################################################################\n");
+        }
+
+        private int GetIndexBestFighter(List<Fighter> team)
+        {
+            int index = 0;
+            int danger = 0;
+
+            for (int i = 0; i < team.Count; i++)
+            {
+                if (team[i].Danger > danger)
+                {
+                    danger = team[i].Danger;
+                    index = i;
+                }
+            }
+            return index;
+        }
+    }
+
+    class Fighter
+    {
+        private readonly int _attackModifier = 35;
+        private readonly int _protectModifer = 10;
+        private readonly static Random _random = new Random();
+        private readonly string[] _weapons = { "Пистолет", "Ружье", "Автомат" };
+        private readonly Dictionary<string, int> _attack = new Dictionary<string, int>();
+        private readonly string[] _armors = { "Куртка", "Бронижелет", "Доспех" };
+        private readonly Dictionary<string, int> _protection = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _dexterity = new Dictionary<string, int>();
+
+        public string Weapon { get; private set; }
+        public int Attack { get; private set; }
+        public string Armor { get; private set; }
+        public int Protection { get; private set; }
+        public int Health { get; private set; } = 1000;
+        public int Dexterity { get; private set; }
+        public int Danger { get; private set; }
+
+        public Fighter()
+        {
+            CreateListsInDictionary(_attackModifier, _protectModifer);
+            int maximumDexterityDefault = 10;
+            int numberWeapon = _random.Next(0, _weapons.Length);
+            int numberArmor = _random.Next(0, _armors.Length);
+
+            Weapon = _weapons[numberWeapon];
+            Attack = _attack[Weapon];
+            Armor = _armors[numberArmor];
+            Protection = _protection[Armor];
+            Dexterity = _dexterity[Armor] + _random.Next(0, maximumDexterityDefault);
+            Danger = (Attack + Protection) * Dexterity;
+        }
+
+        public void RemoveHealth(int damage)
+        {
+            Health -= damage;
+        }
+
+        private void CreateListsInDictionary(int attackModifier, int protectModifer)
+        {
+            CreateDictionary(_weapons, _attack, attackModifier);
+            CreateDictionary(_armors, _protection, protectModifer);
+            CreateDictionary(_armors, _dexterity, protectModifer);
+        }
+
+        private void CreateDictionary(string[] array, Dictionary<string, int> dictionary, int number)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                dictionary.Add(array[i], (i + 1) * number);
+            }
+        }
+    }
+}
