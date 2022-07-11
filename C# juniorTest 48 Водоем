@@ -134,14 +134,20 @@ namespace TestOOP
 
         private void GetNumberNewFish(out int number, out bool isAdd)
         {
-            int fishOptions = 3;
+            Fish fish = new Fish(1);
 
             Console.Clear();
-            Console.WriteLine("\nВыбор ограничен:\n\n 1 - Гуппи.\n\n 2 - Золотая рыбка.\n\n 3 - Сом.");
-            Console.Write("Какаю берем?: ");
+            Console.WriteLine("\nВыбор ограничен: ");
+
+            for (int i = 0; i < fish.GetNumberFishSpecies(); i++)
+            {
+                Console.Write($"\n\n {i + 1} - {fish.GetFishNames(i)}.");
+            }
+
+            Console.Write("Какую берем?: ");
             int.TryParse(Console.ReadLine(), out number);
 
-            if (number > 0 && number <= fishOptions)
+            if (number > 0 && number <= fish.GetNumberFishSpecies())
                 isAdd = true;
             else
                 isAdd = false;
@@ -169,5 +175,9 @@ namespace TestOOP
         }
 
         public void RemoveResorceLife() => ResourceLife--;
+
+        public string GetFishNames(int number) => _fishSpecies[number];
+
+        public int GetNumberFishSpecies() => _fishSpecies.Length;
     }
 }
