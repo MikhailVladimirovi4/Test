@@ -19,8 +19,8 @@ namespace TestOOP
     {
         public void СreateFight()
         {
-            CountrySouth fightersSouth = new CountrySouth();
-            CountryNorth fightersNorth = new CountryNorth();
+            Country fightersSouth = new Country();
+            Country fightersNorth = new Country();
 
             DrawFighters(fightersSouth, fightersNorth);
 
@@ -38,28 +38,28 @@ namespace TestOOP
                 Console.Write(" Победил Север.\n\n");
         }
 
-        private void MakeMoveTeams(CountrySouth fightersSouth, CountryNorth fightersNorth)
+        private void MakeMoveTeams(Country fightersSouth, Country fightersNorth)
         {
             MakeMoveTeam(fightersSouth, fightersNorth);
             CheckHealthFighters(fightersSouth, fightersNorth);
         }
 
-        private void MakeMoveTeam(CountrySouth fightersSouth, CountryNorth fightersNorth)
+        private void MakeMoveTeam(Country fightersSouth, Country fightersNorth)
         {
-            fightersNorth.MakeMoveFighters(fightersSouth.GetDamage());
-            fightersSouth.MakeMoveFighters(fightersNorth.GetDamage());
+            fightersNorth.MakeMoveFighters(fightersSouth.GetDamageFighters());
+            fightersSouth.MakeMoveFighters(fightersNorth.GetDamageFighters());
         }
 
-        private void CheckHealthFighters(CountrySouth fightersSouth, CountryNorth fightersNorth)
+        private void CheckHealthFighters(Country fightersSouth, Country fightersNorth)
         {
-            fightersSouth.CheckHealthFighter();
-            fightersNorth.CheckHealthFighter();
+            fightersSouth.CheckHealthFighters();
+            fightersNorth.CheckHealthFighters();
         }
 
-        private void DrawFighters(CountrySouth fightersSouth, CountryNorth fightersNorth)
+        private void DrawFighters(Country fightersSouth, Country fightersNorth)
         {
-            fightersSouth.DrawFighter();
-            fightersNorth.DrawFighter();
+            fightersSouth.DrawFighter("Команда Юга:  \n\n");
+            fightersNorth.DrawFighter("Команда Севера:  \n\n");
         }
     }
 
@@ -67,48 +67,55 @@ namespace TestOOP
     {
         private readonly int _unitSize = 3;
         private readonly static Random _random = new Random();
+        private readonly List<Fighter> _fighters = new List<Fighter>();
 
-        protected virtual void Draw(List<Fighter> fighters)
+        public Country() => CreateFighters(_fighters);
+
+        public int GetAmountFighters() => _fighters.Count;
+
+        public void DrawFighter(string text)
         {
-            for (var i = 0; i < fighters.Count; i++)
+            Console.WriteLine(text);
+
+            for (var i = 0; i < _fighters.Count; i++)
             {
                 Console.Write($"Боец({i + 1}) ");
-                fighters[i].Draw();
+                _fighters[i].Draw();
             }
 
             Console.WriteLine("########################################################################################\n");
         }
 
-        protected void CreateFighters(List<Fighter> fighters)
-        {
-            for (int i = 0; i < _unitSize; i++)
-                fighters.Add(new Fighter());
-        }
-
-        protected int GetDamage(List<Fighter> fighters)
+        public int GetDamageFighters()
         {
             int damage = 0;
 
-            for (int i = 0; i < fighters.Count; i++)
+            for (int i = 0; i < _fighters.Count; i++)
             {
-                damage += fighters[i].Attack;
+                damage += _fighters[i].Attack;
             }
 
             return damage;
         }
 
-        protected void MakeMove(List<Fighter> fighters, int damage)
+        public void MakeMoveFighters(int damage)
         {
             int perCent = 100;
 
-            if (_random.Next(0, perCent) > fighters[GetIndexBestFighter(fighters)].Dexterity)
-                fighters[GetIndexBestFighter(fighters)].RemoveHealth(damage);
+            if (_random.Next(0, perCent) > _fighters[GetIndexBestFighter(_fighters)].Dexterity)
+                _fighters[GetIndexBestFighter(_fighters)].RemoveHealth(damage);
         }
 
-        protected void CheckHealth(List<Fighter> fighters)
+        public void CheckHealthFighters()
         {
-            if (fighters[GetIndexBestFighter(fighters)].Health < 1)
-                fighters.RemoveAt(GetIndexBestFighter(fighters));
+            if (_fighters[GetIndexBestFighter(_fighters)].Health < 1)
+                _fighters.RemoveAt(GetIndexBestFighter(_fighters));
+        }
+
+        private void CreateFighters(List<Fighter> fighters)
+        {
+            for (int i = 0; i < _unitSize; i++)
+                fighters.Add(new Fighter());
         }
 
         private int GetIndexBestFighter(List<Fighter> fighters)
@@ -126,48 +133,6 @@ namespace TestOOP
             }
             return index;
         }
-    }
-
-    class CountrySouth : Country
-    {
-        private readonly List<Fighter> _fighters = new List<Fighter>();
-
-        public CountrySouth() { CreateFighters(_fighters); }
-
-        public void DrawFighter()
-        {
-            Console.WriteLine("Команда Юга:  \n\n");
-            base.Draw(_fighters);
-        }
-
-        public int GetAmountFighters() { return _fighters.Count; }
-
-        public int GetDamage() { return base.GetDamage(_fighters); }
-
-        public void MakeMoveFighters(int damage) { MakeMove(_fighters, damage); }
-
-        public void CheckHealthFighter() { CheckHealth(_fighters); }
-    }
-
-    class CountryNorth : Country
-    {
-        private readonly List<Fighter> _fighters = new List<Fighter>();
-
-        public CountryNorth() { CreateFighters(_fighters); }
-
-        public void DrawFighter()
-        {
-            Console.WriteLine("Команда Севера:  \n\n");
-            base.Draw(_fighters);
-        }
-
-        public int GetAmountFighters() { return _fighters.Count; }
-
-        public int GetDamage() { return base.GetDamage(_fighters); }
-
-        public void MakeMoveFighters(int damage) { MakeMove(_fighters, damage); }
-
-        public void CheckHealthFighter() { CheckHealth(_fighters); }
     }
 
     class Fighter
@@ -221,11 +186,11 @@ namespace TestOOP
             CreateAttacks();
         }
 
-        public int GetListsValue(string name) { return _attacks[name]; }
+        public int GetListsValue(string name) => _attacks[name];
 
-        public string GetName(int number) { return _items[number]; }
+        public string GetName(int number) => _items[number];
 
-        public int GetListsSize() { return _attacks.Count; }
+        public int GetListsSize() => _attacks.Count;
 
         private void CreateAttacks()
         {
@@ -253,15 +218,15 @@ namespace TestOOP
             CreateDictionaries();
         }
 
-        public int GetListsValue(string name) { return _protections[name]; }
+        public int GetListsValue(string name) => _protections[name];
 
-        public string GetName(int number) { return _items[number]; }
+        public string GetName(int number) => _items[number];
 
-        public int GetValueDexterity(string name) { return _dexterityModifiers[name]; }
+        public int GetValueDexterity(string name) => _dexterityModifiers[name];
 
-        public int GetListsSize() { return _protections.Count; }
+        public int GetListsSize() => _protections.Count;
 
-        public string GetNameArmor(int number) { return _items[number]; }
+        public string GetNameArmor(int number) => _items[number];
 
         private void CreateDictionaries()
         {
