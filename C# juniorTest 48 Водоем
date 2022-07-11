@@ -1,0 +1,173 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            FishHouse fishHouse = new FishHouse();
+            bool isPlay = true;
+
+            while (isPlay)
+            {
+                Console.Clear();
+
+                DrawFishs(fishHouse);
+                DrawInterface(fishHouse);
+                Console.Write("\n\n Ваше действие: ");
+                string action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        fishHouse.AddFish();
+                        break;
+
+                    case "2":
+                        RemoveFishs(fishHouse);
+                        break;
+
+                    case "exit":
+                        isPlay = false;
+                        break;
+
+                    default:
+                        Console.WriteLine(" Прошел год.");
+                        break;
+                }
+            }
+        }
+
+        private static void RemoveFishs(FishHouse fishHouse)
+        {
+            Console.Write("Введите номер рыбы в водоеме: ");
+            int.TryParse(Console.ReadLine(), out int id);
+
+            if (id > 0 && id < fishHouse.GetNumberFishs())
+            {
+                fishHouse.RemoveFish(--id);
+            }
+            else
+            {
+                Console.WriteLine("Такой рыбы нет, потеря года");
+                Console.ReadKey();
+            }
+        }
+
+        private static void DrawInterface(FishHouse fishHouse)
+        {
+            Console.SetCursorPosition(1, 1);
+            Console.WriteLine("За каждое действие(за пустое также) проходит год.\n Варианты действий:\n\n exit - Выход.\n\n 1 - Добавить рыбу.");
+
+            if (fishHouse.GetNumberFishs() > 0)
+            {
+                Console.WriteLine("\n 2 - Выловить рыбу.");
+                fishHouse.RemoveResourcesLife();
+            }
+        }
+
+        private static void DrawFishs(FishHouse fishHouse)
+        {
+            int positionListsX = 0;
+            int positionListsY = 18;
+
+            Console.SetCursorPosition(positionListsX, positionListsY);
+            Console.WriteLine("Список рыб:");
+
+            for (int i = 0; i < fishHouse.GetNumberFishs(); i++)
+            {
+                Console.Write($"{i + 1} ");
+                fishHouse.DrawFishs(i);
+            }
+        }
+    }
+
+    class FishHouse
+    {
+        private readonly int _maximumFishsHouse = 5;
+        private readonly List<Fish> _fishs = new List<Fish>();
+
+        public int GetNumberFishs() => _fishs.Count;
+
+        public void DrawFishs(int number) => _fishs[number].Draw();
+
+        public void RemoveResourcesLife()
+        {
+            for (int i = _fishs.Count; i > 0; i--)
+            {
+                _fishs[i - 1].RemoveResorceLife();
+
+                if (_fishs[i - 1].ResourceLife < 1)
+                    _fishs.RemoveAt(i - 1);
+            }
+        }
+
+        public void RemoveFish(int number) => _fishs.RemoveAt(number);
+
+        public void AddFish()
+        {
+            int number;
+            bool isAdd;
+
+            if (_fishs.Count < _maximumFishsHouse)
+            {
+                GetNumberNewFish(out number, out isAdd);
+
+                if (isAdd)
+                {
+                    _fishs.Add(new Fish(number));
+                }
+                else
+                {
+                    Console.WriteLine("Нет такой рыбы, приходите позже.");
+                    Console.ReadKey();
+                }
+            }
+            else
+            {
+                Console.Write("Нет места.");
+                Console.ReadKey();
+            }
+        }
+
+        private void GetNumberNewFish(out int number, out bool isAdd)
+        {
+            int fishOptions = 3;
+
+            Console.Clear();
+            Console.WriteLine("\nВыбор ограничен:\n\n 1 - Гуппи.\n\n 2 - Золотая рыбка.\n\n 3 - Сом.");
+            Console.Write("Какаю берем?: ");
+            int.TryParse(Console.ReadLine(), out number);
+
+            if (number > 0 && number <= fishOptions)
+                isAdd = true;
+            else
+                isAdd = false;
+        }
+    }
+
+    class Fish
+    {
+        private readonly static Random _random = new Random();
+        private readonly string[] _fishSpecies = { "Гуппи", "Золотая рыбка", "Сом" };
+        public string Name { get; private set; }
+        public int ResourceLife { get; private set; }
+
+        public Fish(int number)
+        {
+            int minimumAge = 15;
+            int maximumAge = 20;
+            Name = _fishSpecies[--number];
+            ResourceLife = _random.Next(minimumAge, maximumAge);
+        }
+
+        public void Draw()
+        {
+            Console.WriteLine($"Вид: {Name}, срок жизни {ResourceLife} лет.");
+        }
+
+        public void RemoveResorceLife() => ResourceLife--;
+    }
+}
