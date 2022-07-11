@@ -7,121 +7,120 @@ namespace TestOOP
     {
         static void Main(string[] args)
         {
-            int unitSize = 9;
-            List<Fighter> countryFighters1 = new List<Fighter>();
-            List<Fighter> countryFighters2 = new List<Fighter>();
             Battle battle = new Battle();
 
             Console.CursorVisible = false;
-            CreateCountryFighters(countryFighters1, countryFighters2, unitSize);
-            battle.СreateFight(countryFighters1, countryFighters2);
-
-            if (countryFighters1.Count > 0)
-                Console.Write(" Победил Север.\n\n");
-            else
-                Console.Write(" Победил Юг.\n\n");
-
+            battle.СreateFight();
             Console.ReadKey();
         }
-
-        static void CreateCountryFighters(List<Fighter> lists1, List<Fighter> lists2, int number)
-        {
-            for (int i = 0; i < number; i++)
-            {
-                lists1.Add(new Fighter());
-                lists2.Add(new Fighter());
-            }
-        }
     }
+
     class Battle
     {
-        private readonly static Random _random = new Random();
-
-        public void СreateFight(List<Fighter> team1, List<Fighter> team2)
+        public void СreateFight()
         {
-            DrawFighters(team1, team2);
+            CountrySouth fightersSouth = new CountrySouth();
+            CountryNorth fightersNorth = new CountryNorth();
 
-            while (team1.Count > 0 && team2.Count > 0)
+            DrawFighters(fightersSouth, fightersNorth);
+
+            while (fightersSouth.GetAmountFighters() > 0 && fightersNorth.GetAmountFighters() > 0)
             {
                 Console.ReadKey();
                 Console.Clear();
-                MakeMoveTeams(team1, team2);
-                DrawFighters(team1, team2);
+                MakeMoveTeams(fightersSouth, fightersNorth);
+                DrawFighters(fightersSouth, fightersNorth);
             }
+
+            if (fightersSouth.GetAmountFighters() > 0)
+                Console.Write(" Победил Юг.\n\n");
+            else
+                Console.Write(" Победил Север.\n\n");
         }
 
-        private void MakeMoveTeams(List<Fighter> team1, List<Fighter> team2)
+        private void MakeMoveTeams(CountrySouth fightersSouth, CountryNorth fightersNorth)
         {
-            MakeMoveTeam(team1, team2);
-            TestLifeBestFighters(team1, team2);
+            MakeMoveTeam(fightersSouth, fightersNorth);
+            CheckHealthFighters(fightersSouth, fightersNorth);
         }
 
-        private void MakeMoveTeam(List<Fighter> team1, List<Fighter> team2)
+        private void MakeMoveTeam(CountrySouth fightersSouth, CountryNorth fightersNorth)
         {
-            MakeMoveFighters(team1, team2[GetIndexBestFighter(team2)]);
-            MakeMoveFighters(team2, team1[GetIndexBestFighter(team1)]);
+            fightersNorth.MakeMoveFighters(fightersSouth.GetDamage());
+            fightersSouth.MakeMoveFighters(fightersNorth.GetDamage());
         }
 
-        private void TestLifeBestFighters(List<Fighter> team1, List<Fighter> team2)
+        private void CheckHealthFighters(CountrySouth fightersSouth, CountryNorth fightersNorth)
         {
-            TestLifeBestFighter(team1);
-            TestLifeBestFighter(team2);
+            fightersSouth.CheckHealthFighter();
+            fightersNorth.CheckHealthFighter();
         }
 
-        private void TestLifeBestFighter(List<Fighter> team)
+        private void DrawFighters(CountrySouth fightersSouth, CountryNorth fightersNorth)
         {
-            if (team[GetIndexBestFighter(team)].Health < 1)
-                team.RemoveAt(GetIndexBestFighter(team));
+            fightersSouth.DrawFighter();
+            fightersNorth.DrawFighter();
         }
+    }
 
-        private void MakeMoveFighters(List<Fighter> attackingFighters, Fighter attackedFighter)
+    class Country
+    {
+        private readonly int _unitSize = 3;
+        private readonly static Random _random = new Random();
+
+        protected virtual void Draw(List<Fighter> fighters)
         {
-            int perCent = 100;
+            for (var i = 0; i < fighters.Count; i++)
+            {
+                Console.Write($"Боец({i + 1}) ");
+                fighters[i].Draw();
+            }
 
-            int damage = GetDamage(attackingFighters);
-
-            if (_random.Next(0, perCent) > attackedFighter.Dexterity)
-                attackedFighter.RemoveHealth(damage);
+            Console.WriteLine("########################################################################################\n");
         }
 
-        private int GetDamage(List<Fighter> attackingFighters)
+        protected void CreateFighters(List<Fighter> fighters)
+        {
+            for (int i = 0; i < _unitSize; i++)
+                fighters.Add(new Fighter());
+        }
+
+        protected int GetDamage(List<Fighter> fighters)
         {
             int damage = 0;
 
-            for (int i = 0; i < attackingFighters.Count; i++)
+            for (int i = 0; i < fighters.Count; i++)
             {
-                damage += attackingFighters[i].Attack;
+                damage += fighters[i].Attack;
             }
 
             return damage;
         }
 
-        private void DrawFighters(List<Fighter> team1, List<Fighter> team2)
+        protected void MakeMove(List<Fighter> fighters, int damage)
         {
-            DrawFighter(team1, "Команда Севера");
-            DrawFighter(team2, "Команда Юга");
+            int perCent = 100;
+
+            if (_random.Next(0, perCent) > fighters[GetIndexBestFighter(fighters)].Dexterity)
+                fighters[GetIndexBestFighter(fighters)].RemoveHealth(damage);
         }
 
-        private void DrawFighter(List<Fighter> team, string text)
+        protected void CheckHealth(List<Fighter> fighters)
         {
-            Console.WriteLine(text + "\n\n");
-
-            for (var i = 0; i < team.Count; i++)
-                Console.WriteLine($"Боец({i + 1}) HP({team[i].Health}): в руках: {team[i].Weapon} - урон: {team[i].Attack}. Одет в {team[i].Armor} - защита: {team[i].Protection}. Ловкость: {team[i].Dexterity}\n");
-
-            Console.WriteLine("########################################################################################\n");
+            if (fighters[GetIndexBestFighter(fighters)].Health < 1)
+                fighters.RemoveAt(GetIndexBestFighter(fighters));
         }
 
-        private int GetIndexBestFighter(List<Fighter> team)
+        private int GetIndexBestFighter(List<Fighter> fighters)
         {
             int index = 0;
             int danger = 0;
 
-            for (int i = 0; i < team.Count; i++)
+            for (int i = 0; i < fighters.Count; i++)
             {
-                if (team[i].Danger > danger)
+                if (fighters[i].Danger > danger)
                 {
-                    danger = team[i].Danger;
+                    danger = fighters[i].Danger;
                     index = i;
                 }
             }
@@ -129,16 +128,54 @@ namespace TestOOP
         }
     }
 
+    class CountrySouth : Country
+    {
+        private readonly List<Fighter> _fighters = new List<Fighter>();
+
+        public CountrySouth() { CreateFighters(_fighters); }
+
+        public void DrawFighter()
+        {
+            Console.WriteLine("Команда Юга:  \n\n");
+            base.Draw(_fighters);
+        }
+
+        public int GetAmountFighters() { return _fighters.Count; }
+
+        public int GetDamage() { return base.GetDamage(_fighters); }
+
+        public void MakeMoveFighters(int damage) { MakeMove(_fighters, damage); }
+
+        public void CheckHealthFighter() { CheckHealth(_fighters); }
+    }
+
+    class CountryNorth : Country
+    {
+        private readonly List<Fighter> _fighters = new List<Fighter>();
+
+        public CountryNorth() { CreateFighters(_fighters); }
+
+        public void DrawFighter()
+        {
+            Console.WriteLine("Команда Севера:  \n\n");
+            base.Draw(_fighters);
+        }
+
+        public int GetAmountFighters() { return _fighters.Count; }
+
+        public int GetDamage() { return base.GetDamage(_fighters); }
+
+        public void MakeMoveFighters(int damage) { MakeMove(_fighters, damage); }
+
+        public void CheckHealthFighter() { CheckHealth(_fighters); }
+    }
+
     class Fighter
     {
-        private readonly int _attackModifier = 35;
-        private readonly int _protectModifer = 10;
+        private readonly int _baseDexterity = 10;
         private readonly static Random _random = new Random();
-        private readonly string[] _weapons = { "Пистолет", "Ружье", "Автомат" };
-        private readonly Dictionary<string, int> _attack = new Dictionary<string, int>();
-        private readonly string[] _armors = { "Куртка", "Бронижелет", "Доспех" };
-        private readonly Dictionary<string, int> _protection = new Dictionary<string, int>();
-        private readonly Dictionary<string, int> _dexterity = new Dictionary<string, int>();
+        private readonly WeaponElement _weapons = new WeaponElement();
+        private readonly ArmorElement _armors = new ArmorElement();
 
         public string Weapon { get; private set; }
         public int Attack { get; private set; }
@@ -148,39 +185,103 @@ namespace TestOOP
         public int Dexterity { get; private set; }
         public int Danger { get; private set; }
 
-        public Fighter()
-        {
-            CreateListsInDictionary(_attackModifier, _protectModifer);
-            int maximumDexterityDefault = 10;
-            int numberWeapon = _random.Next(0, _weapons.Length);
-            int numberArmor = _random.Next(0, _armors.Length);
-
-            Weapon = _weapons[numberWeapon];
-            Attack = _attack[Weapon];
-            Armor = _armors[numberArmor];
-            Protection = _protection[Armor];
-            Dexterity = _dexterity[Armor] + _random.Next(0, maximumDexterityDefault);
-            Danger = (Attack + Protection) * Dexterity;
-        }
-
         public void RemoveHealth(int damage)
         {
-            Health -= damage;
+            if (damage > Protection)
+                Health -= damage - Protection;
         }
 
-        private void CreateListsInDictionary(int attackModifier, int protectModifer)
+        public void Draw()
         {
-            CreateDictionary(_weapons, _attack, attackModifier);
-            CreateDictionary(_armors, _protection, protectModifer);
-            CreateDictionary(_armors, _dexterity, protectModifer);
+            Console.WriteLine($" HP({Health}): в руках: {Weapon} - урон: {Attack}. Одет в {Armor} - защита: {Protection}. Ловкость: {Dexterity}\n");
         }
 
-        private void CreateDictionary(string[] array, Dictionary<string, int> dictionary, int number)
+        public Fighter()
         {
-            for (int i = 0; i < array.Length; i++)
+            int numberWeapon = _random.Next(0, _weapons.GetListsSize());
+            int numberArmor = _random.Next(0, _armors.GetListsSize());
+
+            Weapon = _weapons.GetName(numberWeapon);
+            Attack = _weapons.GetListsValue(Weapon);
+            Armor = _armors.GetName(numberArmor);
+            Protection = _armors.GetListsValue(Armor);
+            Health = Health;
+            Dexterity = _armors.GetValueDexterity(Armor) + _baseDexterity;
+            Danger = (Attack + Protection) * Dexterity;
+        }
+    }
+
+    class WeaponElement
+    {
+        private readonly string[] _items = { "Пистолет", "Ружье", "Автомат" };
+        private readonly Dictionary<string, int> _attacks = new Dictionary<string, int>();
+
+        public WeaponElement()
+        {
+            CreateAttacks();
+        }
+
+        public int GetListsValue(string name) { return _attacks[name]; }
+
+        public string GetName(int number) { return _items[number]; }
+
+        public int GetListsSize() { return _attacks.Count; }
+
+        private void CreateAttacks()
+        {
+            for (var i = 0; i < _items.Length; i++)
             {
-                dictionary.Add(array[i], (i + 1) * number);
+                _attacks.Add(_items[i], GetAttack(i));
             }
+        }
+
+        private int GetAttack(int number)
+        {
+            int modifier = 35;
+            return ++number * modifier;
+        }
+    }
+
+    class ArmorElement
+    {
+        private readonly string[] _items = { "Куртка", "Бронижелет", "Доспех" };
+        private readonly Dictionary<string, int> _protections = new Dictionary<string, int>();
+        private readonly Dictionary<string, int> _dexterityModifiers = new Dictionary<string, int>();
+
+        public ArmorElement()
+        {
+            CreateDictionaries();
+        }
+
+        public int GetListsValue(string name) { return _protections[name]; }
+
+        public string GetName(int number) { return _items[number]; }
+
+        public int GetValueDexterity(string name) { return _dexterityModifiers[name]; }
+
+        public int GetListsSize() { return _protections.Count; }
+
+        public string GetNameArmor(int number) { return _items[number]; }
+
+        private void CreateDictionaries()
+        {
+            for (int i = 0; i < _items.Length; i++)
+            {
+                _protections.Add(_items[i], GetProtection(i));
+                _dexterityModifiers.Add(_items[i], CreateDexterityModifier(i));
+            }
+        }
+
+        private int GetProtection(int number)
+        {
+            int modifier = 10;
+            return modifier * ++number;
+        }
+
+        private int CreateDexterityModifier(int number)
+        {
+            int modifier = 10;
+            return modifier / ++number + modifier;
         }
     }
 }
