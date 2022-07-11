@@ -1,0 +1,176 @@
+using System;
+using System.Collections.Generic;
+
+namespace TestOOP
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Zoo zoo = new Zoo();
+
+            zoo.CreateZoo();
+        }
+    }
+
+    class Zoo
+    {
+        private readonly int _numbersAviary = 5;
+        private readonly List<Aviary> _enclosures = new List<Aviary>();
+
+        public Zoo()
+        {
+            for (int i = 0; i < _numbersAviary; i++)
+                _enclosures.Add(new Aviary());
+        }
+
+        public void CreateZoo()
+        {
+            int number;
+            string action;
+            bool isOpen = true;
+
+            while (isOpen)
+            {
+                Console.Clear();
+                DrawInterface();
+                Console.Write("\n       Для выхода наберите exit.");
+                Console.Write("\n Введите номер вольера для детализации информации: ");
+                action = Console.ReadLine();
+
+                if (int.TryParse(action, out number))
+                {
+                    if (number > 0 && number <= _enclosures.Count)
+                    {
+                        ShowAviaryInformation(--number);
+                    }
+                    else
+                    {
+                        Console.WriteLine("Вы перепутали наш музей с обсерваторией - нет таких звезд");
+                    }
+                }
+                else if (action == "exit")
+                {
+                    isOpen = false;
+                }
+                else
+                {
+                    Console.WriteLine("Введена хрень");
+                }
+
+                Console.ReadKey();
+            }
+        }
+
+        private void ShowAviaryInformation(int number)
+        {
+            ConsoleColor defaultColor = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            _enclosures[number].DrawAnimals();
+            Console.ForegroundColor = defaultColor;
+        }
+
+        private void DrawInterface()
+        {
+            Console.WriteLine("Добро пожаловать в виртуальный зоопарк.\n\n Список животных в вольерах на сегодня:");
+
+            for (int i = 0; i < _enclosures.Count; i++)
+                Console.WriteLine($" Вольер {i + 1}:  {_enclosures[i].GetNamesAnimals()}");
+        }
+    }
+
+    class Aviary
+    {
+        private readonly int[] _places = { 1, 3, 5 };
+        private static readonly Random _random = new Random();
+        private readonly Dictionary<int, string> _aviaryModel = new Dictionary<int, string>();
+        private readonly List<Animal> _animals = new List<Animal>();
+        public string Name { get; private set; }
+        public int Place { get; private set; }
+
+        public Aviary()
+        {
+            Animal animal = new Animal(1);
+            int kindAnimal;
+
+            CreateAviaryModel(_aviaryModel);
+            Place = _places[_random.Next(0, _places.Length)];
+            Name = _aviaryModel[Place];
+            kindAnimal = _random.Next(0, animal.GetNumberZooAnimals());
+
+            for (int i = 0; i < Place; i++)
+                _animals.Add(new Animal(kindAnimal));
+        }
+
+        public void DrawAnimals()
+        {
+            Console.Write($" {Name} вольер на {Place} мест.");
+            _animals[0].Draw();
+            Console.Write($" {_animals.Count} особей: {GetNumberMales()} самцы, {_animals.Count - GetNumberMales()} самок.");
+        }
+
+        public string GetNamesAnimals() => _animals[0].Name;
+
+        private int GetNumberMales()
+        {
+            int numberMales = 0;
+
+            for (int i = 0; i < _animals.Count; i++)
+            {
+                if (_animals[i].Floor == 0)
+                    numberMales++;
+            }
+
+            return numberMales;
+        }
+
+        private void CreateAviaryModel(Dictionary<int, string> _aviaryModel)
+        {
+            _aviaryModel.Add(1, "Малый");
+            _aviaryModel.Add(3, "Средний");
+            _aviaryModel.Add(5, "Большой");
+        }
+    }
+
+    class Animal
+    {
+        private readonly int _randomGenderNumber1 = 100;
+        private readonly int _randomGenderNumber2 = 2;
+        private static readonly Random _floor = new Random();
+        private readonly SoundDictionary _soundDictionary = new SoundDictionary();
+        private readonly string[] _zooAnimals = { "Кошки", "Жабы", "Собаки", "Коровы", "Верблюды", "Крокодилы", "Мыши" };
+
+        public string Name { get; private set; }
+        public string Sound { get; private set; }
+        public int Floor { get; private set; }
+
+        public Animal(int number)
+        {
+            Name = _zooAnimals[number];
+            Sound = _soundDictionary.Value(Name);
+            Floor = _floor.Next(0, _randomGenderNumber1) % _randomGenderNumber2;
+        }
+
+        public void Draw() => Console.Write($" {Name} издают звук: {Sound}.");
+
+        public int GetNumberZooAnimals() => _zooAnimals.Length;
+    }
+
+    class SoundDictionary
+    {
+        private readonly Dictionary<string, string> _conformityAnimals = new Dictionary<string, string>();
+
+        public SoundDictionary()
+        {
+            _conformityAnimals.Add("Кошки", "мяу-мяу");
+            _conformityAnimals.Add("Жабы", "ква-ква");
+            _conformityAnimals.Add("Собаки", "гав-гав");
+            _conformityAnimals.Add("Коровы", "му-му");
+            _conformityAnimals.Add("Верблюды", "тьфу-тьфу");
+            _conformityAnimals.Add("Крокодилы", "клац-клац");
+            _conformityAnimals.Add("Мыши", "пи-пи");
+        }
+
+        public string Value(string animals) => _conformityAnimals[animals];
+    }
+}
