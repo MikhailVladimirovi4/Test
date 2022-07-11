@@ -41,7 +41,7 @@ namespace TestOOP
         private void MakeMoveTeams(Country fightersSouth, Country fightersNorth)
         {
             MakeMoveTeam(fightersSouth, fightersNorth);
-            CheckHealthFighters(fightersSouth, fightersNorth);
+            RemoveHealthFighters(fightersSouth, fightersNorth);
         }
 
         private void MakeMoveTeam(Country fightersSouth, Country fightersNorth)
@@ -50,10 +50,10 @@ namespace TestOOP
             fightersSouth.MakeMoveFighters(fightersNorth.GetDamageFighters());
         }
 
-        private void CheckHealthFighters(Country fightersSouth, Country fightersNorth)
+        private void RemoveHealthFighters(Country fightersSouth, Country fightersNorth)
         {
-            fightersSouth.CheckHealthFighters();
-            fightersNorth.CheckHealthFighters();
+            fightersSouth.RemoveHealthFighter();
+            fightersNorth.RemoveHealthFighter();
         }
 
         private void DrawFighters(Country fightersSouth, Country fightersNorth)
@@ -65,7 +65,7 @@ namespace TestOOP
 
     class Country
     {
-        private readonly int _unitSize = 3;
+        private readonly int _unitSize = 9;
         private readonly static Random _random = new Random();
         private readonly List<Fighter> _fighters = new List<Fighter>();
 
@@ -106,7 +106,7 @@ namespace TestOOP
                 _fighters[GetIndexBestFighter(_fighters)].RemoveHealth(damage);
         }
 
-        public void CheckHealthFighters()
+        public void RemoveHealthFighter()
         {
             if (_fighters[GetIndexBestFighter(_fighters)].Health < 1)
                 _fighters.RemoveAt(GetIndexBestFighter(_fighters));
