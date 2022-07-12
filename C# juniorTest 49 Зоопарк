@@ -81,8 +81,8 @@ namespace TestOOP
 
     class Aviary
     {
-        private readonly int[] _places = { 1, 3, 5 };
         private static readonly Random _random = new Random();
+        private readonly int[] _places = { 1, 3, 5 };
         private readonly Dictionary<int, string> _aviaryModel = new Dictionary<int, string>();
         private readonly List<Animal> _animals = new List<Animal>();
         public string Name { get; private set; }
@@ -134,9 +134,9 @@ namespace TestOOP
 
     class Animal
     {
+        private static readonly Random _floor = new Random();
         private readonly int _randomGenderNumber1 = 100;
         private readonly int _randomGenderNumber2 = 2;
-        private static readonly Random _floor = new Random();
         private readonly SoundDictionary _soundDictionary = new SoundDictionary();
         private readonly string[] _zooAnimals = { "Кошки", "Жабы", "Собаки", "Коровы", "Верблюды", "Крокодилы", "Мыши" };
 
