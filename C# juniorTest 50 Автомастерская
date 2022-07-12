@@ -1,0 +1,165 @@
+using System;
+using System.Collections.Generic;
+
+namespace CarService
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            RepairBox box = new RepairBox();
+
+            box.OpenBox();
+        }
+    }
+
+    class RepairBox
+    {
+        private readonly Warehouse _warehouse = new Warehouse();
+        protected readonly PriceDetail _priceDetails = new PriceDetail();
+        protected readonly PriceWork _priceWorks = new PriceWork();
+
+        public void OpenBox()
+        {
+            int _dayBalance = 0;
+            bool isOpen = true;
+
+            _warehouse.GetDetails(ref _dayBalance);
+
+            while (isOpen)
+            {
+                Console.Clear();
+                DrawPrices();
+                Console.ReadKey();
+                DrawInterface(_dayBalance);
+                Console.ReadKey();
+            }
+        }
+
+        private void DrawInterface(int _dayBalance)
+        {
+
+        }
+
+        private void DrawPrices()
+        {
+            int positionPriceX = 0;
+            int positionPriceY = 1;
+
+            _priceDetails.Draw(positionPriceX, positionPriceY);
+            Console.WriteLine();
+            _priceWorks.Draw(positionPriceX, positionPriceY+ _priceDetails.GetCountItems());
+        }
+    }
+
+    class Warehouse : RepairBox
+    {
+        private readonly Dictionary<Detail,int> _details = new Dictionary<Detail, int>();
+
+        public void GetDetails(ref int _dayBalance)
+        {
+            bool isGet = true;
+            string action;
+
+            while (isGet)
+            {
+                Console.Clear();
+                Console.WriteLine("Вы заказали грузовик с деталями на день работы.\n\n Сочиняем поставку деталей.\n !!!=> закупочную стоимость и стоимость работ задает рандом для ускорения, а-ля анализ рынка.\n");
+                Console.Write(" 1 - добавить деталь \n 2 - грузовик пуст.\n\n Выбор: ");
+                action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        AddDetail(ref _dayBalance);
+                        break;
+
+                    case "2":
+                        isGet = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Перекур окончен - работаем.");
+                        Console.ReadKey();
+                        break;
+                }
+            }
+        }
+
+        private void AddDetail(ref int _dayBalance)
+        {
+            Random random = new Random();
+            int minimumPriceDetail = 30;
+            int maximumPriceDetail = 50;
+            int minimumPriceWork = 20;
+            int maximumPriceWork = 40;
+
+            int priceDetail = random.Next(minimumPriceDetail, maximumPriceDetail);
+            int priceWork = random.Next(minimumPriceWork, maximumPriceWork);
+            Console.Write("Введите название детали, через Enter количество поставки: ");
+            string nameDetail = Console.ReadLine();
+
+            if (int.TryParse(Console.ReadLine(), out int amountDetail))
+            {
+                _details.Add(new Detail(nameDetail),amountDetail);
+                _priceDetails.AddNote(nameDetail, priceDetail);
+                _priceWorks.AddNote("Замена " + nameDetail, priceWork);
+                _dayBalance -= priceDetail;
+            }
+            else
+            {
+                Console.WriteLine("Криворуким не отгружаем.");
+                Console.ReadKey();
+            }
+        }
+    }
+
+    class Detail
+    {
+        public string Name { get; private set; }
+
+        public Detail(string name)
+        {
+            Name = name;
+        }
+    }
+
+    class PriceDetail
+    {
+        private readonly Dictionary<string, int> _lists = new Dictionary<string, int>();
+
+        public void AddNote(string name, int money)
+        {
+            float margin = 1.3f;
+
+            _lists.Add(name, (int)(money * margin));
+        }
+
+        public void Draw(int positionX, int positionY)
+        {
+            Console.SetCursorPosition(positionX, positionY);
+
+            foreach (var item in _lists)
+                Console.WriteLine(item.Key, item.Value);
+        }
+
+        public int GetCountItems() => _lists.Count;
+    }
+
+    class PriceWork
+    {
+        private readonly Dictionary<string, int> _lists = new Dictionary<string, int>();
+
+        public void AddNote(string name, int money) => _lists.Add(name, money);
+
+        public void Draw(int positionX, int positionY)
+        {
+            Console.SetCursorPosition(positionX, positionY);
+
+            foreach (var item in _lists)
+                Console.WriteLine(item.Key, item.Value);
+        }
+
+        public int GetCountItems() => _lists.Count;
+    }
+}
