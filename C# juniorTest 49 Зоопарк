@@ -117,7 +117,7 @@ namespace TestOOP
 
             for (int i = 0; i < _animals.Count; i++)
             {
-                if (_animals[i].Floor == 0)
+                if (_animals[i].Gender == 0)
                     numberMales++;
             }
 
@@ -134,7 +134,7 @@ namespace TestOOP
 
     class Animal
     {
-        private static readonly Random _floor = new Random();
+        private static readonly Random _random = new Random();
         private readonly int _randomGenderNumber1 = 100;
         private readonly int _randomGenderNumber2 = 2;
         private readonly SoundDictionary _soundDictionary = new SoundDictionary();
@@ -142,13 +142,13 @@ namespace TestOOP
 
         public string Name { get; private set; }
         public string Sound { get; private set; }
-        public int Floor { get; private set; }
+        public int Gender { get; private set; }
 
         public Animal(int number)
         {
             Name = _zooAnimals[number];
-            Sound = _soundDictionary.Value(Name);
-            Floor = _floor.Next(0, _randomGenderNumber1) % _randomGenderNumber2;
+            Sound = _soundDictionary.GetValue(Name);
+            Gender = _random.Next(0, _randomGenderNumber1) % _randomGenderNumber2;
         }
 
         public void Draw() => Console.Write($" {Name} издают звук: {Sound}.");
@@ -171,6 +171,6 @@ namespace TestOOP
             _conformityAnimals.Add("Мыши", "пи-пи");
         }
 
-        public string Value(string animals) => _conformityAnimals[animals];
+        public string GetValue(string animals) => _conformityAnimals[animals];
     }
 }
