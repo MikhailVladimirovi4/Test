@@ -16,47 +16,206 @@ namespace CarService
     class RepairBox
     {
         private readonly Warehouse _warehouse = new Warehouse();
-        protected readonly PriceDetail _priceDetails = new PriceDetail();
-        protected readonly PriceWork _priceWorks = new PriceWork();
+        private readonly WorkZone _workZone = new WorkZone();
+        private readonly PriceDetail _priceDetails = new PriceDetail();
+        private readonly PriceWork _priceWorks = new PriceWork();
 
         public void OpenBox()
         {
             int _dayBalance = 0;
+            string action;
             bool isOpen = true;
 
-            _warehouse.GetDetails(ref _dayBalance);
+            _warehouse.GetDetails(_priceDetails, _priceWorks, ref _dayBalance);
 
             while (isOpen)
             {
                 Console.Clear();
                 DrawPrices();
-                Console.ReadKey();
+                _warehouse.Draw();
                 DrawInterface(_dayBalance);
-                Console.ReadKey();
+                action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        _workZone.GetStarted(_priceDetails, _priceWorks, _warehouse, ref _dayBalance);
+                        break;
+
+                    case "2":
+                        CloseBox();
+                        isOpen = false;
+                        break;
+
+                    default:
+                        Console.Write("Перекур окончен - работаем.");
+                        Console.ReadKey();
+                        break;
+                }
             }
         }
 
-        private void DrawInterface(int _dayBalance)
+        private void DrawInterface(int dayBalance)
         {
+            int positionInterfaceX = 60;
+            int positionInterfaceY = 2;
 
+            DrawStringInterface($"Баланс отчетного периода: {dayBalance} монет.", positionInterfaceX, positionInterfaceY++);
+            DrawStringInterface($"1 - Принять Клиента.", positionInterfaceX, positionInterfaceY++);
+            DrawStringInterface($"2 - Закрыть бокс.", positionInterfaceX, positionInterfaceY++);
+            DrawStringInterface($"Выбор действия: ", positionInterfaceX, positionInterfaceY++);
+        }
+
+        private void DrawStringInterface(string text, int positionX, int positionY)
+        {
+            Console.SetCursorPosition(positionX, positionY);
+            Console.Write(text);
         }
 
         private void DrawPrices()
         {
-            int positionPriceX = 0;
-            int positionPriceY = 1;
-
-            _priceDetails.Draw(positionPriceX, positionPriceY);
+            _priceDetails.Draw();
             Console.WriteLine();
-            _priceWorks.Draw(positionPriceX, positionPriceY+ _priceDetails.GetCountItems());
+            _priceWorks.Draw();
+        }
+
+        private void CloseBox()
+        {
+            Console.Clear();
+            Console.WriteLine("Хреновый день, завтра будет лучше!");
         }
     }
 
-    class Warehouse : RepairBox
+    class WorkZone
     {
-        private readonly Dictionary<Detail,int> _details = new Dictionary<Detail, int>();
+        private readonly int _amountFine = 100;
 
-        public void GetDetails(ref int _dayBalance)
+        public void GetStarted(PriceDetail priceDetails, PriceWork priceWorks, Warehouse warehouse, ref int dayBalance)
+        {
+            bool isRepair = true;
+            int positionСheckListY = 22;
+            Client client = new Client();
+
+            Console.SetCursorPosition(0, positionСheckListY);
+            Console.WriteLine($"У вас клиент: состояние машины: {client.TypeDamage}, деталей на замену: {client.NumberBrokenParts}.");
+
+            if (client.NumberBrokenParts > warehouse.GetAmountDetails())
+            {
+                PayFine(" Недостаточно деталей, выплачиваем штраф.", ref dayBalance);
+            }
+            else
+            {
+                for (int i = 0; i < client.NumberBrokenParts; i++)
+                {
+                    if (isRepair)
+                        MakeRepairs(priceDetails, priceWorks, warehouse, ref dayBalance, ref isRepair);
+                    else
+                        return;
+                }
+            }
+        }
+
+        private void MakeRepairs(PriceDetail priceDetails, PriceWork priceWorks, Warehouse warehouse, ref int dayBalance, ref bool isRepair)
+        {
+            string detail;
+
+            Console.Write(" Введите название детали на замену: ");
+            detail = Console.ReadLine();
+
+            if (warehouse.GetDetail(detail))
+            {
+                dayBalance += priceDetails.GetValue(detail) + priceWorks.GetValue(detail);
+                warehouse.RemoveDetail(detail);
+                Console.Write("   Замена успешна.");
+                Console.ReadKey();
+            }
+            else
+            {
+                PayFine(" Попытка провести некачетсвенный ремонт, выплачиваем штраф.", ref dayBalance);
+                isRepair = false;
+            }
+        }
+
+        private void PayFine(string text, ref int _dayBalance)
+        {
+            _dayBalance -= _amountFine;
+            Console.WriteLine(text);
+            Console.ReadKey();
+        }
+    }
+
+    class Client
+    {
+        private static readonly Random _random = new Random();
+        private static readonly string[] _listsCarStates = { "Мелкий ремонт", "Средний ремонт", "Крупный ремонт", "Тотал", };
+        private static readonly Dictionary<string, int> _damageLists = new Dictionary<string, int>();
+        public string TypeDamage { get; private set; }
+        public int NumberBrokenParts { get; private set; }
+
+        public Client()
+        {
+            CreateDamages();
+            TypeDamage = _listsCarStates[_random.Next(0, _listsCarStates.Length)];
+            NumberBrokenParts = _damageLists[TypeDamage];
+            _damageLists.Clear();
+        }
+
+        private void CreateDamages()
+        {
+            int junkDamage = 99999;
+
+            for (int i = 1; i < _listsCarStates.Length; i++)
+                _damageLists.Add(_listsCarStates[i - 1], i);
+
+            _damageLists.Add(_listsCarStates[_listsCarStates.Length - 1], junkDamage);
+        }
+    }
+
+    class Warehouse
+    {
+        private readonly int _warehouseSize = 5;
+        private readonly Dictionary<Detail, int> _details = new Dictionary<Detail, int>();
+
+        public bool GetDetail(string detail)
+        {
+            foreach (var nameDetal in _details)
+            {
+                if (nameDetal.Key.Name == detail)
+                    return true;
+            }
+
+            return false;
+        }
+
+        public void RemoveDetail(string detail)
+        {
+            foreach (var nameDetal in _details)
+            {
+                if (nameDetal.Key.Name == detail)
+                {
+                    _details.TryGetValue(nameDetal.Key, out int number);
+                    number--;
+                    _details.Remove(nameDetal.Key);
+
+                    if (number > 0)
+                        _details.Add(nameDetal.Key, number);
+
+                    return;
+                }
+            }
+        }
+
+        public int GetAmountDetails() => _details.Count;
+
+        public void Draw()
+        {
+            Console.WriteLine("\n На складе в наличии:");
+
+            foreach (var item in _details)
+                Console.WriteLine(item.Key.Name + " - " + item.Value + " штук.");
+        }
+
+        public void GetDetails(PriceDetail priceDetails, PriceWork priceWorks, ref int dayBalance)
         {
             bool isGet = true;
             string action;
@@ -65,13 +224,13 @@ namespace CarService
             {
                 Console.Clear();
                 Console.WriteLine("Вы заказали грузовик с деталями на день работы.\n\n Сочиняем поставку деталей.\n !!!=> закупочную стоимость и стоимость работ задает рандом для ускорения, а-ля анализ рынка.\n");
-                Console.Write(" 1 - добавить деталь \n 2 - грузовик пуст.\n\n Выбор: ");
+                Console.Write(" 1 - добавить деталь \n 2 - Закончить отгрузку.\n\n Выбор: ");
                 action = Console.ReadLine();
 
                 switch (action)
                 {
                     case "1":
-                        AddDetail(ref _dayBalance);
+                        AddDetail(priceDetails, priceWorks, ref dayBalance);
                         break;
 
                     case "2":
@@ -79,14 +238,14 @@ namespace CarService
                         break;
 
                     default:
-                        Console.WriteLine("Перекур окончен - работаем.");
+                        Console.Write("Перекур окончен - работаем.");
                         Console.ReadKey();
                         break;
                 }
             }
         }
 
-        private void AddDetail(ref int _dayBalance)
+        private void AddDetail(PriceDetail priceDetails, PriceWork priceWorks, ref int dayBalance)
         {
             Random random = new Random();
             int minimumPriceDetail = 30;
@@ -101,16 +260,35 @@ namespace CarService
 
             if (int.TryParse(Console.ReadLine(), out int amountDetail))
             {
-                _details.Add(new Detail(nameDetail),amountDetail);
-                _priceDetails.AddNote(nameDetail, priceDetail);
-                _priceWorks.AddNote("Замена " + nameDetail, priceWork);
-                _dayBalance -= priceDetail;
+                if (_details.Count < _warehouseSize)
+                {
+                    if (GetDetail(nameDetail) == false)
+                    {
+                        _details.Add(new Detail(nameDetail), amountDetail);
+                        priceDetails.AddNote(nameDetail, priceDetail);
+                        priceWorks.AddNote("Замена " + nameDetail, priceWork);
+                        dayBalance -= priceDetail;
+                    }
+                    else
+                    {
+                        ShowMessage("Деталь принята.");
+                    }
+                }
+                else
+                {
+                    ShowMessage("Нет места на складе.");
+                }
             }
             else
             {
-                Console.WriteLine("Криворуким не отгружаем.");
-                Console.ReadKey();
+                ShowMessage("Криворуким не отгружаем.");
             }
+        }
+
+        private void ShowMessage(string text)
+        {
+            Console.WriteLine(text);
+            Console.ReadKey();
         }
     }
 
@@ -124,7 +302,24 @@ namespace CarService
         }
     }
 
-    class PriceDetail
+    abstract class Price
+    {
+        protected void DrawItem(Dictionary<string, int> lists, string text)
+        {
+            Console.WriteLine(text);
+
+            foreach (var item in lists)
+                Console.WriteLine(item.Key + " - " + item.Value + " монет.");
+        }
+
+        protected int GetNumber(Dictionary<string, int> lists, string detailName)
+        {
+            lists.TryGetValue(detailName, out int value);
+            return value;
+        }
+    }
+
+    class PriceDetail : Price
     {
         private readonly Dictionary<string, int> _lists = new Dictionary<string, int>();
 
@@ -135,31 +330,19 @@ namespace CarService
             _lists.Add(name, (int)(money * margin));
         }
 
-        public void Draw(int positionX, int positionY)
-        {
-            Console.SetCursorPosition(positionX, positionY);
+        public void Draw() => DrawItem(_lists, "Стоимость деталей:");
 
-            foreach (var item in _lists)
-                Console.WriteLine(item.Key, item.Value);
-        }
-
-        public int GetCountItems() => _lists.Count;
+        public int GetValue(string detailName) => GetNumber(_lists, detailName);
     }
 
-    class PriceWork
+    class PriceWork : Price
     {
         private readonly Dictionary<string, int> _lists = new Dictionary<string, int>();
 
         public void AddNote(string name, int money) => _lists.Add(name, money);
 
-        public void Draw(int positionX, int positionY)
-        {
-            Console.SetCursorPosition(positionX, positionY);
+        public void Draw() => DrawItem(_lists, "Стоимость Ремонта:");
 
-            foreach (var item in _lists)
-                Console.WriteLine(item.Key, item.Value);
-        }
-
-        public int GetCountItems() => _lists.Count;
+        public int GetValue(string detailName) => GetNumber(_lists, detailName);
     }
 }
