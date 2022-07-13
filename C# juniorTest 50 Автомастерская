@@ -108,14 +108,14 @@ namespace CarService
                 for (int i = 0; i < client.NumberBrokenParts; i++)
                 {
                     if (isRepair)
-                        MakeRepairs(priceDetails, priceWorks, warehouse, ref dayBalance, ref isRepair);
+                        MakeRepair(priceDetails, priceWorks, warehouse, ref dayBalance, ref isRepair);
                     else
                         return;
                 }
             }
         }
 
-        private void MakeRepairs(PriceDetail priceDetails, PriceWork priceWorks, Warehouse warehouse, ref int dayBalance, ref bool isRepair)
+        private void MakeRepair(PriceDetail priceDetails, PriceWork priceWorks, Warehouse warehouse, ref int dayBalance, ref bool isRepair)
         {
             string detail;
 
@@ -148,26 +148,14 @@ namespace CarService
     {
         private static readonly Random _random = new Random();
         private static readonly string[] _listsCarStates = { "Мелкий ремонт", "Средний ремонт", "Крупный ремонт", "Тотал", };
-        private static readonly Dictionary<string, int> _damageLists = new Dictionary<string, int>();
+        private static readonly Dictionary<string, int> _damageLists = new Dictionary<string, int> { { "Мелкий ремонт", 1 }, { "Средний ремонт", 3 }, { "Крупный ремонт", 5 }, { "Тотал", 99999 } };
         public string TypeDamage { get; private set; }
         public int NumberBrokenParts { get; private set; }
 
         public Client()
         {
-            CreateDamages();
             TypeDamage = _listsCarStates[_random.Next(0, _listsCarStates.Length)];
             NumberBrokenParts = _damageLists[TypeDamage];
-            _damageLists.Clear();
-        }
-
-        private void CreateDamages()
-        {
-            int junkDamage = 99999;
-
-            for (int i = 1; i < _listsCarStates.Length; i++)
-                _damageLists.Add(_listsCarStates[i - 1], i);
-
-            _damageLists.Add(_listsCarStates[_listsCarStates.Length - 1], junkDamage);
         }
     }
 
