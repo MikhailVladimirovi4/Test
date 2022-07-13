@@ -141,14 +141,13 @@ namespace CarService
     {
         public void GetResult(List<Criminal> _criminals, int minimumHeight, int maximumHeight, int minimumWeight, int maximumWeight, string nationality)
         {
-            var result = _criminals.Where(criminal => criminal.Height >= minimumHeight && criminal.Height <= maximumHeight && criminal.Weight >= minimumWeight && criminal.Weight <= maximumWeight);// && criminal.Nationality == nationality);
+            var result = _criminals.Where(criminal => criminal.Height >= minimumHeight && criminal.Height <= maximumHeight && criminal.Weight >= minimumWeight && criminal.Weight <= maximumWeight && criminal.IsInPrison == false);// && criminal.Nationality == nationality);
             Console.WriteLine("\n\n Под описания подходят:\n");
 
             foreach (var persoon in result)
             {
-                if (persoon.IsInPrison == false)
-                    if (persoon.Nationality == nationality)
-                        Console.WriteLine($"{persoon.FullName} : {persoon.Height} : {persoon.Weight} : {persoon.Nationality}");
+                if (persoon.Nationality == nationality)
+                    Console.WriteLine($"{persoon.FullName} : {persoon.Height} : {persoon.Weight} : {persoon.Nationality}");
             }
         }
     }
