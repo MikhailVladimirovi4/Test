@@ -1,0 +1,59 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LinQ
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Soldier> lists = new List<Soldier>();
+            int numberMembersSubdivision = 5;
+
+            for (int i = 0; i < numberMembersSubdivision; i++)
+            {
+                lists.Add(new Soldier());
+                lists[i].Draw();
+            }
+
+            Console.WriteLine("\n");
+            var persoons = lists.Select(persoon => new { Name = persoon.Name, Rank = persoon.Rank });
+
+            foreach( var persoon in persoons)
+                Console.Write(persoon.Name + " " + persoon.Rank + "\n");
+
+            Console.ReadKey();
+        }
+    }
+
+    class Soldier
+    {
+        private readonly static Random _random = new Random();
+        private readonly WordStorage _wordStorage = new WordStorage();
+        public string Name { get; private set; }
+        public string Armament { get; private set; }
+        public string Rank { get; private set; }
+        public int SoldierLife { get; private set; }
+
+        public Soldier()
+        {
+            int minimumSoldierLife = 0;
+            int maximumSoldierLife = 24;
+
+            Name = _wordStorage.Names[_random.Next(0, _wordStorage.Names.Length)];
+            Armament = _wordStorage.Armaments[_random.Next(0, _wordStorage.Armaments.Length)];
+            Rank = _wordStorage.Ranks[_random.Next(0, _wordStorage.Ranks.Length)];
+            SoldierLife = _random.Next(minimumSoldierLife, maximumSoldierLife);
+        }
+
+        public void Draw() => Console.WriteLine($"Боец: {Name}, вооружение: {Armament}, звание: {Rank}, отслужил: {SoldierLife} месяцев.");
+    }
+
+    class WordStorage
+    {
+        public readonly string[] Names = { "Иван", "Федор", "Самуил", " Сабир", "Степан", "Дмитрий", "Владимир", "Геннадий", "Аркадий" };
+        public readonly string[] Armaments = { "Бита", "Нож", "Сабля", " Копье", "Лук", "Арбалет", "Пистолет", "Ружье", "Автомат" };
+        public readonly string[] Ranks = { "Рядовой", "Сержант", "Прапорщик", " Лейтенант", "Капитан", "Майор", "Полковник", "Генерал", "Маршал" };
+    }
+}
