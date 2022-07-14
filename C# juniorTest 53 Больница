@@ -1,0 +1,198 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace CarService
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            Hospital hospital = new Hospital();
+
+            Console.SetWindowSize(Console.LargestWindowWidth, Console.LargestWindowHeight);
+            hospital.GetStarted();
+        }
+    }
+
+    class Hospital
+    {
+        private readonly List<Client> _clients = new List<Client>();
+        private readonly Analyzer _analyzer = new Analyzer();
+        private readonly int _numberPlaces = 5;
+
+        public void GetStarted()
+        {
+            bool isWork = true;
+
+            CreateClients();
+
+            while (isWork)
+            {
+                Console.Clear();
+                DrawInterfaces();
+                string action = Console.ReadLine();
+
+                switch (action)
+                {
+                    case "1":
+                        _analyzer.SortFullName(_clients);
+                        break;
+
+                    case "2":
+                        _analyzer.SortAge(_clients);
+                        break;
+
+                    case "3":
+                        _analyzer.SortDisease(_clients);
+                        break;
+
+                    case "4":
+                        isWork = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Криворукий.");
+                        break;
+                }
+
+                Console.ReadKey();
+            }
+        }
+
+        private void DrawInterfaces()
+        {
+            DrawClients();
+            DrawMenu();
+        }
+
+        private void DrawMenu()
+        {
+            Console.SetCursorPosition(0, 0);
+            Console.WriteLine("Рабочий стол детектива:\n\n 1 - Сортировка по ФИО.\n 2 - Сортировка по возрасту.\n 3 - Показать клиентов определенным заболеванием.\n 4 - Закончить работу.");
+            Console.Write("\nВыбор действия: ");
+        }
+
+        private void DrawClients()
+        {
+            int positionCriminalsX = 55;
+            int positionCriminalsY = 2;
+
+            Console.SetCursorPosition(positionCriminalsX, 0);
+            Console.WriteLine(" Картотека лечащихся: ФИО; Взраст; Заболевание:\n");
+
+            for (int i = 0; i < _clients.Count; i++)
+            {
+                Console.SetCursorPosition(positionCriminalsX, positionCriminalsY++);
+                _clients[i].Draw();
+            }
+        }
+
+        private void CreateClients()
+        {
+            Console.WriteLine("Заполняем койко-места: ");
+
+            for (int i = 0; i < _numberPlaces; i++)
+            {
+                Console.Write("Введите диагноз больного: ");
+                _clients.Add(new Client(Console.ReadLine()));
+            }
+        }
+
+        class Analyzer
+        {
+            public void SortFullName(List<Client> clients)
+            {
+                var persoons = clients.OrderBy(persoon => persoon.FullName).ToList();
+                DrawResult(persoons, "Сортировка по ФИО: ");
+            }
+
+            public void SortAge(List<Client> clients)
+            {
+                var persoons = clients.OrderBy(persoon => persoon.Age).ToList();
+                DrawResult(persoons, "Сортировка по возрасту: ");
+            }
+
+            public void SortDisease(List<Client> clients)
+            {
+                Console.Write(" Введите диагноз: ");
+                string disease = Console.ReadLine();
+                var persoons = clients.Where(persoon => persoon.Disease == disease).ToList();
+                DrawResult(persoons, $"Клиенты с диагнозом - {disease}: ");
+            }
+
+            private void DrawResult(List<Client> result, string text)
+            {
+                Console.WriteLine($"\n\n{text}\n");
+
+                foreach (var persoon in result)
+                {
+                    Console.WriteLine($"{persoon.FullName} : {persoon.Age} : {persoon.Disease}");
+                }
+            }
+        }
+    
+        class Client
+        {
+            private static readonly Random _random = new Random();
+            private readonly StringArrayStorage _lists = new StringArrayStorage();
+
+            public string FullName { get; private set; }
+            public int Age { get; private set; }
+            public string Disease { get; private set; }
+
+            public Client(string disease)
+            {
+                int minimumAge = 20;
+                int maximumAge = 100;
+
+                FullName = new StringGenerator(_lists.Surnames, _lists.Names, _lists.Patronymics).Result;
+                Age = _random.Next(minimumAge, maximumAge);
+                Disease = disease;
+            }
+
+            public void Draw()
+            {
+                Console.Write(FullName);
+                AlignText();
+                Console.Write($": {Age} : {Disease}");
+            }
+
+            private void AlignText()
+            {
+                char sing = ' ';
+                int fieldLengthFullName = 30;
+                int number = fieldLengthFullName - FullName.Length;
+
+                for (int i = 0; i < number; i++)
+                    Console.Write(sing);
+            }
+        }
+
+        class StringGenerator
+        {
+            private static readonly Random _random = new Random();
+            public string Result { get; private set; }
+
+            public StringGenerator(string[] array1, string[] array2 = null, string[] array3 = null)
+            {
+                Result = Get(array1) + Get(array2) + Get(array3);
+            }
+
+            private string Get(string[] array)
+            {
+                if (array != null)
+                    return array[_random.Next(0, array.Length)] + " ";
+                else
+                    return null;
+            }
+        }
+
+        class StringArrayStorage
+        {
+            public string[] Names { get; private set; } = { "Иван", "Степан", "Баклан", "Колыван", "Диван", "Урал", "Денис", };
+            public string[] Patronymics { get; private set; } = { "Иванович", "Степанович", "Бакланович", "Колыванович", "Диванович", "Урал", "Денисович", };
+            public string[] Surnames { get; private set; } = { "Иванов", "Степанов", "Бакланов", "Колыванов", "Диванов", "Уралов", "Денисов", };
+        }
+    }
+}
