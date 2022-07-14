@@ -1,0 +1,84 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LinQ
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            HeadquartersCenter center = new HeadquartersCenter();
+            List<Soldier> combatUnit1 = new List<Soldier>();
+            List<Soldier> combatUnit2 = new List<Soldier>();
+
+            center.CreateCombatUnits(combatUnit1, combatUnit2);
+            center.ReorganizeUnit(combatUnit1, combatUnit2);
+            ShowResult(combatUnit2);
+            Console.ReadKey();
+        }
+
+        private static void ShowResult(List<Soldier> combatUnit2)
+        {
+            Console.WriteLine("\n\nРезультат переформирования: ");
+
+            foreach (var unit in combatUnit2)
+                unit.Draw();
+        }
+    }
+
+    class HeadquartersCenter
+    {
+        public void ReorganizeUnit(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
+        {
+            var persoons = combatUnit1.Where(persoon => persoon.Name.ToLower().StartsWith("б"));
+
+            foreach (var persoon in persoons)
+                combatUnit2.Add(persoon);
+        }
+
+        public void CreateCombatUnits(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
+        {
+            string nameCombatUnit1 = "Отряд 1";
+            string nameCombatUnit2 = "Отряд 2";
+
+            CreateCombatUnit(combatUnit1, nameCombatUnit1);
+            CreateCombatUnit(combatUnit2, nameCombatUnit2);
+        }
+
+        private void CreateCombatUnit(List<Soldier> lists, string text)
+        {
+            int numberUnits = 5;
+
+            Console.WriteLine("\n\n" + text);
+
+            for (int i = 0; i < numberUnits; i++)
+            {
+                lists.Add(new Soldier());
+                lists[i].Draw();
+            }
+        }
+    }
+
+    class Soldier
+    {
+        private readonly static Random _random = new Random();
+        private readonly WordStorage _wordStorage = new WordStorage();
+        public string Name { get; private set; }
+        public string Rank { get; private set; }
+
+        public Soldier()
+        {
+            Name = _wordStorage.Names[_random.Next(0, _wordStorage.Names.Length)];
+            Rank = _wordStorage.Ranks[_random.Next(0, _wordStorage.Ranks.Length)];
+        }
+
+        public void Draw() => Console.WriteLine($"Боец: {Name}, звание: {Rank}.");
+    }
+
+    class WordStorage
+    {
+        public readonly string[] Names = { "Бакланов", "Арбузов", "Баклажанов", " Суханов", "Бобов" };
+        public readonly string[] Ranks = { "Рядовой", "Сержант", "Прапорщик", " Лейтенант", "Капитан", "Майор", "Полковник", "Генерал", "Маршал" };
+    }
+}
