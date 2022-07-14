@@ -1,0 +1,48 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+
+namespace LinQ
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            List<Stew> stews = new List<Stew>(10);
+            int placesBox = 10;
+            int thisYear = 2022;
+
+            for (int i = 0; i < placesBox; i++)
+            {
+                stews.Add(new Stew(thisYear));
+                stews[i].Draw();
+            }
+
+            var items = stews.Where(persoon => (persoon.ProductionYear + persoon.BestBeforeDate) >= thisYear);
+            Console.WriteLine("\n\nГодится к употреблению: ");
+
+            foreach (var item in items)
+                item.Draw();
+        }
+    }
+
+    class Stew
+    {
+        private readonly static Random _random = new Random();
+        public string Name { get; private set; }
+        public int ProductionYear { get; private set; }
+        public int BestBeforeDate { get; private set; }
+
+        public Stew(int maximumYear)
+        {
+            int minimumYear = 2000;
+            int maximumBestBeforeDate = 30;
+
+            Name = "Тушенка";
+            ProductionYear = _random.Next(minimumYear, maximumYear);
+            BestBeforeDate = _random.Next(0, maximumBestBeforeDate);
+        }
+
+        public void Draw() => Console.WriteLine($"{Name}, произведена в: {ProductionYear} году, срок годности: {BestBeforeDate} лет.");
+    }
+}
