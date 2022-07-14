@@ -18,10 +18,10 @@ namespace LinQ
             }
 
             Console.WriteLine("\n");
-            var persoons = lists.Select(persoon => new { Name = persoon.Name, Rank = persoon.Rank });
+            var persoons = lists.Select(persoon => new { name = persoon.Name, rank = persoon.Rank });
 
             foreach( var persoon in persoons)
-                Console.Write(persoon.Name + " " + persoon.Rank + "\n");
+                Console.Write(persoon.name + " " + persoon.rank + "\n");
 
             Console.ReadKey();
         }
