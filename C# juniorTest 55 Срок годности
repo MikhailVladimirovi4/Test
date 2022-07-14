@@ -8,7 +8,7 @@ namespace LinQ
     {
         static void Main(string[] args)
         {
-            List<Stew> stews = new List<Stew>(10);
+            List<Stew> stews = new List<Stew>();
             int placesBox = 10;
             int thisYear = 2022;
 
