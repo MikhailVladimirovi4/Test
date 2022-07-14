@@ -19,7 +19,7 @@ namespace CarService
     {
         private readonly List<Client> _clients = new List<Client>();
         private readonly Analyzer _analyzer = new Analyzer();
-        private readonly int _numberPlaces = 5;
+        private readonly int _numberPlaces = 10;
 
         public void GetStarted()
         {
