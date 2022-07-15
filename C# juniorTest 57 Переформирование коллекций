@@ -21,22 +21,31 @@ namespace LinQ
     {
         public void ReorganizeUnit(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
         {
-            List<Soldier> temporaryUnit1 = combatUnit1.Except(combatUnit2).ToList();
-            List<Soldier> temporaryUnit2 = temporaryUnit1.Where(persoon => persoon.Name.ToLower().StartsWith("б")).ToList();
-            List<Soldier> resultCombatUnit = combatUnit2.Union(temporaryUnit2).ToList();
+            List<Soldier> temporaryUnit = combatUnit1.Where(persoon => persoon.Name.ToLower().StartsWith("б")).ToList();
+            List<Soldier> resultCombatUnit1 = combatUnit1.Except(temporaryUnit).ToList();
+            List<Soldier> resultCombatUnit2 = combatUnit2.Union(temporaryUnit).ToList();
             Console.WriteLine("\n\nРезультат переформирования: ");
-
-            foreach (var unit in resultCombatUnit)
-                unit.Draw();
+            DrawCombatUnits(resultCombatUnit1, resultCombatUnit2);
         }
 
         public void CreateCombatUnits(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
         {
-            string nameCombatUnit1 = "Отряд 1";
-            string nameCombatUnit2 = "Отряд 2";
+            CreateCombatUnit(combatUnit1, "Первый отряд");
+            CreateCombatUnit(combatUnit2, "Второй отряд");
+        }
 
-            CreateCombatUnit(combatUnit1, nameCombatUnit1);
-            CreateCombatUnit(combatUnit2, nameCombatUnit2);
+        private void DrawCombatUnits(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
+        {
+            DrawCombatUnit(combatUnit1, "Первый отряд");
+            DrawCombatUnit(combatUnit2, "Второй отряд");
+        }
+
+        private void DrawCombatUnit(List<Soldier> combatUnit, string text)
+        {
+            Console.WriteLine("\n\n" + text);
+
+            for (int i = 0; i < combatUnit.Count; i++)
+                combatUnit[i].Draw();
         }
 
         private void CreateCombatUnit(List<Soldier> lists, string text)
