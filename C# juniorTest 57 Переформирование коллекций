@@ -14,16 +14,6 @@ namespace LinQ
 
             center.CreateCombatUnits(combatUnit1, combatUnit2);
             center.ReorganizeUnit(combatUnit1, combatUnit2);
-            ShowResult(combatUnit2);
-            Console.ReadKey();
-        }
-
-        private static void ShowResult(List<Soldier> combatUnit2)
-        {
-            Console.WriteLine("\n\nРезультат переформирования: ");
-
-            foreach (var unit in combatUnit2)
-                unit.Draw();
         }
     }
 
@@ -31,10 +21,13 @@ namespace LinQ
     {
         public void ReorganizeUnit(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
         {
-            var persoons = combatUnit1.Where(persoon => persoon.Name.ToLower().StartsWith("б"));
+            List<Soldier> temporaryUnit1 = combatUnit1.Except(combatUnit2).ToList();
+            List<Soldier> temporaryUnit2 = temporaryUnit1.Where(persoon => persoon.Name.ToLower().StartsWith("б")).ToList();
+            List<Soldier> resultCombatUnit = combatUnit2.Union(temporaryUnit2).ToList();
+            Console.WriteLine("\n\nРезультат переформирования: ");
 
-            foreach (var persoon in persoons)
-                combatUnit2.Add(persoon);
+            foreach (var unit in resultCombatUnit)
+                unit.Draw();
         }
 
         public void CreateCombatUnits(List<Soldier> combatUnit1, List<Soldier> combatUnit2)
