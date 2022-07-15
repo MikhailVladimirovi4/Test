@@ -156,7 +156,7 @@ namespace LinQ
             int minimumAge = 20;
             int maximumAge = 100;
 
-            FullName = AlignText(Get(_stringArrayStorage.Surnames)) + AlignText(Get(_stringArrayStorage.Names)) + AlignText(Get(_stringArrayStorage.Patronymics));
+            FullName = AlignText(GetWord(_stringArrayStorage.Surnames)) + AlignText(GetWord(_stringArrayStorage.Names)) + AlignText(GetWord(_stringArrayStorage.Patronymics));
             Age = _random.Next(minimumAge, maximumAge);
             Disease = disease;
         }
@@ -175,7 +175,7 @@ namespace LinQ
             return word;
         }
 
-        private string Get(string[] wordList)
+        private string GetWord(string[] wordList)
         {
             if (wordList != null)
                 return wordList[_random.Next(0, wordList.Length)] + " ";
