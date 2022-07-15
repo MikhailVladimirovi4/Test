@@ -8,21 +8,21 @@ namespace LinQ
     {
         static void Main(string[] args)
         {
-            List<Stew> stews = new List<Stew>();
+            List<Stew> stewBox = new List<Stew>();
             int placesBox = 10;
             int thisYear = 2022;
 
             for (int i = 0; i < placesBox; i++)
             {
-                stews.Add(new Stew(thisYear));
-                stews[i].Draw();
+                stewBox.Add(new Stew(thisYear));
+                stewBox[i].Draw();
             }
 
-            var items = stews.Where(persoon => (persoon.ProductionYear + persoon.BestBeforeDate) >= thisYear);
+            List<Stew> newStewBox = stewBox.Where(stew => (stew.ProductionYear + stew.BestBeforeDate) >= thisYear).ToList();
             Console.WriteLine("\n\nГодится к употреблению: ");
 
-            foreach (var item in items)
-                item.Draw();
+            foreach (Stew stew in newStewBox)
+                stew.Draw();
         }
     }
 
