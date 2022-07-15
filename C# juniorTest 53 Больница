@@ -186,8 +186,8 @@ namespace LinQ
 
     class StringArrayStorage
     {
-        public string[] Names { get; private set; } = { "Иван", "Степан", "Баклан", "Колыван", "Диван", "Урал", "Денис", };
-        public string[] Patronymics { get; private set; } = { "Иванович", "Степанович", "Бакланович", "Колыванович", "Диванович", "Урал", "Денисович", };
-        public string[] Surnames { get; private set; } = { "Иванов", "Степанов", "Бакланов", "Колыванов", "Диванов", "Уралов", "Денисов", };
+        public readonly string[] Names { get; private set; } = { "Иван", "Степан", "Баклан", "Колыван", "Диван", "Урал", "Денис", };
+        public readonly string[] Patronymics { get; private set; } = { "Иванович", "Степанович", "Бакланович", "Колыванович", "Диванович", "Урал", "Денисович", };
+        public readonly string[] Surnames { get; private set; } = { "Иванов", "Степанов", "Бакланов", "Колыванов", "Диванов", "Уралов", "Денисов", };
     }
 }
